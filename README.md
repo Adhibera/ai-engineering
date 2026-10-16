@@ -24,3 +24,4 @@
 | 13. Agent-loop | `uv run les13` | `src/ai_engineering/agent_loop.py` |
 | 14. Logging | `uv run les14` | `src/ai_engineering/logboek.py` |
 | 15. Controleur | `uv run les15` | `src/ai_engineering/controleur.py` |
+| 16. Framework | `uv run les16` | `src/ai_engineering/framework.py` |

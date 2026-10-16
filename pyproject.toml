@@ -9,6 +9,7 @@ authors = [
 requires-python = ">=3.13"
 dependencies = [
     "openai>=3.31.0",
+    "openai-agents>=0.24.0",
     "pydantic>=2.14.1",
     "python-dotenv>=1.2.4",
     "requests>=2.34.2",
@@ -30,6 +31,7 @@ les12 = "ai_engineering.parallelization:main"
 les13 = "ai_engineering.agent_loop:main"
 les14 = "ai_engineering.logboek:main"
 les15 = "ai_engineering.controleur:main"
+les16 = "ai_engineering.framework:main"
 
 [build-system]
 requires = ["uv_build>=0.12.17,<0.13.0"]
