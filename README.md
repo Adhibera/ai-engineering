@@ -20,3 +20,4 @@
 | 9. Retrieval | `uv run les9` | `src/ai_engineering/retrieval.py` |
 | 10. Prompt chaining | `uv run les10` | `src/ai_engineering/prompt_chaining.py` |
 | 11. Routing | `uv run les11` | `src/ai_engineering/routing.py` |
+| 12. Parallelization | `uv run les12` | `src/ai_engineering/parallelization.py` |
