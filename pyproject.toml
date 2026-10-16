@@ -29,6 +29,7 @@ les11 = "ai_engineering.routing:main"
 les12 = "ai_engineering.parallelization:main"
 les13 = "ai_engineering.agent_loop:main"
 les14 = "ai_engineering.logboek:main"
+les15 = "ai_engineering.controleur:main"
 
 [build-system]
 requires = ["uv_build>=0.12.17,<0.13.0"]

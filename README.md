@@ -23,3 +23,4 @@
 | 12. Parallelization | `uv run les12` | `src/ai_engineering/parallelization.py` |
 | 13. Agent-loop | `uv run les13` | `src/ai_engineering/agent_loop.py` |
 | 14. Logging | `uv run les14` | `src/ai_engineering/logboek.py` |
+| 15. Controleur | `uv run les15` | `src/ai_engineering/controleur.py` |
