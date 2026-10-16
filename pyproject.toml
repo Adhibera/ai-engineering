@@ -1,0 +1,20 @@
+[project]
+name = "ai-engineering"
+version = "0.1.0"
+description = "AI engineering voor leerlingen: van een eerste AI call naar agents"
+readme = "README.md"
+authors = [
+    { name = "Adhibera", email = "info@adhibera.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "openai>=3.31.0",
+    "python-dotenv>=1.2.4",
+]
+
+[project.scripts]
+ai-engineering = "ai_engineering:main"
+
+[build-system]
+requires = ["uv_build>=0.12.17,<0.13.0"]
+build-backend = "uv_build"
