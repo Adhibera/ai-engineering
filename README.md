@@ -7,8 +7,7 @@
 
 ## Starten
 
-```bash
-uv run ai-engineering
-```
-
-De code staat in `src/ai_engineering/ai_call.py`.
+| Les | Starten | Code |
+|---|---|---|
+| 1. Je eerste AI call | `uv run les1` | `src/ai_engineering/ai_call.py` |
+| 2. Memory | `uv run les2` | `src/ai_engineering/memory.py` |

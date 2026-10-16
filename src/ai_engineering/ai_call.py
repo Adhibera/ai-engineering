@@ -3,7 +3,7 @@ Les 1: je eerste AI call.
 
 We sturen een vraag naar een taalmodel (LLM) van OpenAI en printen het antwoord.
 
-Starten:  uv run ai-engineering
+Starten:  uv run les1
 """
 
 from dotenv import load_dotenv
@@ -16,8 +16,8 @@ load_dotenv()
 client = OpenAI()
 
 
-def vraag_ai(vraag: str) -> str:
-    """Stuur een vraag naar het LLM en geef het antwoord terug."""
+def vraag_ai(vraag: str | list) -> str:
+    """Stuur een vraag (of een heel gesprek) naar het LLM en geef het antwoord terug."""
     response = client.responses.create(
         model="gpt-6-astra",
         instructions="Je bent een behulpzame docent. Antwoord kort en in het Nederlands.",

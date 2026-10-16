@@ -13,7 +13,8 @@ dependencies = [
 ]
 
 [project.scripts]
-ai-engineering = "ai_engineering:main"
+les1 = "ai_engineering.ai_call:main"
+les2 = "ai_engineering.memory:main"
 
 [build-system]
 requires = ["uv_build>=0.12.17,<0.13.0"]
