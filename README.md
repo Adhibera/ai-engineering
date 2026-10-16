@@ -22,3 +22,4 @@
 | 11. Routing | `uv run les11` | `src/ai_engineering/routing.py` |
 | 12. Parallelization | `uv run les12` | `src/ai_engineering/parallelization.py` |
 | 13. Agent-loop | `uv run les13` | `src/ai_engineering/agent_loop.py` |
+| 14. Logging | `uv run les14` | `src/ai_engineering/logboek.py` |
