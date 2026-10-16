@@ -14,3 +14,6 @@ wheels/
 
 # Externe bronnen (eigen git-repositories)
 resources/
+
+# Handoff voor agents (niet voor leerlingen)
+HANDOFF.md
