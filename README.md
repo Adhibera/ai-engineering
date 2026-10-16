@@ -1,5 +1,9 @@
 # AI Engineering
 
+## Lesboek
+
+Open `documents/lesmateriaal.html` in je browser. Daarin staan per les de uitleg, een schema, opdrachten en een denkvraag.
+
 ## Installeren
 
 1. Installeer de packages: `uv sync`
