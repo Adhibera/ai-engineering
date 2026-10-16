@@ -22,6 +22,7 @@ les4 = "ai_engineering.tools:main"
 les5 = "ai_engineering.structured_output:main"
 les6 = "ai_engineering.control:main"
 les7 = "ai_engineering.recovery:main"
+les8 = "ai_engineering.feedback:main"
 
 [build-system]
 requires = ["uv_build>=0.12.17,<0.13.0"]
