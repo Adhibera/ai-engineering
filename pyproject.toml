@@ -14,6 +14,7 @@ dependencies = [
 
 [project.scripts]
 les1 = "ai_engineering.ai_call:main"
+"les1.1" = "ai_engineering.chat:main"
 les2 = "ai_engineering.memory:main"
 
 [build-system]
