@@ -12,7 +12,7 @@ import json
 
 import requests
 
-from ai_engineering.ai_call import MODEL, client
+from ai_engineering.ai_call import INSTRUCTIES, MODEL, client
 
 
 def huidige_temperatuur(latitude: float, longitude: float) -> float:
@@ -48,7 +48,9 @@ def main() -> None:
     gesprek = [{"role": "user", "content": vraag}]
 
     # Stap 1: het LLM kiest zelf of het de tool nodig heeft
-    response = client.responses.create(model=MODEL, input=gesprek, tools=tools)
+    response = client.responses.create(
+        model=MODEL, instructions=INSTRUCTIES, input=gesprek, tools=tools
+    )
     gesprek += response.output
 
     # Stap 2: jouw code voert de tool uit
@@ -64,7 +66,9 @@ def main() -> None:
             })
 
     # Stap 3: het LLM maakt een antwoord met het resultaat
-    response = client.responses.create(model=MODEL, input=gesprek, tools=tools)
+    response = client.responses.create(
+        model=MODEL, instructions=INSTRUCTIES, input=gesprek, tools=tools
+    )
     print("AI:", response.output_text)
 
 

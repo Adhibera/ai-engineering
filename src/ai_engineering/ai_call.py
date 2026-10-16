@@ -18,12 +18,15 @@ client = OpenAI()
 # Het taalmodel dat we in alle lessen gebruiken
 MODEL = "gpt-6-astra"
 
+# De instructie die het LLM bij elke vraag meekrijgt
+INSTRUCTIES = "Je bent een behulpzame docent. Antwoord kort en in het Nederlands, zonder Markdown."
+
 
 def vraag_ai(vraag: str | list) -> str:
     """Stuur een vraag (of een heel gesprek) naar het LLM en geef het antwoord terug."""
     response = client.responses.create(
         model=MODEL,
-        instructions="Je bent een behulpzame docent. Antwoord kort en in het Nederlands.",
+        instructions=INSTRUCTIES,
         input=vraag,
     )
     return response.output_text
