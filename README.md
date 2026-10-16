@@ -21,3 +21,4 @@
 | 10. Prompt chaining | `uv run les10` | `src/ai_engineering/prompt_chaining.py` |
 | 11. Routing | `uv run les11` | `src/ai_engineering/routing.py` |
 | 12. Parallelization | `uv run les12` | `src/ai_engineering/parallelization.py` |
+| 13. Agent-loop | `uv run les13` | `src/ai_engineering/agent_loop.py` |

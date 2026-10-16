@@ -27,6 +27,7 @@ les9 = "ai_engineering.retrieval:main"
 les10 = "ai_engineering.prompt_chaining:main"
 les11 = "ai_engineering.routing:main"
 les12 = "ai_engineering.parallelization:main"
+les13 = "ai_engineering.agent_loop:main"
 
 [build-system]
 requires = ["uv_build>=0.12.17,<0.13.0"]
