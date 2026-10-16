@@ -18,3 +18,4 @@
 | 7. Recovery | `uv run les7` | `src/ai_engineering/recovery.py` |
 | 8. Feedback | `uv run les8` | `src/ai_engineering/feedback.py` |
 | 9. Retrieval | `uv run les9` | `src/ai_engineering/retrieval.py` |
+| 10. Prompt chaining | `uv run les10` | `src/ai_engineering/prompt_chaining.py` |
