@@ -1,10 +1,10 @@
 """
-Les 1.1: chat zonder geheugen.
+Les 2: chat zonder geheugen.
 
 Met een while-lus kun je steeds een nieuwe vraag stellen.
 Maar let op: onthoudt de AI wat je eerder zei?
 
-Starten:  uv run les1.1   (typ "stop" om te stoppen)
+Starten:  uv run les2   (typ "stop" om te stoppen)
 """
 
 from ai_engineering.ai_call import vraag_ai

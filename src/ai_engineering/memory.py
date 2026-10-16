@@ -1,10 +1,10 @@
 """
-Les 2: memory.
+Les 3: memory.
 
 Een LLM onthoudt niets. Wil je een gesprek voeren,
 dan stuur je bij elke vraag de hele geschiedenis mee.
 
-Starten:  uv run les2   (typ "stop" om te stoppen)
+Starten:  uv run les3   (typ "stop" om te stoppen)
 """
 
 from ai_engineering.ai_call import vraag_ai
