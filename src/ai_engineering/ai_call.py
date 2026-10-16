@@ -15,11 +15,14 @@ load_dotenv()
 # De client praat met OpenAI. Hij vindt de key (OPENAI_API_KEY) zelf.
 client = OpenAI()
 
+# Het taalmodel dat we in alle lessen gebruiken
+MODEL = "gpt-6-astra"
+
 
 def vraag_ai(vraag: str | list) -> str:
     """Stuur een vraag (of een heel gesprek) naar het LLM en geef het antwoord terug."""
     response = client.responses.create(
-        model="gpt-6-astra",
+        model=MODEL,
         instructions="Je bent een behulpzame docent. Antwoord kort en in het Nederlands.",
         input=vraag,
     )

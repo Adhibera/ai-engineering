@@ -12,3 +12,4 @@
 | 1. Je eerste AI call | `uv run les1` | `src/ai_engineering/ai_call.py` |
 | 2. Chat zonder geheugen | `uv run les2` | `src/ai_engineering/chat.py` |
 | 3. Memory | `uv run les3` | `src/ai_engineering/memory.py` |
+| 4. Tools | `uv run les4` | `src/ai_engineering/tools.py` |
