@@ -11,8 +11,8 @@ Starten:  uv run les8
 from ai_engineering.ai_call import vraag_ai
 
 
-def main() -> None:
-    klacht = input("Klacht van de klant: ")
+def schrijf_mail(klacht: str) -> None:
+    """Het LLM schrijft een concept-mail, en een mens beslist of die weg mag."""
     opdracht = f"Schrijf een korte, vriendelijke mail aan een klant met deze klacht: {klacht}"
     gesprek = [{"role": "user", "content": opdracht}]
 
@@ -30,6 +30,11 @@ def main() -> None:
         feedback = input("Wat moet er anders? ")
         gesprek.append({"role": "assistant", "content": concept})
         gesprek.append({"role": "user", "content": feedback})
+
+
+def main() -> None:
+    klacht = input("Klacht van de klant: ")
+    schrijf_mail(klacht)
 
 
 if __name__ == "__main__":

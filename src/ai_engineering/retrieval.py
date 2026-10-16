@@ -21,9 +21,8 @@ def zoek_in_kennisbank(vraag: str) -> str:
     return KENNISBANK.read_text()
 
 
-def main() -> None:
-    vraag = input("Stel je vraag: ")
-
+def beantwoord_vraag(vraag: str) -> str:
+    """Beantwoord een vraag van een klant met informatie uit de kennisbank."""
     # Stap 1: onze code haalt de informatie op
     informatie = zoek_in_kennisbank(vraag)
 
@@ -33,7 +32,12 @@ def main() -> None:
         instructions="Je bent de klantenservice van een webshop. Antwoord kort en in het Nederlands, zonder Markdown. Gebruik alleen de informatie uit de kennisbank. Staat het antwoord er niet in, zeg dat dan.",
         input=f"Kennisbank:\n{informatie}\n\nVraag van de klant: {vraag}",
     )
-    print("AI:", response.output_text)
+    return response.output_text
+
+
+def main() -> None:
+    vraag = input("Stel je vraag: ")
+    print("AI:", beantwoord_vraag(vraag))
 
 
 if __name__ == "__main__":

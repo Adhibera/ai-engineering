@@ -25,6 +25,7 @@ les7 = "ai_engineering.recovery:main"
 les8 = "ai_engineering.feedback:main"
 les9 = "ai_engineering.retrieval:main"
 les10 = "ai_engineering.prompt_chaining:main"
+les11 = "ai_engineering.routing:main"
 
 [build-system]
 requires = ["uv_build>=0.12.17,<0.13.0"]
