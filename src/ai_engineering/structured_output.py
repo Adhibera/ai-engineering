@@ -7,6 +7,8 @@ vraag je om data in een vaste vorm: velden met een naam en een type.
 Starten:  uv run les5
 """
 
+from typing import Literal
+
 from pydantic import BaseModel
 
 from ai_engineering.ai_call import MODEL, client
@@ -16,7 +18,7 @@ from ai_engineering.ai_call import MODEL, client
 class Taak(BaseModel):
     omschrijving: str
     klaar: bool
-    prioriteit: int
+    prioriteit: Literal["laag", "middel", "hoog", "nvt"]  # alleen deze vier mogen
 
 
 def main() -> None:
@@ -24,7 +26,7 @@ def main() -> None:
 
     response = client.responses.parse(
         model=MODEL,
-        instructions="Haal de taak uit de tekst van de gebruiker.",
+        instructions="Haal de taak uit de tekst van de gebruiker. Is de taak al klaar, kies dan nvt als prioriteit.",
         input=zin,
         text_format=Taak,
     )
