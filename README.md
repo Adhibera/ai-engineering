@@ -15,3 +15,4 @@
 | 4. Tools | `uv run les4` | `src/ai_engineering/tools.py` |
 | 5. Structured output | `uv run les5` | `src/ai_engineering/structured_output.py` |
 | 6. Control | `uv run les6` | `src/ai_engineering/control.py` |
+| 7. Recovery | `uv run les7` | `src/ai_engineering/recovery.py` |
