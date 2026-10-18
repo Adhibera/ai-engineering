@@ -164,7 +164,7 @@ p.prose { display: block; }
 .drietal dd { margin: 0; color: var(--muted); font-size: 15.5px; }
 
 .route { display: grid; gap: 12px; }
-@media (min-width: 720px) { .route { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 720px) { .route { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .route a { display: grid; gap: 6px; align-content: start; text-decoration: none; color: var(--ink); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; background: var(--panel); }
 .route a:hover { border-color: var(--accent); }
 .route .wat { font-size: 12.5px; letter-spacing: .07em; text-transform: uppercase; font-weight: 600; color: var(--muted); }
@@ -347,10 +347,10 @@ details.onthul > div { display: grid; gap: 8px; font-size: 15.5px; }
     <div class="kop-tekst">
       <p class="bovenregel">Lesboek bij de lessenreeks AI engineering</p>
       <h1>Bouw je eigen <span>AI-agent</span></h1>
-      <p class="lead">In zestien lessen bouw je de klantenservice van een webshop. Je begint met één vraag aan een taalmodel. Aan het eind heb je een agent die zelf bedenkt welke stappen hij zet. Bij elke les hoort een Python-bestand dat je start, leest en aanpast.</p>
+      <p class="lead">In deze lessen bouw je de klantenservice van een webshop. Je begint met één vraag aan een taalmodel. Aan het eind van deel 3 heb je een agent die zelf bedenkt welke stappen hij zet. In deel 4 maak je je klaar voor een echte klant. Bij elke les hoort een Python-bestand dat je start, leest en aanpast.</p>
       <ul class="feiten">
-        <li><b>16</b> lessen</li>
-        <li><b>3</b> delen</li>
+        <li><b>17</b> lessen</li>
+        <li><b>4</b> delen</li>
         <li>Python en de OpenAI API</li>
         <li>Rode draad: een webshop</li>
       </ul>
@@ -397,6 +397,10 @@ Stel je vraag: <kbd>Waar blijft mijn bestelling 1001?</kbd>
     <li><a href="#les16"><span class="nr">16</span><span class="t">Framework</span><span class="tel"></span></a></li>
   </ol>
   <a class="los" href="#kiezen">Kiezen en bewijzen</a>
+  <p class="nav-deel">Deel 4 · Naar een echte klant</p>
+  <ol>
+    <li><a href="#les17"><span class="nr">17</span><span class="t">Werken zonder gesprek</span><span class="tel"></span></a></li>
+  </ol>
   <p class="nav-deel">Naslag</p>
   <a class="los" href="#overzicht">Alles op een rij</a>
   <a class="los" href="#woorden">Woordenlijst</a>
@@ -436,6 +440,12 @@ Stel je vraag: <kbd>Waar blijft mijn bestelling 1001?</kbd>
       <strong>Een agent</strong>
       <p>Het LLM kiest zelf de volgende stap, in een lus, binnen de grenzen die jij stelt. Welke route het nam, zie je pas achteraf.</p>
       <p class="kiest">Wie kiest de volgende stap? <b>Het LLM.</b></p>
+    </a>
+    <a href="#deel4">
+      <span class="wat">Deel 4 · vanaf les 17</span>
+      <strong>Naar een echte klant</strong>
+      <p>Je maakt van een les een programma dat zijn werk doet zonder dat jij erbij zit. Dat heb je nodig voor de eindopdracht, voor een echt bedrijf.</p>
+      <p class="kiest">Wie kiest de volgende stap? <b>Wat bij de taak past. Nieuw is: er zit niemand bij.</b></p>
     </a>
   </div>
 
@@ -2152,6 +2162,152 @@ Stel je vraag: <kbd>Waar blijft mijn bestelling 1001?</kbd>
   <div class="onthoud"><span class="kopje">Onthoud</span><p>Kies de eenvoudigste oplossing die werkt, en bewijs met testgevallen dat hij werkt.</p></div>
 </section>
 
+<!-- ================================================================ DEEL 4 -->
+<section class="deel" id="deel4">
+  <p class="label">Deel 4 · vanaf les 17</p>
+  <h2>Naar een echte klant</h2>
+  <div class="prose">
+    <p>Tot nu toe zat jij steeds achter het toetsenbord. Je typte een vraag, las het antwoord en besliste. Bij een bedrijf gaat dat anders: daar moet het werk ook gebeuren als er niemand naast het programma zit. In dit deel maak je van een les zo'n programma. Dat heb je nodig voor de eindopdracht, waarin je een taak automatiseert voor een echt bedrijf.</p>
+  </div>
+  <div class="tabel"><table>
+    <thead><tr><th></th><th>In de lessen tot nu toe</th><th>Bij een bedrijf</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Waar komt het werk vandaan?</strong></td><td>jij typt het, met <code>input()</code></td><td>uit een map, een export of een mailbox</td></tr>
+      <tr><td><strong>Waar gaat het resultaat heen?</strong></td><td>naar het scherm, met <code>print</code></td><td>naar een bestand dat een medewerker later leest</td></tr>
+      <tr><td><strong>Wanneer kijkt de mens?</strong></td><td>meteen: "Versturen? (j/n)"</td><td>later, als het de medewerker uitkomt</td></tr>
+      <tr><td><strong>Wie start het programma?</strong></td><td>jij</td><td>een klok op een server, bijvoorbeeld elk kwartier</td></tr>
+    </tbody>
+  </table></div>
+  <p class="let-op">De bouwstenen blijven hetzelfde. Wat verandert, is alles eromheen. Kies ook hier de eenvoudigste oplossing die werkt, zoals in <a href="#kiezen">Kiezen en bewijzen</a>.</p>
+</section>
+
+<!-- ---------------------------------------------------------------- les 17 -->
+<section class="les" id="les17">
+  <header class="les-kop">
+    <span class="les-nr">17</span>
+    <p class="eyebrow">Begrip: batch</p>
+    <h3>Werken zonder gesprek</h3>
+    <div class="meta"><span class="start">uv run les17</span><span>batch.py</span><span>inbox → concepten</span></div>
+  </header>
+  <p class="doel"><strong>Na deze les</strong> kun je een programma maken dat een stapel mails verwerkt zonder dat er iemand bij zit, en uitleggen waar de mens dan in de lus zit.</p>
+  <div class="probleem">
+    <h4>Het probleem</h4>
+    <p>Elk programma tot nu toe wachtte met <code>input()</code> tot jij iets typte. Bij de klantenservice van de webshop ligt 's ochtends een stapel mails. Er zit niemand naast het programma om ze één voor één in te typen.</p>
+  </div>
+  <p class="idee"><strong>Lees uit een map, schrijf naar een map, en stop.</strong> Het programma verwerkt alle mails achter elkaar: een <em>batch</em>. Voor elke mail zet het een concept-antwoord klaar. Een medewerker leest de concepten later na en verstuurt ze zelf.</p>
+  <figure class="schema">
+    <div class="papier"><svg viewBox="0 0 720 250" role="img" aria-label="Jouw code leest de mails één voor één uit de map inbox, laat het LLM een concept schrijven en zet dat in de map concepten. Een medewerker leest de concepten later." style="--min:562px">
+<defs><marker id="kop-les17" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="kop" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<polyline class="pijl" points="160,88.0 205,88.0" marker-end="url(#kop-les17)"/>
+<polyline class="pijl" points="265,114 265,176" marker-end="url(#kop-les17)"/>
+<polyline class="pijl" points="325,176 325,114" marker-end="url(#kop-les17)"/>
+<polyline class="pijl" points="385,88.0 430,88.0" marker-end="url(#kop-les17)"/>
+<polyline class="pijl stippel" points="580,88.0 610,88.0" marker-end="url(#kop-les17)"/>
+<rect class="v-tool" x="10" y="30" width="150" height="116" rx="4"/>
+<text class="hoofd" x="22" y="52">inbox/</text>
+<text class="rij" x="22" y="72">mail-01.txt</text>
+<text class="rij" x="22" y="92">mail-02.txt</text>
+<text class="rij" x="22" y="112">mail-03.txt</text>
+<text class="rij" x="22" y="132">mail-04.txt</text>
+<rect class="v-code" x="205" y="62" width="180" height="52" rx="4"/>
+<text class="hoofd" x="295.0" y="85.0" text-anchor="middle">Lus over de mails</text>
+<text class="sub" x="295.0" y="103.0" text-anchor="middle">jouw code</text>
+<rect class="v-llm" x="205" y="176" width="180" height="52" rx="12"/>
+<text class="hoofd" x="295.0" y="199.0" text-anchor="middle">LLM</text>
+<text class="sub" x="295.0" y="217.0" text-anchor="middle">les 9: concept-antwoord</text>
+<rect class="v-tool" x="430" y="30" width="150" height="116" rx="4"/>
+<text class="hoofd" x="442" y="52">concepten/</text>
+<text class="rij" x="442" y="72">mail-01.txt</text>
+<text class="rij" x="442" y="92">mail-02.txt</text>
+<text class="rij" x="442" y="112">mail-03.txt</text>
+<text class="rij" x="442" y="132">mail-04.txt</text>
+<rect class="v-mens" x="610" y="62" width="105" height="52" rx="24"/>
+<text class="hoofd" x="662.5" y="85.0" text-anchor="middle">Medewerker</text>
+<text class="sub" x="662.5" y="103.0" text-anchor="middle">leest later</text>
+<text class="lbl" x="182" y="80" text-anchor="middle">lees</text>
+<text class="lbl" x="257" y="150" text-anchor="end">mail</text>
+<text class="lbl" x="333" y="150" text-anchor="start">antwoord</text>
+<text class="lbl" x="407" y="80" text-anchor="middle">schrijf</text>
+<text class="lbl" x="595" y="80" text-anchor="middle">later</text>
+<text class="lbl zacht" x="505" y="172" text-anchor="middle">daarna stopt het programma</text>
+</svg></div>
+    <figcaption>Het hart is <code>beantwoord_vraag()</code> uit les 9. Nieuw is alleen wat eromheen staat: een map in plaats van <code>input()</code>, een bestand in plaats van <code>print</code>, en een mens die later kijkt.</figcaption>
+  </figure>
+  <h4>De kern van de code</h4>
+<pre class="py"><code><span class="com"># De mappen staan in de map waar je het programma start</span>
+INBOX = Path(<span class="str">&quot;inbox&quot;</span>)
+CONCEPTEN = Path(<span class="str">&quot;concepten&quot;</span>)
+
+mails = sorted(INBOX.glob(<span class="str">&quot;*.txt&quot;</span>))
+print(len(mails), <span class="str">&quot;mails in&quot;</span>, INBOX.resolve())
+
+<span class="kw">for</span> bestand <span class="kw">in</span> mails:
+    <span class="com"># Geen input(): de mail komt uit een bestand (utf-8, zodat ë en € ook op Windows goed gaan)</span>
+    mail = bestand.read_text(encoding=<span class="str">&quot;utf-8&quot;</span>)
+    antwoord = beantwoord_vraag(mail)  <span class="com"># les 9: retrieval</span>
+
+    <span class="com"># Geen antwoord op het scherm: het concept gaat naar een bestand, voor de medewerker</span>
+    concept = <span class="str">f&quot;Mail van de klant:\n{mail}\nConcept-antwoord:\n{antwoord}\n&quot;</span>
+    (CONCEPTEN / bestand.name).write_text(concept, encoding=<span class="str">&quot;utf-8&quot;</span>)</code></pre>
+  <p class="uitleg-in"><code>INBOX.glob("*.txt")</code> zoekt alle bestanden in de inbox die op <code>.txt</code> eindigen. <code>INBOX.resolve()</code> geeft het hele pad, zodat je ziet in welke map het programma zocht.</p>
+  <h4>Probeer het</h4>
+  <p class="prose">Vul eerst de inbox. Kopieer in de projectmap de map <code>voorbeelden/mails</code>, en noem de kopie <code>inbox</code>. Dat kan in de verkenner, of met een commando. Op Windows typ je <code>xcopy voorbeelden\mails inbox /E /I</code>.</p>
+<pre class="term"><code><span class="prompt">$</span> <span class="cmd">cp -r voorbeelden/mails inbox</span>
+<span class="prompt">$</span> <span class="cmd">uv run les17</span>
+4 mails in …/ai-engineering/inbox
+Concept klaar: mail-01.txt
+Concept klaar: mail-02.txt
+Concept klaar: mail-03.txt
+Concept klaar: mail-04.txt
+Klaar. Een medewerker leest de concepten na en verstuurt ze zelf.</code></pre>
+  <p class="uitleg-in">Het pad is ingekort. Open daarna de map <code>concepten</code>. Zo zag het eerste concept er bij ons uit:</p>
+<pre class="term"><code><span class="prompt">$</span> <span class="cmd">cat concepten/mail-01.txt</span>
+Mail van de klant:
+Hallo,
+
+Vorige week heb ik een jas bij jullie besteld, maar hij is te klein. Kan ik hem nog terugsturen? Ik heb de bon nog.
+
+Groet,
+Sanne
+
+Concept-antwoord:
+Hallo Sanne,
+
+Ja, je kunt de jas binnen 30 dagen na aankoop terugsturen met de bon. Je krijgt je geld binnen 5 tot 7 werkdagen terug via dezelfde betaalmethode.</code></pre>
+  <h4>Opdrachten</h4>
+  <ul class="taken">
+    <li><input type="checkbox" id="t17a"><div class="tekst"><label for="t17a"><span class="soort s-voorspel">Voorspel</span>Er liggen vier mails in de inbox. Hoeveel LLM-calls doet het programma? En hoe lang duurt het ongeveer? Kijk naar <code>beantwoord_vraag()</code> in les 9.</label><details class="onthul"><summary>Bekijk wat er bij ons gebeurde</summary><div>
+        <p>Vier calls: één per mail. Bij ons duurde het 9 tot 13 seconden, want de mails gaan na elkaar. Tegelijk kan ook, met les 12.</p>
+      </div></details></div></li>
+    <li><input type="checkbox" id="t17b"><div class="tekst"><label for="t17b"><span class="soort s-zoek">Zoek uit</span>Speel de medewerker. Lees de vier concepten, en kijk ook in <code>kennisbank.json</code>, want alleen met de mail kun je niet controleren of het antwoord klopt. Welke concepten zou jij zo versturen? Welke pas je aan, en welke schrijf je zelf?</label><details class="onthul"><summary>Bekijk wat er bij ons gebeurde</summary><div>
+        <p><strong>Mail 1, de jas:</strong> klopt met de kennisbank. Die kan zo weg.</p>
+        <p><strong>Mail 2, België:</strong> <em>"in onze kennisbank staat niet of België daarbij hoort"</em>. Dat klopt met de bron, maar een medewerker weet gewoon of de webshop naar België verstuurt. En weet een klant wat een kennisbank is?</p>
+        <p><strong>Mail 3, Apple Pay:</strong> <em>"Apple Pay wordt niet genoemd in onze kennisbank"</em>. Eerlijk, net als in les 9, maar weer met dat woord.</p>
+        <p><strong>Mail 4, pakket kwijt:</strong> <em>"in onze kennisbank staat niet wat we doen als een pakket is kwijtgeraakt"</em>. Dit is een klacht, geen vraag. Daar is les 9 niet voor gemaakt.</p>
+        <p>Een concept is dus nog geen antwoord. De mens zit nog steeds in de lus, alleen later.</p>
+      </div></details></div></li>
+    <li><input type="checkbox" id="t17c"><div class="tekst"><label for="t17c"><span class="soort s-experiment">Experiment</span>Schrijf zelf een mail en zet die als <code>mail-05.txt</code> in de inbox. Je verandert geen regel code. Draai les 17 opnieuw. Hoeveel mails verwerkt het programma nu?</label></div></li>
+    <li><input type="checkbox" id="t17d"><div class="tekst"><label for="t17d"><span class="soort s-experiment">Experiment</span>Pas <code>concepten/mail-01.txt</code> aan, zoals een medewerker zou doen: zet er een zin onder. Draai les 17 nog een keer. Wat is er met jouw zin gebeurd? Hoe zou jij dit voorkomen?</label><details class="onthul"><summary>Bekijk wat er bij ons gebeurde</summary><div>
+        <p>De zin was weg. Het programma verwerkte alle mails opnieuw en overschreef elk concept, ook het aangepaste. Dat kost dus niet alleen extra LLM-calls: het gooit ook het werk van de medewerker weg. En bij drie van de vier mails was het nieuwe concept anders dan het eerste.</p>
+      </div></details></div></li>
+    <li><input type="checkbox" id="t17e"><div class="tekst"><label for="t17e"><span class="soort s-zoek">Zoek uit</span>Ga in de terminal naar de map <code>src</code> met <code>cd src</code>, en start daar <code>uv run les17</code>. Hoeveel mails vindt het programma? Kijk naar het pad. Ga daarna terug met <code>cd ..</code>.</label><details class="onthul"><summary>Bekijk het antwoord</summary><div>
+        <p>Bij ons: <code>0 mails in …/ai-engineering/src/inbox</code>. Het programma zoekt <code>inbox</code> en <code>concepten</code> in de map waar je het start. Er staat nu ook een lege map <code>concepten</code> in <code>src</code>; die mag weg. Draait het programma straks op een server, dan moet je dus vastleggen in welke map het start.</p>
+      </div></details></div></li>
+    <li><input type="checkbox" id="t17f"><div class="tekst"><label for="t17f"><span class="soort s-zoek">Zoek uit</span>Waarom kun je <code>schrijf_mail()</code> uit les 8 of les 15 hier niet gebruiken?</label><details class="onthul"><summary>Bekijk het antwoord</summary><div>
+        <p>Allebei vragen ze met <code>input()</code> of de mail weg mag. In een batch zit er niemand die antwoordt, dus het programma blijft wachten. In les 17 beslist de medewerker daarom later, met het bestand.</p>
+      </div></details></div></li>
+    <li><input type="checkbox" id="t17g"><div class="tekst"><label for="t17g"><span class="soort s-bouw">Bouw</span>Laat de schrijver en de controleur van les 15 de concepten maken. Maak van de lus in les 15 een functie die het concept en het oordeel van de controleur teruggeeft, zonder <code>input()</code>. Zet het oordeel bovenaan het concept. Zo ziet de medewerker welke concepten extra aandacht nodig hebben.</label></div></li>
+  </ul>
+  <div class="denk">
+    <h4>Denkvraag</h4>
+    <p class="vraag">Les 17 draaide om negen uur. Om tien uur komt er een nieuwe mail in de inbox. Wat gebeurt er met die mail?</p>
+    <details class="onthul"><summary>Bekijk een hint</summary><div>
+      <p>Niets, tot iemand les 17 opnieuw start. Werken zonder gesprek betekent nog niet dat het programma vanzelf start. Daarvoor heb je iets nodig dat het programma op vaste tijden start, bijvoorbeeld elk kwartier. En dat moet draaien op een computer die altijd aan staat, niet op een laptop die 's avonds dichtgaat.</p>
+    </div></details>
+  </div>
+  <div class="onthoud"><span class="kopje">Onthoud</span><p>Werken zonder gesprek: lees uit een map, schrijf naar een map, en stop. De mens kijkt later.</p></div>
+</section>
+
 <!-- ================================================================ NASLAG -->
 <section class="sectie" id="overzicht">
   <h2>Alles op een rij</h2>
@@ -2175,6 +2331,7 @@ Stel je vraag: <kbd>Waar blijft mijn bestelling 1001?</kbd>
       <tr><td class="nr"><a href="#les15">15</a></td><td>Controleur</td><td>De een schrijft, de ander keurt.</td></tr>
       <tr><td class="nr"><a href="#les16">16</a></td><td>Framework</td><td>Hetzelfde als jouw code, alleen zie je het niet meer.</td></tr>
       <tr><td class="nr"><a href="#kiezen">✓</a></td><td>Kiezen en bewijzen</td><td>De eenvoudigste oplossing die werkt, en testgevallen als bewijs.</td></tr>
+      <tr><td class="nr"><a href="#les17">17</a></td><td>Werken zonder gesprek</td><td>Lees uit een map, schrijf naar een map, en stop. De mens kijkt later.</td></tr>
     </tbody>
   </table></div>
   <h3>Een agent is een systeem</h3>
@@ -2196,6 +2353,7 @@ Stel je vraag: <kbd>Waar blijft mijn bestelling 1001?</kbd>
     <div><dt>API</dt><dd>De manier waarop programma's met elkaar praten. Jouw code praat via de API met OpenAI.</dd></div>
     <div><dt>API-key</dt><dd>Je geheime sleutel voor de API. Hij staat in <code>.env</code> en hoort nooit in git.</dd></div>
     <div><dt>async / await</dt><dd>Python-woorden waarmee je op meerdere antwoorden tegelijk kunt wachten (les 12).</dd></div>
+    <div><dt>Batch</dt><dd>Een stapel bestanden die je programma achter elkaar verwerkt, zonder dat er iemand bij zit (les 17).</dd></div>
     <div><dt>call_id</dt><dd>Het nummer van één tool-aanvraag. Jouw code zet het bij het resultaat, zodat het LLM weet bij welke aanvraag het hoort (les 4).</dd></div>
     <div><dt>Classificeren</dt><dd>Een label kiezen uit vaste keuzes, zoals klacht, compliment of vraag (les 6).</dd></div>
     <div><dt>Context</dt><dd>Alles wat bij één call naar het LLM meegaat: de instructie, het gesprek, de bron en de vraag. Wat jij niet meestuurt, zoals een eerder gesprek of de gegevens van jouw webshop, weet het LLM in die call niet. Wat het in zijn training leerde wel, maar dat kan verouderd of fout zijn (les 3, 9 en 10).</dd></div>

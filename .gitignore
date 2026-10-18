@@ -21,6 +21,10 @@ HANDOFF.md
 # Logboeken van de agent (les 14)
 agent.log
 
+# Werkmappen van de batch (les 17). De voorbeeldmails staan in voorbeelden/mails.
+inbox/
+concepten/
+
 # Verbeteradvies van Codex (voor de docent, niet voor leerlingen)
 analyse.md
 verbeteradvies-claude-code.md

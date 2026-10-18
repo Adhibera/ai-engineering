@@ -415,9 +415,31 @@ def les16():
     return s
 
 
+def les17():
+    s = Schema("les17", 720, 250, "Jouw code leest de mails één voor één uit de map inbox, laat het LLM een concept schrijven en zet dat in de map concepten. Een medewerker leest de concepten later.")
+    s.vak("inbox", "tool", 10, 30, 150, 116, ["inbox/", "mail-01.txt", "mail-02.txt", "mail-03.txt", "mail-04.txt"], links=True)
+    s.vak("code", "code", 205, 62, 180, 52, ["Lus over de mails", "jouw code"])
+    s.vak("llm", "llm", 205, 176, 180, 52, ["LLM", "les 9: concept-antwoord"])
+    s.vak("concepten", "tool", 430, 30, 150, 116, ["concepten/", "mail-01.txt", "mail-02.txt", "mail-03.txt", "mail-04.txt"], links=True)
+    s.vak("mens", "mens", 610, 62, 105, 52, ["Medewerker", "leest later"])
+    s.pijl(s.p("inbox", "r"), s.p("code", "l"))
+    s.tekst(182, 80, "lees")
+    s.pijl((265, 114), (265, 176))
+    s.tekst(257, 150, "mail", anker="end")
+    s.pijl((325, 176), (325, 114))
+    s.tekst(333, 150, "antwoord", anker="start")
+    s.pijl(s.p("code", "r"), s.p("concepten", "l"))
+    s.tekst(407, 80, "schrijf")
+    # De mens kijkt niet meer tijdens de run, maar later
+    s.pijl(s.p("concepten", "r"), s.p("mens", "l"), stippel=True)
+    s.tekst(595, 80, "later")
+    s.tekst(505, 172, "daarna stopt het programma", klasse="lbl zacht")
+    return s
+
+
 SCHEMAS = {f.__name__: f for f in (
     augmented, les1, les2, les3, les4, les5, les6, les7, les8, les9,
-    les10, les11, les12, les12_tijd, les13, les14, les15, les16,
+    les10, les11, les12, les12_tijd, les13, les14, les15, les16, les17,
 )}
 
 
