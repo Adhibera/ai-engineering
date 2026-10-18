@@ -437,9 +437,33 @@ def les17():
     return s
 
 
+def les18():
+    s = Schema("les18", 720, 252, "Halverwege de batch: mail 1 en 2 hebben een concept en staan in verwerkt, mail 3 en 4 staan nog in de inbox. Eerst schrijft de code het concept, pas daarna verplaatst hij de mail.")
+    s.vak("inbox", "tool", 10, 48, 150, 80, ["inbox/", "mail-03.txt", "mail-04.txt"], links=True)
+    s.vak("code", "code", 205, 62, 180, 52, ["verwerk(mail)", "jouw code"])
+    s.vak("llm", "llm", 205, 176, 180, 52, ["LLM", "les 9: concept-antwoord"])
+    s.vak("concepten", "tool", 500, 34, 170, 76, ["concepten/", "mail-01.txt", "mail-02.txt"], links=True)
+    s.vak("verwerkt", "tool", 500, 150, 170, 76, ["verwerkt/", "mail-01.txt", "mail-02.txt"], links=True)
+    s.pijl(s.p("inbox", "r"), s.p("code", "l"))
+    s.tekst(182, 80, "lees")
+    s.pijl((265, 114), (265, 176))
+    s.tekst(257, 150, "mail", anker="end")
+    s.pijl((325, 176), (325, 114))
+    s.tekst(333, 150, "antwoord", anker="start")
+    # De volgorde is de kern: eerst het concept, dan pas de mail verplaatsen
+    s.pijl((385, 72), (500, 72))
+    s.tekst(442, 64, "1. concept")
+    s.pijl((385, 104), (442, 104), (442, 188), (500, 188))
+    s.tekst(450, 150, "daarna", anker="start", klasse="lbl zacht")
+    s.tekst(471, 180, "2. mail")
+    s.tekst(85, 146, "nog te doen", klasse="lbl zacht")
+    s.tekst(585, 244, "klaar", klasse="lbl zacht")
+    return s
+
+
 SCHEMAS = {f.__name__: f for f in (
     augmented, les1, les2, les3, les4, les5, les6, les7, les8, les9,
-    les10, les11, les12, les12_tijd, les13, les14, les15, les16, les17,
+    les10, les11, les12, les12_tijd, les13, les14, les15, les16, les17, les18,
 )}
 
 

@@ -349,7 +349,7 @@ details.onthul > div { display: grid; gap: 8px; font-size: 15.5px; }
       <h1>Bouw je eigen <span>AI-agent</span></h1>
       <p class="lead">In deze lessen bouw je de klantenservice van een webshop. Je begint met één vraag aan een taalmodel. Aan het eind van deel 3 heb je een agent die zelf bedenkt welke stappen hij zet. In deel 4 maak je je klaar voor een echte klant. Bij elke les hoort een Python-bestand dat je start, leest en aanpast.</p>
       <ul class="feiten">
-        <li><b>17</b> lessen</li>
+        <li><b>18</b> lessen</li>
         <li><b>4</b> delen</li>
         <li>Python en de OpenAI API</li>
         <li>Rode draad: een webshop</li>
@@ -400,6 +400,7 @@ Stel je vraag: <kbd>Waar blijft mijn bestelling 1001?</kbd>
   <p class="nav-deel">Deel 4 · Naar een echte klant</p>
   <ol>
     <li><a href="#les17"><span class="nr">17</span><span class="t">Werken zonder gesprek</span><span class="tel"></span></a></li>
+    <li><a href="#les18"><span class="nr">18</span><span class="t">Veilig opnieuw starten</span><span class="tel"></span></a></li>
   </ol>
   <p class="nav-deel">Naslag</p>
   <a class="los" href="#overzicht">Alles op een rij</a>
@@ -2288,7 +2289,7 @@ Ja, je kunt de jas binnen 30 dagen na aankoop terugsturen met de bon. Je krijgt 
       </div></details></div></li>
     <li><input type="checkbox" id="t17c"><div class="tekst"><label for="t17c"><span class="soort s-experiment">Experiment</span>Schrijf zelf een mail en zet die als <code>mail-05.txt</code> in de inbox. Je verandert geen regel code. Draai les 17 opnieuw. Hoeveel mails verwerkt het programma nu?</label></div></li>
     <li><input type="checkbox" id="t17d"><div class="tekst"><label for="t17d"><span class="soort s-experiment">Experiment</span>Pas <code>concepten/mail-01.txt</code> aan, zoals een medewerker zou doen: zet er een zin onder. Draai les 17 nog een keer. Wat is er met jouw zin gebeurd? Hoe zou jij dit voorkomen?</label><details class="onthul"><summary>Bekijk wat er bij ons gebeurde</summary><div>
-        <p>De zin was weg. Het programma verwerkte alle mails opnieuw en overschreef elk concept, ook het aangepaste. Dat kost dus niet alleen extra LLM-calls: het gooit ook het werk van de medewerker weg. En bij drie van de vier mails was het nieuwe concept anders dan het eerste.</p>
+        <p>De zin was weg. Het programma verwerkte alle mails opnieuw en overschreef elk concept, ook het aangepaste. Dat kost dus niet alleen extra LLM-calls: het gooit ook het werk van de medewerker weg. En bij drie van de vier mails was het nieuwe concept anders dan het eerste. In les 18 los je dit op.</p>
       </div></details></div></li>
     <li><input type="checkbox" id="t17e"><div class="tekst"><label for="t17e"><span class="soort s-zoek">Zoek uit</span>Ga in de terminal naar de map <code>src</code> met <code>cd src</code>, en start daar <code>uv run les17</code>. Hoeveel mails vindt het programma? Kijk naar het pad. Ga daarna terug met <code>cd ..</code>.</label><details class="onthul"><summary>Bekijk het antwoord</summary><div>
         <p>Bij ons: <code>0 mails in …/ai-engineering/src/inbox</code>. Het programma zoekt <code>inbox</code> en <code>concepten</code> in de map waar je het start. Er staat nu ook een lege map <code>concepten</code> in <code>src</code>; die mag weg. Draait het programma straks op een server, dan moet je dus vastleggen in welke map het start.</p>
@@ -2306,6 +2307,124 @@ Ja, je kunt de jas binnen 30 dagen na aankoop terugsturen met de bon. Je krijgt 
     </div></details>
   </div>
   <div class="onthoud"><span class="kopje">Onthoud</span><p>Werken zonder gesprek: lees uit een map, schrijf naar een map, en stop. De mens kijkt later.</p></div>
+</section>
+
+<!-- ---------------------------------------------------------------- les 18 -->
+<section class="les" id="les18">
+  <header class="les-kop">
+    <span class="les-nr">18</span>
+    <p class="eyebrow">Begrip: herstartbaarheid</p>
+    <h3>Veilig opnieuw starten</h3>
+    <div class="meta"><span class="start">uv run les18</span><span>herstart.py</span><span>inbox → verwerkt</span></div>
+  </header>
+  <p class="doel"><strong>Na deze les</strong> kun je een batch zo bouwen dat je hem na een crash gewoon opnieuw kunt starten, zonder het werk van de medewerker kwijt te raken.</p>
+  <div class="probleem">
+    <h4>Het probleem</h4>
+    <p>Les 17 deed bij elke start alle mails opnieuw. Dat kostte calls, en een concept dat de medewerker al had aangepast, werd overschreven. En crashte les 17 halverwege, dan begon hij de volgende keer weer bij de eerste mail.</p>
+  </div>
+  <p class="idee"><strong>Een mail verlaat de inbox pas als zijn concept klaarstaat.</strong> De map waarin een mail staat, is zijn status: <code>inbox</code> is nog te doen, <code>verwerkt</code> is klaar. Daarom mag het programma crashen. Je start het opnieuw, en het gaat verder met wat nog in de inbox staat. Een concept dat er al is, overschrijft het nooit. Dezelfde mail nog een keer aanbieden verandert het concept dus niet. Dat heet <em>idempotent</em>.</p>
+  <figure class="schema">
+    <div class="papier"><svg viewBox="0 0 720 252" role="img" aria-label="Halverwege de batch: mail 1 en 2 hebben een concept en staan in verwerkt, mail 3 en 4 staan nog in de inbox. Eerst schrijft de code het concept, pas daarna verplaatst hij de mail." style="--min:562px">
+<defs><marker id="kop-les18" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="kop" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<polyline class="pijl" points="160,88.0 205,88.0" marker-end="url(#kop-les18)"/>
+<polyline class="pijl" points="265,114 265,176" marker-end="url(#kop-les18)"/>
+<polyline class="pijl" points="325,176 325,114" marker-end="url(#kop-les18)"/>
+<polyline class="pijl" points="385,72 500,72" marker-end="url(#kop-les18)"/>
+<polyline class="pijl" points="385,104 442,104 442,188 500,188" marker-end="url(#kop-les18)"/>
+<rect class="v-tool" x="10" y="48" width="150" height="80" rx="4"/>
+<text class="hoofd" x="22" y="70">inbox/</text>
+<text class="rij" x="22" y="90">mail-03.txt</text>
+<text class="rij" x="22" y="110">mail-04.txt</text>
+<rect class="v-code" x="205" y="62" width="180" height="52" rx="4"/>
+<text class="hoofd" x="295.0" y="85.0" text-anchor="middle">verwerk(mail)</text>
+<text class="sub" x="295.0" y="103.0" text-anchor="middle">jouw code</text>
+<rect class="v-llm" x="205" y="176" width="180" height="52" rx="12"/>
+<text class="hoofd" x="295.0" y="199.0" text-anchor="middle">LLM</text>
+<text class="sub" x="295.0" y="217.0" text-anchor="middle">les 9: concept-antwoord</text>
+<rect class="v-tool" x="500" y="34" width="170" height="76" rx="4"/>
+<text class="hoofd" x="512" y="56">concepten/</text>
+<text class="rij" x="512" y="76">mail-01.txt</text>
+<text class="rij" x="512" y="96">mail-02.txt</text>
+<rect class="v-tool" x="500" y="150" width="170" height="76" rx="4"/>
+<text class="hoofd" x="512" y="172">verwerkt/</text>
+<text class="rij" x="512" y="192">mail-01.txt</text>
+<text class="rij" x="512" y="212">mail-02.txt</text>
+<text class="lbl" x="182" y="80" text-anchor="middle">lees</text>
+<text class="lbl" x="257" y="150" text-anchor="end">mail</text>
+<text class="lbl" x="333" y="150" text-anchor="start">antwoord</text>
+<text class="lbl" x="442" y="64" text-anchor="middle">1. concept</text>
+<text class="lbl zacht" x="450" y="150" text-anchor="start">daarna</text>
+<text class="lbl" x="471" y="180" text-anchor="middle">2. mail</text>
+<text class="lbl zacht" x="85" y="146" text-anchor="middle">nog te doen</text>
+<text class="lbl zacht" x="585" y="244" text-anchor="middle">klaar</text>
+</svg></div>
+    <figcaption>Zo ziet het eruit halverwege de batch. De volgorde is de kern: eerst het concept schrijven (1), pas daarna de mail verplaatsen (2). Crasht het programma tussendoor, dan staat de mail nog in de inbox.</figcaption>
+  </figure>
+  <h4>De kern van de code</h4>
+<pre class="py"><code><span class="kw">def</span> verwerk(bestand: Path) -&gt; <span class="kw">None</span>:
+    concept_bestand = CONCEPTEN / bestand.name
+
+    <span class="com"># Staat er al een concept? Niet overschrijven: misschien heeft de medewerker het al aangepast</span>
+    <span class="kw">if</span> <span class="kw">not</span> concept_bestand.exists():
+        mail = bestand.read_text(encoding=<span class="str">&quot;utf-8&quot;</span>)
+        antwoord = beantwoord_vraag(mail)  <span class="com"># les 9: retrieval</span>
+        concept = <span class="str">f&quot;Mail van de klant:\n{mail}\nConcept-antwoord:\n{antwoord}\n&quot;</span>
+        concept_bestand.write_text(concept, encoding=<span class="str">&quot;utf-8&quot;</span>)
+
+    <span class="com"># Pas als het concept er staat, gaat de mail uit de inbox</span>
+    bestand.replace(VERWERKT / bestand.name)</code></pre>
+  <p class="uitleg-in"><code>replace</code> verplaatst de mail naar <code>verwerkt</code>. Staat daar al een mail met dezelfde naam, dan vervangt hij die. Met <code>rename</code> zou het programma dan op Windows crashen. Er staat bewust geen <code>try</code>/<code>except</code> in: crashen is hier veilig, omdat de voortgang in de mappen staat.</p>
+  <p class="let-op"><strong>Twee afspraken maken dit veilig.</strong> Elke mail heeft een eigen naam, want het programma herkent een mail aan zijn naam. En er draait maar één keer les 18 tegelijk.</p>
+  <h4>Probeer het</h4>
+  <p class="prose">Begin schoon. De mappen van les 17 staan er nog, en dan ziet les 18 de oude concepten. Verwijder de mappen <code>inbox</code>, <code>concepten</code> en <code>verwerkt</code>, en vul de inbox opnieuw. Op Windows verwijder je de mappen in de verkenner, en kopieer je zoals in les 17.</p>
+<pre class="term"><code><span class="prompt">$</span> <span class="cmd">rm -rf inbox concepten verwerkt</span>
+<span class="prompt">$</span> <span class="cmd">cp -r voorbeelden/mails inbox</span>
+<span class="prompt">$</span> <span class="cmd">uv run les18</span>
+4 mails in …/ai-engineering/inbox
+Verwerkt: mail-01.txt
+Verwerkt: mail-02.txt
+Verwerkt: mail-03.txt
+Verwerkt: mail-04.txt
+Klaar. Een medewerker leest de concepten na en verstuurt ze zelf.</code></pre>
+  <p class="uitleg-in">Het pad is ingekort. Kijk in de drie mappen: de inbox is leeg, en elke mail staat in <code>verwerkt</code> en heeft een concept.</p>
+  <h4>Opdrachten</h4>
+  <ul class="taken">
+    <li><input type="checkbox" id="t18a"><div class="tekst"><label for="t18a"><span class="soort s-voorspel">Voorspel</span>Draai les 18 nog een keer, zonder iets te veranderen. Hoeveel LLM-calls doet het programma? En wat deed les 17 de tweede keer?</label><details class="onthul"><summary>Bekijk wat er bij ons gebeurde</summary><div>
+        <p>Nul calls: <code>0 mails in …/ai-engineering/inbox</code>. De inbox is leeg, dus er is niets te doen. Les 17 deed alle vier de mails opnieuw.</p>
+      </div></details></div></li>
+    <li><input type="checkbox" id="t18b"><div class="tekst"><label for="t18b"><span class="soort s-experiment">Experiment</span>Laat het programma crashen op het slechtste moment. Zet in <code>verwerk()</code>, direct onder <code>write_text</code>, de regel <code>raise SystemExit("Crash!")</code>. Begin schoon en draai les 18. Kijk in de drie mappen. Pas dan <code>concepten/mail-01.txt</code> aan zoals een medewerker: zet er een zin onder. Haal de crash weg en draai opnieuw. Hoeveel calls zijn er? Staat jouw zin er nog?</label><details class="onthul"><summary>Bekijk wat er bij ons gebeurde</summary><div>
+        <p>Na de crash stond concept 01 er al, maar mail 01 stond nog in de inbox. Bij de herstart verplaatste het programma mail 01 zonder nieuwe call, en maakte het alleen concepten voor 02, 03 en 04: drie calls. Jouw zin stond er nog.</p>
+      </div></details></div></li>
+    <li><input type="checkbox" id="t18c"><div class="tekst"><label for="t18c"><span class="soort s-zoek">Zoek uit</span>Waarom eerst het concept schrijven en dan pas de mail verplaatsen? Wat gaat er mis als je die twee omdraait, en het programma daartussen crasht?</label><details class="onthul"><summary>Bekijk het antwoord</summary><div>
+        <p>Dan staat de mail al in <code>verwerkt</code>, maar er is geen concept. Bij de volgende start lijkt de mail klaar. Niemand merkt dat de klant nooit een antwoord kreeg.</p>
+      </div></details></div></li>
+    <li><input type="checkbox" id="t18d"><div class="tekst"><label for="t18d"><span class="soort s-voorspel">Voorspel</span>Laat <code>concepten</code> en <code>verwerkt</code> staan, en kopieer de voorbeeldmails nog een keer naar de inbox. Hoeveel calls doet les 18 nu? En stel dat er een nieuwe mail binnenkomt die ook <code>mail-01.txt</code> heet. Wat gebeurt er dan?</label><details class="onthul"><summary>Bekijk wat er bij ons gebeurde</summary><div>
+        <p>Nul calls. Voor elke mail bestond al een concept, dus het programma verplaatste ze alleen. Dat klopt als het dezelfde mails zijn. Maar een nieuwe mail met een oude naam krijgt géén concept, en vervangt de oude mail in <code>verwerkt</code>. Daarom moet elke mail een eigen naam hebben, bijvoorbeeld met de datum en de tijd erin.</p>
+      </div></details></div></li>
+    <li><input type="checkbox" id="t18e"><div class="tekst"><label for="t18e"><span class="soort s-experiment">Experiment</span>Een mail uit een ander systeem. Begin schoon, vul de inbox met de voorbeeldmails, en kopieer daarna ook <code>voorbeelden/andere-codering/mail-00.txt</code> naar de inbox. Open dat bestand niet in een editor, want die kan het bij opslaan omzetten. Draai les 18 twee keer. Wat gebeurt er met de andere mails?</label><details class="onthul"><summary>Bekijk wat er bij ons gebeurde</summary><div>
+        <p>Bij elke start crashte het programma op mail-00: <code>UnicodeDecodeError: 'utf-8' codec can't decode byte 0xeb</code>. Deze mail gebruikt een andere tekencodering dan utf-8. Omdat mail-00 vooraan staat, kwamen de andere mails nooit aan de beurt. Opnieuw starten helpt hier niet, want deze mail lukt nooit.</p>
+      </div></details></div></li>
+    <li><input type="checkbox" id="t18f"><div class="tekst"><label for="t18f"><span class="soort s-bouw">Bouw</span>Vang in <code>main()</code> alleen de <code>UnicodeDecodeError</code> op, en zet zo'n mail in een map <code>mislukt</code>. Print welke mail mislukte. Waarom kun je niet gewoon <code>except Exception</code> gebruiken? Denk aan wat er gebeurt als de wifi uit staat.</label><details class="onthul"><summary>Bekijk een hint</summary><div>
+        <p>Met <code>except Exception</code> belandt bij een storing élke mail in <code>mislukt</code>, terwijl ze bij de volgende start gewoon gelukt waren. Een tijdelijke fout laat je staan. Alleen een mail die nooit lukt, zet je apart. Bij ons waren het negen regels extra, en de andere vier mails werden gewoon verwerkt.</p>
+      </div></details></div></li>
+    <li><input type="checkbox" id="t18g"><div class="tekst"><label for="t18g"><span class="soort s-extra">Extra</span>Begin schoon en druk op <code>Ctrl+C</code> na de tweede "Verwerkt". Of zet je wifi uit. Kijk in de mappen, en start opnieuw.</label><details class="onthul"><summary>Bekijk wat er bij ons gebeurde</summary><div>
+        <p>Onze Ctrl+C viel midden in de derde call. Mail 01 en 02 stonden in <code>verwerkt</code>, 03 en 04 nog in de inbox. De herstart deed alleen 03 en 04. De onderbroken call leverde geen concept op, maar kan wel geld gekost hebben. Zonder verbinding met OpenAI crashte het programma met <code>openai.APIConnectionError: Connection error.</code>, en bleven alle mails in de inbox.</p>
+      </div></details></div></li>
+    <li><input type="checkbox" id="t18h"><div class="tekst"><label for="t18h"><span class="soort s-extra">Extra</span>Wat als het programma crasht precies tijdens <code>write_text</code>? Dan kan er een leeg of half concept staan, en <code>exists()</code> denkt dat het klaar is. Schrijf het concept daarom eerst naar een tijdelijk bestand, en geef het pas daarna de echte naam. Waarom helpt dat?</label><pre class="py"><code>tijdelijk = concept_bestand.with_suffix(<span class="str">&quot;.tmp&quot;</span>)
+tijdelijk.write_text(concept, encoding=<span class="str">&quot;utf-8&quot;</span>)
+tijdelijk.replace(concept_bestand)</code></pre><details class="onthul"><summary>Bekijk het antwoord</summary><div>
+        <p>Een bestand met de echte naam is nu altijd helemaal geschreven: <code>replace</code> geeft het in één stap zijn naam. Het is dezelfde regel als in de les. Iets telt pas als klaar als het helemaal af is.</p>
+      </div></details></div></li>
+  </ul>
+  <div class="denk">
+    <h4>Denkvraag</h4>
+    <p class="vraag">In les 7 stond: een goed programma crasht niet. Les 18 heeft geen <code>try</code>/<code>except</code>, en is toch veilig. Hoe kan dat?</p>
+    <details class="onthul"><summary>Bekijk een hint</summary><div>
+      <p>De voortgang staat op schijf, in de mappen. Crasht het programma, dan is er niets kwijt, en de volgende start gaat verder. Gecontroleerd stoppen, met behoud van de voortgang, is dus ook een manier van herstellen.</p>
+      <p>Maar het werkt alleen als iemand het programma opnieuw start, en als de fout de volgende keer weg is. Een mail die nooit lukt (opdracht t18e), of een server waar niemand naar kijkt, los je er niet mee op.</p>
+    </div></details>
+  </div>
+  <div class="onthoud"><span class="kopje">Onthoud</span><p>Een mail verlaat de inbox pas als zijn concept klaarstaat. Dan mag het programma crashen: je start het gewoon opnieuw.</p></div>
 </section>
 
 <!-- ================================================================ NASLAG -->
@@ -2332,6 +2451,7 @@ Ja, je kunt de jas binnen 30 dagen na aankoop terugsturen met de bon. Je krijgt 
       <tr><td class="nr"><a href="#les16">16</a></td><td>Framework</td><td>Hetzelfde als jouw code, alleen zie je het niet meer.</td></tr>
       <tr><td class="nr"><a href="#kiezen">✓</a></td><td>Kiezen en bewijzen</td><td>De eenvoudigste oplossing die werkt, en testgevallen als bewijs.</td></tr>
       <tr><td class="nr"><a href="#les17">17</a></td><td>Werken zonder gesprek</td><td>Lees uit een map, schrijf naar een map, en stop. De mens kijkt later.</td></tr>
+      <tr><td class="nr"><a href="#les18">18</a></td><td>Veilig opnieuw starten</td><td>Een mail verlaat de inbox pas als zijn concept klaarstaat.</td></tr>
     </tbody>
   </table></div>
   <h3>Een agent is een systeem</h3>
@@ -2360,7 +2480,9 @@ Ja, je kunt de jas binnen 30 dagen na aankoop terugsturen met de bon. Je krijgt 
     <div><dt>Framework</dt><dd>Kant-en-klare code die veel werk voor je doet, zoals de OpenAI Agents SDK (les 16).</dd></div>
     <div><dt>Gate</dt><dd>Een <code>if</code> tussen twee stappen die de keten kan stoppen (les 10).</dd></div>
     <div><dt>Guardrail</dt><dd>Een check die bepaalt of een bericht door mag (les 12).</dd></div>
+    <div><dt>Herstartbaar</dt><dd>Een programma dat je na een crash gewoon opnieuw kunt starten. Het gaat verder waar het was, en raakt geen werk kwijt (les 18).</dd></div>
     <div><dt>Human-in-the-loop</dt><dd>Een mens beslist mee voordat er iets gebeurt (les 8).</dd></div>
+    <div><dt>Idempotent</dt><dd>Als je iets nog een keer doet, verandert het resultaat niet. Dezelfde mail opnieuw aanbieden verandert het concept niet (les 18).</dd></div>
     <div><dt>Instructie</dt><dd>De tekst die het LLM vertelt welke rol het heeft en hoe het moet antwoorden. Ook wel de <em>prompt</em>.</dd></div>
     <div><dt>JSON</dt><dd>Een tekstvorm voor data, met velden en waarden. Pydantic maakt er een Python-object van (les 5).</dd></div>
     <div><dt>Kennisbank</dt><dd>Een bestand met vragen en antwoorden over jouw bedrijf (les 9).</dd></div>
