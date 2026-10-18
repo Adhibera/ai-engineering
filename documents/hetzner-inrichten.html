@@ -1,0 +1,1354 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Klassenserver inrichten</title>
+<meta name="description" content="Alle stappen om de klassenserver bij Hetzner in te richten, van een nieuw account tot een geteste server met een testgroep, zoals gedaan op 18 en 19 oktober 2026.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:wght@400;600&family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,600;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
+<style>
+/* Layout: dezelfde stijl als het lesboek. Een smalle leeskolom met een vaste
+   inhoudsopgave links; elke stap heeft een nummer, labels voor waar je typt,
+   commando's om te kopiëren en de uitvoer van toen. */
+:root {
+  --paper: #f3f6f7; --panel: #ffffff; --ink: #15222c; --muted: #566672; --line: #d2dce1;
+  --accent: #2348c4; --accent-soft: #e2e8fb;
+  --llm-bg: #dbf1e2;  --llm-line: #2f8a55;  --llm-ink: #1d6a3f;
+  --code-bg: #e3e8ee; --code-line: #4f6273; --code-ink: #384a59;
+  --tool-bg: #fcefc8; --tool-line: #b07b0e; --tool-ink: #774f05;
+  --mens-bg: #fbe0e1; --mens-line: #c24752; --mens-ink: #a0343f;
+  --pre-bg: #14212b;  --pre-fg: #e4ecf1;  --pre-com: #8ea2b0; --pre-in: #ffd479;
+  --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --body: "Atkinson Hyperlegible Next", "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --mono: "Atkinson Hyperlegible Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #10171c; --panel: #17212a; --ink: #e3eaee; --muted: #98a7b2; --line: #2b3943;
+    --accent: #8ca8ff; --accent-soft: #1d2848;
+    --llm-bg: #163a27;  --llm-line: #5dc48b;  --llm-ink: #84dba8;
+    --code-bg: #232f39; --code-line: #9db0c0; --code-ink: #c6d2dc;
+    --tool-bg: #3a2e10; --tool-line: #e2b04a; --tool-ink: #f1c96e;
+    --mens-bg: #3e1e23; --mens-line: #ee7c86; --mens-ink: #f59ca4;
+    --pre-bg: #0a1116;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #10171c; --panel: #17212a; --ink: #e3eaee; --muted: #98a7b2; --line: #2b3943;
+  --accent: #8ca8ff; --accent-soft: #1d2848;
+  --llm-bg: #163a27;  --llm-line: #5dc48b;  --llm-ink: #84dba8;
+  --code-bg: #232f39; --code-line: #9db0c0; --code-ink: #c6d2dc;
+  --tool-bg: #3a2e10; --tool-line: #e2b04a; --tool-ink: #f1c96e;
+  --mens-bg: #3e1e23; --mens-line: #ee7c86; --mens-ink: #f59ca4;
+  --pre-bg: #0a1116;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--body); font-size: 17px; line-height: 1.6; -webkit-text-size-adjust: 100%; }
+a { color: var(--accent); text-underline-offset: 2px; }
+a:focus-visible, input:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+h1, h2, h3 { font-family: var(--display); line-height: 1.15; text-wrap: balance; margin: 0; }
+p { margin: 0; }
+code { font-family: var(--mono); font-size: .88em; background: var(--code-bg); color: var(--code-ink); padding: .08em .35em; border-radius: 4px; overflow-wrap: anywhere; }
+.gutter { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+/* ---------- kop */
+.kop { border-bottom: 1px solid var(--line); background: var(--panel); }
+.kop-binnen { max-width: 1180px; margin: 0 auto; padding-block: 48px 44px; display: grid; gap: 32px; align-items: center; }
+@media (min-width: 920px) { .kop-binnen { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 56px; } }
+.kop-tekst { display: grid; gap: 18px; min-width: 0; }
+.bovenregel { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.kop h1 { font-size: clamp(38px, 6vw, 62px); font-weight: 800; letter-spacing: -.02em; }
+.kop h1 span { color: var(--accent); }
+.lead { font-size: 19px; max-width: 34em; }
+.feiten { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.feiten li { border: 1px solid var(--line); border-radius: 999px; padding: 3px 12px; font-size: 14.5px; color: var(--muted); }
+.feiten b { color: var(--ink); }
+.kop-term { min-width: 0; display: grid; gap: 8px; }
+.kop-term .onder { font-size: 14px; color: var(--muted); }
+
+/* ---------- opbouw en inhoudsopgave */
+.layout { max-width: 1180px; margin: 0 auto; display: grid; gap: 8px; padding-block: 24px 80px; }
+@media (min-width: 1080px) { .layout { grid-template-columns: 240px minmax(0, 1fr); gap: 56px; padding-top: 40px; } }
+main { min-width: 0; max-width: 800px; }
+.inhoud { font-size: 15px; display: grid; gap: 6px; align-content: start; min-width: 0; }
+.inhoud .nav-kop { font-family: var(--display); font-weight: 800; font-size: 18px; }
+.voortgang { font-size: 14px; color: var(--llm-ink); font-weight: 600; }
+.inhoud .nav-deel { margin-top: 10px; font-size: 12.5px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.inhoud a { color: var(--ink); text-decoration: none; }
+.inhoud a.los { padding: 3px 0; }
+.inhoud a:hover { color: var(--accent); }
+.inhoud ol { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.inhoud ol a { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); font-variant-numeric: tabular-nums; font-weight: 600; }
+.inhoud .t { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.inhoud ol a.af { background: var(--llm-bg); border-color: var(--llm-line); color: var(--llm-ink); }
+@media (min-width: 1080px) {
+  .inhoud { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 24px); max-height: calc(100vh - 48px); overflow-y: auto; padding-right: 6px; }
+  .inhoud ol { display: grid; gap: 1px; }
+  .inhoud ol a { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 6px; align-items: baseline; width: auto; height: auto; place-items: initial; border: 0; background: none; border-radius: 6px; padding: 4px 8px 4px 6px; font-weight: 400; }
+  .inhoud .nr { color: var(--muted); font-variant-numeric: tabular-nums; text-align: right; }
+  .inhoud .t { display: block; position: static; width: auto; height: auto; overflow: visible; clip-path: none; white-space: normal; }
+  .inhoud ol a.af { background: none; color: var(--muted); text-decoration: line-through; text-decoration-color: var(--llm-line); }
+  .inhoud ol a.af .nr { color: var(--llm-ink); }
+}
+
+/* ---------- secties, delen en stappen */
+.sectie { display: grid; gap: 16px; padding-top: 48px; }
+.sectie h2 { font-size: 32px; font-weight: 800; letter-spacing: -.01em; }
+.sectie h3 { font-size: 21px; font-weight: 700; margin-top: 10px; }
+.deel { border-top: 2px solid var(--ink); margin-top: 72px; padding-top: 22px; display: grid; gap: 14px; }
+.deel .label { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; font-weight: 600; color: var(--accent); }
+.deel h2 { font-size: clamp(30px, 4.4vw, 42px); font-weight: 800; letter-spacing: -.015em; }
+.prose { display: grid; gap: 12px; max-width: 42em; }
+p.prose { display: block; }
+.lijst { margin: 0; padding-left: 1.3em; display: grid; gap: 6px; max-width: 42em; }
+.stap { padding-top: 48px; display: grid; gap: 14px; }
+.stap-kop { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; column-gap: 16px; align-items: end; }
+.stap-nr { font-family: var(--display); font-weight: 800; font-size: 60px; line-height: .8; color: var(--accent); font-variant-numeric: tabular-nums; }
+.stap-titel { display: grid; gap: 6px; min-width: 0; }
+.stap-titel h3 { font-size: clamp(24px, 3.6vw, 30px); font-weight: 800; letter-spacing: -.01em; }
+.eyebrow { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.duur { font-size: 13px; color: var(--muted); }
+.waar { font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; padding: 1px 8px; border-radius: 999px; white-space: nowrap; border: 1px solid transparent; }
+.w-browser { background: var(--tool-bg); color: var(--tool-ink); }
+.w-laptop { background: var(--code-bg); color: var(--code-ink); }
+.w-root { background: var(--mens-bg); color: var(--mens-ink); }
+.w-beheer { background: var(--accent-soft); color: var(--accent); }
+.w-groep0, .w-proef { background: var(--llm-bg); color: var(--llm-ink); }
+.klaar { display: flex; gap: 6px; align-items: center; font-size: 14px; color: var(--muted); cursor: pointer; padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--panel); }
+.klaar input { width: 18px; height: 18px; margin: 0; accent-color: var(--llm-line); cursor: pointer; }
+.klaar:has(input:checked) { border-color: var(--llm-line); color: var(--llm-ink); background: var(--llm-bg); }
+.stap-body { display: grid; gap: 12px; min-width: 0; }
+@media (max-width: 560px) {
+  .stap-kop { grid-template-columns: auto minmax(0, 1fr); row-gap: 10px; }
+  .stap-nr { font-size: 46px; }
+  .klaar { grid-column: 1 / -1; justify-self: start; }
+}
+
+/* ---------- commando's en uitvoer */
+pre { margin: 0; position: relative; overflow-x: auto; border-radius: 10px; padding: 32px 18px 14px; font-family: var(--mono); font-size: 14px; line-height: 1.55; tab-size: 4; white-space: pre-wrap; overflow-wrap: anywhere; }
+pre code { background: none; color: inherit; padding: 0; font-size: inherit; border-radius: 0; overflow-wrap: anywhere; }
+pre::before { content: attr(data-waar); position: absolute; top: 8px; left: 18px; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
+pre.cmd, pre.term { background: var(--pre-bg); color: var(--pre-fg); }
+pre.cmd::before, pre.term::before { color: var(--pre-com); }
+pre.term::before { content: "terminal"; }
+pre.out { background: var(--panel); color: var(--code-ink); border: 1px dashed var(--line); font-size: 13.5px; }
+pre.out::before { color: var(--muted); }
+pre .ip { color: var(--pre-in); font-weight: 600; }
+pre.out .ip { color: var(--accent); }
+.kopieer { position: absolute; top: 6px; right: 8px; font: 600 12px var(--body); color: var(--pre-fg); background: transparent; border: 1px solid var(--pre-com); border-radius: 6px; padding: 2px 9px; cursor: pointer; }
+.kopieer:hover { border-color: var(--pre-fg); }
+
+/* ---------- tabellen en kaders */
+.tabel { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); }
+table { border-collapse: collapse; width: 100%; font-size: 15.5px; line-height: 1.45; }
+th, td { text-align: left; padding: 9px 12px; vertical-align: top; border-bottom: 1px solid var(--line); }
+th { font-weight: 700; font-size: 14px; background: var(--paper); }
+tr:last-child td { border-bottom: 0; }
+.tip { border-radius: 10px; padding: 12px 16px; display: grid; gap: 8px; border-left: 4px solid; max-width: 44em; }
+.tip-kop { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; }
+.t-let { background: var(--panel); border-color: var(--code-line); }
+.t-let .tip-kop { color: var(--code-ink); }
+.t-valkuil { background: var(--mens-bg); border-color: var(--mens-line); }
+.t-valkuil .tip-kop { color: var(--mens-ink); }
+.t-volgende { background: var(--accent-soft); border-color: var(--accent); }
+.t-volgende .tip-kop { color: var(--accent); }
+.ip-blok { display: grid; gap: 8px; border: 1px solid var(--accent); border-radius: 12px; padding: 14px 16px; background: var(--accent-soft); max-width: 44em; }
+.ip-blok input { font: 600 17px var(--mono); padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); color: var(--ink); width: 100%; max-width: 22em; }
+.ip-uitleg { font-size: 14.5px; color: var(--muted); }
+.voet { border-top: 1px solid var(--line); margin-top: 72px; padding-top: 18px; font-size: 14.5px; color: var(--muted); display: grid; gap: 6px; }
+@media print {
+  .inhoud, .kopieer, .klaar, .ip-blok input { display: none; }
+  .layout { display: block; }
+  body { background: #fff; }
+  pre, .tip, .tabel { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<header class="kop gutter">
+  <div class="kop-binnen">
+    <div class="kop-tekst">
+      <p class="bovenregel">Voor de docent · bij de lessenreeks AI engineering</p>
+      <h1>De klassenserver <span>inrichten</span></h1>
+      <p class="lead">Alle stappen om de server bij Hetzner in te richten, van een nieuw account tot een geteste server met een testgroep. Zo deden we het op 18 en 19 oktober 2026, en zo kun je het de volgende keer zelf.</p>
+      <ul class="feiten">
+        <li><b>24</b> stappen</li>
+        <li>± <b>2</b> uur</li>
+        <li>Ubuntu 24.04</li>
+        <li><b>€19,99</b> per maand</li>
+      </ul>
+    </div>
+    <div class="kop-term">
+<pre class="term"><code>$ ssh klasserver
+beheer@klasserver:~$ loginctl list-users --no-legend
+1000 beheer no  active
+1001 groep0 yes lingering</code></pre>
+      <p class="onder">Zo staat de server er aan het eind bij: de beheerder, en de testgroep groep0 met linger.</p>
+    </div>
+  </div>
+</header>
+<div class="layout gutter">
+<nav class="inhoud" aria-label="Inhoud">
+<p class="nav-kop">Inhoud</p>
+<p class="voortgang" id="voortgang">0 van 24 klaar</p>
+<a class="los" href="#start">Voordat je begint</a>
+<p class="nav-deel">A · Hetzner</p><ol>
+<li><a href="#s1" data-nav="1"><span class="nr">1</span><span class="t">Een Hetzner-account maken</span></a></li>
+<li><a href="#s2" data-nav="2"><span class="nr">2</span><span class="t">Tweestapsverificatie (2FA) aanzetten</span></a></li>
+<li><a href="#s3" data-nav="3"><span class="nr">3</span><span class="t">Het account laten verifiëren</span></a></li>
+<li><a href="#s4" data-nav="4"><span class="nr">4</span><span class="t">Een project maken</span></a></li>
+<li><a href="#s5" data-nav="5"><span class="nr">5</span><span class="t">De SSH-sleutel toevoegen</span></a></li>
+<li><a href="#s6" data-nav="6"><span class="nr">6</span><span class="t">De firewall maken</span></a></li>
+<li><a href="#s7" data-nav="7"><span class="nr">7</span><span class="t">De server maken</span></a></li>
+</ol>
+<p class="nav-deel">B · Laptop</p><ol>
+<li><a href="#s8" data-nav="8"><span class="nr">8</span><span class="t">De eerste keer inloggen, als root</span></a></li>
+<li><a href="#s9" data-nav="9"><span class="nr">9</span><span class="t">Een korte naam: ssh klasserver</span></a></li>
+</ol>
+<p class="nav-deel">C · Als root</p><ol>
+<li><a href="#s10" data-nav="10"><span class="nr">10</span><span class="t">Rondkijken (alleen lezen)</span></a></li>
+<li><a href="#s11" data-nav="11"><span class="nr">11</span><span class="t">Bijwerken, de tijdzone, en herstarten</span></a></li>
+<li><a href="#s12" data-nav="12"><span class="nr">12</span><span class="t">De beheerder maken</span></a></li>
+<li><a href="#s13" data-nav="13"><span class="nr">13</span><span class="t">SSH dichtzetten</span></a></li>
+</ol>
+<p class="nav-deel">D · Als beheer</p><ol>
+<li><a href="#s14" data-nav="14"><span class="nr">14</span><span class="t">uv voor iedereen</span></a></li>
+<li><a href="#s15" data-nav="15"><span class="nr">15</span><span class="t">Het logboek</span></a></li>
+<li><a href="#s16" data-nav="16"><span class="nr">16</span><span class="t">De testgroepen en hun grenzen</span></a></li>
+</ol>
+<p class="nav-deel">E · Testen</p><ol>
+<li><a href="#s17" data-nav="17"><span class="nr">17</span><span class="t">De testtimer, als groep0</span></a></li>
+<li><a href="#s18" data-nav="18"><span class="nr">18</span><span class="t">De grenzen testen</span></a></li>
+<li><a href="#s19" data-nav="19"><span class="nr">19</span><span class="t">De scheiding testen</span></a></li>
+<li><a href="#s20" data-nav="20"><span class="nr">20</span><span class="t">Uitloggen en herstarten</span></a></li>
+<li><a href="#s21" data-nav="21"><span class="nr">21</span><span class="t">De noodstop, en weer aanzetten</span></a></li>
+</ol>
+<p class="nav-deel">F · Afronden</p><ol>
+<li><a href="#s22" data-nav="22"><span class="nr">22</span><span class="t">'s Nachts herstarten na updates</span></a></li>
+<li><a href="#s23" data-nav="23"><span class="nr">23</span><span class="t">Het script nieuwe-groep</span></a></li>
+<li><a href="#s24" data-nav="24"><span class="nr">24</span><span class="t">Opschrijven</span></a></li>
+</ol>
+<a class="los" href="#valkuilen">Waar we tegenaan liepen</a>
+<a class="los" href="#nu">Wat er nu staat</a>
+</nav>
+<main>
+
+<section class="sectie" id="start">
+  <h2>Voordat je begint</h2>
+  <div class="prose">
+    <p>Op deze pagina staan alle stappen van de sessie van 18 en 19 oktober 2026, in de volgorde waarin we ze deden. Bij elk commando staat de uitvoer die we toen kregen. Zo kun je zien of het bij jou hetzelfde gaat.</p>
+  </div>
+  <div class="ip-blok">
+    <label for="ip"><b>Het IP-adres van je server</b> (uit stap 7)</label>
+    <input id="ip" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="bijvoorbeeld 203.0.113.10">
+    <p class="ip-uitleg">Vul je het in, dan staat het overal op de plek van <span class="ip">&lt;IP&gt;</span>, ook als je een commando kopieert. Het adres blijft alleen in deze browser bewaard.</p>
+  </div>
+  <h3>Waar typ je wat?</h3>
+  <div class="tabel"><table>
+    <thead><tr><th>Label</th><th>Waar</th></tr></thead>
+    <tbody>
+      <tr><td><span class="waar w-browser">browser</span></td><td>In de Hetzner Console, in je browser.</td></tr>
+      <tr><td><span class="waar w-laptop">laptop</span></td><td>In een terminal op je laptop.</td></tr>
+      <tr><td><span class="waar w-root">server · root</span></td><td>Op de server, ingelogd met <code>ssh root@klasserver</code>. Kan alleen tot stap 13.</td></tr>
+      <tr><td><span class="waar w-beheer">server · beheer</span></td><td>Op de server, ingelogd met <code>ssh klasserver</code>.</td></tr>
+      <tr><td><span class="waar w-groep0">server · groep0</span> <span class="waar w-proef">server · proef</span></td><td>Op de server, ingelogd als die groep: <code>ssh groep0@klasserver</code>.</td></tr>
+    </tbody>
+  </table></div>
+  <h3>Wat je nodig hebt</h3>
+  <ul class="lijst">
+    <li>een laptop met een terminal en <code>ssh</code></li>
+    <li>een SSH-sleutel; wij gebruikten <code>~/.ssh/id_ed25519_adhibera</code> (zie stap 5 als je er nog geen hebt)</li>
+    <li>een telefoon met een authenticator-app, voor 2FA</li>
+    <li>een betaalmethode, voor Hetzner</li>
+    <li>ongeveer twee uur, waarvan een deel wachten</li>
+  </ul>
+  <h3>De keuzes die we maakten</h3>
+  <div class="tabel"><table><thead><tr><th>Keuze</th><th>Wat we kozen</th><th>Ook mogelijk</th></tr></thead><tbody><tr><td>Account</td><td>een eigen account van de docent</td><td>een account van de school: beter voor de overdracht, maar langer regelen</td></tr><tr><td>Geheugen</td><td>4 GB</td><td>8 GB (twee keer zo duur), 2 GB (te krap)</td></tr><tr><td>Locatie</td><td>Duitsland, Nürnberg</td><td>Falkenstein, of Helsinki in Finland</td></tr><tr><td>Beheer</td><td>een gebruiker <code>beheer</code> met sudo zonder wachtwoord; root kan niet inloggen</td><td>sudo met wachtwoord (veiliger, maar dan typ je alles zelf), of als root blijven (minst veilig)</td></tr><tr><td>Backups</td><td>uit</td><td>aan, voor 20% extra</td></tr><tr><td>IPv4</td><td>houden</td><td>alleen IPv6 (goedkoper, maar niet elk schoolnetwerk heeft IPv6)</td></tr><tr><td>Sleutel</td><td>de bestaande sleutel van de laptop</td><td>een aparte sleutel voor de server</td></tr></tbody></table></div>
+  <div class="tip t-let"><p class="tip-kop">Twee regels die de hele tijd gelden</p><ul class="lijst"><li><b>Plak nooit een geheim in een chat:</b> geen OpenAI-key, geen herstelcodes, geen privésleutel. Een publieke sleutel (<code>.pub</code>) mag wel.</li><li><b>Sluit jezelf niet buiten:</b> houd bij een wijziging aan SSH een tweede verbinding open, en test eerst in een nieuwe verbinding.</li></ul></div>
+</section>
+
+<section class="deel" id="deel-a">
+  <p class="label">Deel A · stap 1 t/m 7</p>
+  <h2>In de browser: Hetzner</h2>
+  <div class="prose">
+<p>Eerst regel je alles in de Hetzner Console: het account, de beveiliging, het project, de sleutel, de firewall en de server zelf. Dit deel kost ongeveer een uur, maar een groot deel daarvan is wachten op de verificatie.</p></div>
+</section>
+<section class="stap" id="s1">
+  <div class="stap-kop">
+    <span class="stap-nr">1</span>
+    <div class="stap-titel">
+      <p class="eyebrow"><span class="waar w-browser">browser</span><span class="duur">± 10 min</span></p>
+      <h3>Een Hetzner-account maken</h3>
+    </div>
+    <label class="klaar"><input type="checkbox" data-stap="1"><span>klaar</span></label>
+  </div>
+  <div class="stap-body">
+
+<p class="prose">Dit deed je zelf. Claude heeft deze schermen niet gezien. Hieronder staat daarom alleen wat er moet gebeuren, niet welke knoppen er precies staan.</p>
+<ol class="lijst"><li>Ga naar <b>hetzner.com</b> en registreer een account. Wij gebruikten een eigen account van de docent. Een account van de school is beter voor de overdracht en de afspraken met bedrijven, maar het regelen duurt langer.</li><li>Bevestig je e-mailadres.</li><li>Vul je gegevens in, en een betaalmethode.</li></ol>
+<div class="tip t-let"><p class="tip-kop">Goed om te weten</p><p class="prose">Een account van de school is later niet zomaar over te zetten. Dan heb je een nieuwe server nodig.</p></div>
+
+  </div>
+</section>
+<section class="stap" id="s2">
+  <div class="stap-kop">
+    <span class="stap-nr">2</span>
+    <div class="stap-titel">
+      <p class="eyebrow"><span class="waar w-browser">browser</span><span class="duur">± 5 min</span></p>
+      <h3>Tweestapsverificatie (2FA) aanzetten</h3>
+    </div>
+    <label class="klaar"><input type="checkbox" data-stap="2"><span>klaar</span></label>
+  </div>
+  <div class="stap-body">
+
+<p class="prose">Met 2FA kan niemand in je account, ook niet met je wachtwoord, zonder de code op je telefoon. Dit doe je helemaal zelf, want de QR-code is een geheim.</p>
+<ol class="lijst"><li>Open <b>console.hetzner.com</b>. Bovenaan staat de melding <i>2FA is not enabled yet</i>. Klik op <b>Enable 2FA now</b>.</li><li>Scan de QR-code met een authenticator-app op je telefoon.</li><li>Staat er een veld voor een code van zes cijfers, typ dan de code uit je app. Staat er een veld voor een naam, vul dan iets in als <i>telefoon</i>.</li><li>Klik op de groene knop <b>Add</b>.</li><li>Laat Hetzner <b>herstelcodes</b> zien, bewaar die dan buiten de laptop, bijvoorbeeld op papier of in je wachtwoordmanager. Zonder die codes kom je niet meer in je account als je telefoon kwijt is. Zet ze niet in een chat of in de repo.</li></ol>
+<p class="prose"><b>Controle:</b> ververs de pagina. De melding <i>2FA is not enabled yet</i> is weg.</p>
+
+  </div>
+</section>
+<section class="stap" id="s3">
+  <div class="stap-kop">
+    <span class="stap-nr">3</span>
+    <div class="stap-titel">
+      <p class="eyebrow"><span class="waar w-browser">browser</span><span class="duur">bij ons ± 30 min</span></p>
+      <h3>Het account laten verifiëren</h3>
+    </div>
+    <label class="klaar"><input type="checkbox" data-stap="3"><span>klaar</span></label>
+  </div>
+  <div class="stap-body">
+
+<p class="prose">Bij ons kon er eerst geen project gemaakt worden. Na een klik op <b>New project</b> meldde Hetzner <b>Verification pending</b>. Je account moet eerst gecontroleerd worden.</p>
+<ol class="lijst"><li>Ga naar <b>accounts.hetzner.com</b> en log in.</li><li>Klik op <b>Verification</b> en volg de stappen. Hetzner kiest hoe, bijvoorbeeld met een kleine betaling of een foto van je identiteitsbewijs.</li><li>Wacht. Soms gaat het meteen, soms duurt het uren. Bij ons was het na ongeveer een half uur rond.</li></ol>
+<p class="prose">Dit doe je zelf, want het gaat om je persoonsgegevens. Na de verificatie maakte Hetzner zelf een leeg project <b>Default</b>. Dat mag blijven; het kost niets.</p>
+
+  </div>
+</section>
+<section class="stap" id="s4">
+  <div class="stap-kop">
+    <span class="stap-nr">4</span>
+    <div class="stap-titel">
+      <p class="eyebrow"><span class="waar w-browser">browser</span><span class="duur">1 min</span></p>
+      <h3>Een project maken</h3>
+    </div>
+    <label class="klaar"><input type="checkbox" data-stap="4"><span>klaar</span></label>
+  </div>
+  <div class="stap-body">
+
+<p class="prose">Een project is een map in de console, met daarin de server, de firewall en de sleutel. Een eigen project houdt de klassenserver los van ander werk.</p>
+<ol class="lijst"><li>Ga in de console naar <b>Projects</b>.</li><li>Klik op <b>New project</b>.</li><li>Vul als naam <code>klasserver</code> in en klik op <b>Add project</b>.</li><li>Open het project.</li></ol>
+
+  </div>
+</section>
+<section class="stap" id="s5">
+  <div class="stap-kop">
+    <span class="stap-nr">5</span>
+    <div class="stap-titel">
+      <p class="eyebrow"><span class="waar w-laptop">laptop</span> <span class="waar w-browser">browser</span><span class="duur">3 min</span></p>
+      <h3>De SSH-sleutel toevoegen</h3>
+    </div>
+    <label class="klaar"><input type="checkbox" data-stap="5"><span>klaar</span></label>
+  </div>
+  <div class="stap-body">
+
+<p class="prose">Met een SSH-sleutel log je in zonder wachtwoord. Hetzner zet het openbare deel van de sleutel straks zelf op de server. Wij gebruikten een sleutel die al op de laptop stond: <code>~/.ssh/id_ed25519_adhibera</code>.</p>
+<p class="prose"><b>1. Op de laptop:</b> laat het openbare deel zien. Dat is het bestand dat eindigt op <code>.pub</code>. Dat mag je delen; het bestand zonder <code>.pub</code> is geheim.</p>
+<pre class="cmd" data-waar="laptop"><code>cat ~/.ssh/id_ed25519_adhibera.pub</code></pre>
+<pre class="out" data-waar="uitvoer (ingekort)"><code>ssh-ed25519 AAAAC3Nza… info@adhibera.com</code></pre>
+<div class="tip t-volgende"><p class="tip-kop">Geen sleutel?</p><p class="prose">Maak er dan eerst een. Dit hebben we in deze sessie niet gedaan, want de sleutel bestond al:</p><pre class="cmd" data-waar="laptop"><code>ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519_adhibera -C info@adhibera.com</code></pre><p class="prose">Kies bij de vraag om een <i>passphrase</i> een wachtwoordzin. Onze sleutel heeft er geen; zie het draaiboek, onder <i>Nog te doen</i>.</p></div>
+<p class="prose"><b>2. In de console:</b></p>
+<ol class="lijst"><li>Ga in het project naar <b>Security → SSH keys</b>, en klik op <b>Add SSH key</b>.</li><li>Plak de hele regel uit stap 1 in het grote veld.</li><li>Vervang de naam door <code>laptop-docent</code>.</li><li>Klik op <b>Add SSH key</b>.</li></ol>
+<p class="prose"><b>3. Controle:</b> Hetzner toont bij de sleutel een vingerafdruk. Vergelijk die met de vingerafdruk op de laptop:</p>
+<pre class="cmd" data-waar="laptop"><code>ssh-keygen -l -E md5 -f ~/.ssh/id_ed25519_adhibera.pub</code></pre>
+<pre class="out" data-waar="uitvoer bij ons"><code>256 MD5:48:cf:49:37:62:28:7a:a8:b1:65:ef:8c:a6:1a:76:95 info@adhibera.com (ED25519)</code></pre>
+<div class="tip t-valkuil"><p class="tip-kop">Waar we tegenaan liepen</p><p class="prose">Bij het invullen viel er een stukje van het einde van de sleutel weg: er stond <code>…zat7nfo@adhibera.com</code> in plaats van <code>…zat7 info@adhibera.com</code>. Plak de sleutel daarom, typ hem niet over, en kijk het einde na. Het commentaar aan het eind (<code>info@adhibera.com</code>) mag ook weg; wij hebben de sleutel er de tweede keer zonder commentaar in gezet.</p></div>
+<p class="prose">De naam is alleen een etiket in de console. Je kunt hem later wijzigen via <b>Rename</b> bij de sleutel.</p>
+
+  </div>
+</section>
+<section class="stap" id="s6">
+  <div class="stap-kop">
+    <span class="stap-nr">6</span>
+    <div class="stap-titel">
+      <p class="eyebrow"><span class="waar w-browser">browser</span><span class="duur">2 min</span></p>
+      <h3>De firewall maken</h3>
+    </div>
+    <label class="klaar"><input type="checkbox" data-stap="6"><span>klaar</span></label>
+  </div>
+  <div class="stap-body">
+
+<p class="prose">De firewall van Hetzner laat alleen SSH door (poort 22) en ping (ICMP). Er komt geen website op de server, dus meer hoeft er niet open.</p>
+<ol class="lijst"><li>Ga in het project naar <b>Firewalls</b> en klik op <b>Create Firewall</b>.</li><li><b>Inbound rules:</b> er staan al twee regels, allebei van <i>Any IPv4</i> en <i>Any IPv6</i>: <b>TCP</b> met poort <b>22</b>, en <b>ICMP</b>. Laat die zo staan.</li><li><b>Outbound rules:</b> laat dit leeg. Dan mag de server alles naar buiten, en dat is nodig voor apt, git, uv en OpenAI.</li><li><b>Apply to:</b> laat dit leeg. Je koppelt de firewall straks bij het maken van de server.</li><li><b>Name:</b> vul <code>alleen-ssh</code> in.</li><li>Klik op <b>Create Firewall</b>.</li></ol>
+<div class="tip t-valkuil"><p class="tip-kop">Waar we tegenaan liepen</p><p class="prose">Er kwam een venster <i>What's New</i> over de knop heen. Klik eerst op <b>Got it</b>.</p></div>
+
+  </div>
+</section>
+<section class="stap" id="s7">
+  <div class="stap-kop">
+    <span class="stap-nr">7</span>
+    <div class="stap-titel">
+      <p class="eyebrow"><span class="waar w-browser">browser</span><span class="duur">5 min</span></p>
+      <h3>De server maken</h3>
+    </div>
+    <label class="klaar"><input type="checkbox" data-stap="7"><span>klaar</span></label>
+  </div>
+  <div class="stap-body">
+
+<p class="prose">Dit is de enige stap die geld kost. Claude vulde het formulier in, maar op <b>Create &amp; Buy now</b> klikte de docent zelf.</p>
+<p class="prose">Ga naar <b>Servers</b> en klik op <b>Add Server</b>. Loop het formulier van boven naar beneden door:</p>
+<div class="tabel"><table><thead><tr><th>Onderdeel</th><th>Kies</th><th>Waarom</th></tr></thead><tbody><tr><td><b>Type</b></td><td>Shared Resources → <b>Regular Performance</b> → <b>CPX22</b> (2 vCPU's AMD, 4 GB, €19,49 per maand)</td><td>4 GB is genoeg voor ongeveer tien groepen. <i>Cost-Optimized</i> was goedkoper, maar in Nürnberg en Falkenstein <i>Temporarily not available</i>.</td></tr><tr><td><b>Location</b></td><td><b>Nuremberg</b> (eu-central)</td><td>In de EU, en dicht bij Nederland. Falkenstein kan ook.</td></tr><tr><td><b>Image</b></td><td>OS Images → <b>Ubuntu</b>, en kies in het menu <b>24.04</b></td><td>Standaard stond er 26.04. Het plan is op 24.04 gebouwd, 26.04 gebruikt sudo-rs en de Rust-coreutils, en 24.04 krijgt updates tot 2029.</td></tr><tr><td><b>Networking</b></td><td><b>Public IPv4</b> aan, <b>Public IPv6</b> aan, Private networks uit</td><td>Niet elk schoolnetwerk heeft IPv6. IPv4 kost €0,50 per maand.</td></tr><tr><td><b>SSH keys</b></td><td>klik op de kaart <b>laptop-docent</b></td><td>Belangrijk. Zonder sleutel stuurt Hetzner een rootwachtwoord per mail. De melding <i>No SSH key selected</i> verdwijnt als het goed is.</td></tr><tr><td><b>Volumes</b></td><td>leeg</td><td></td></tr><tr><td><b>Firewalls</b></td><td>klik op de kaart <b>alleen-ssh</b></td><td></td></tr><tr><td><b>Backups</b></td><td><b>uit</b></td><td>De code staat in git, en het gaat om voorbeelddata. Aan kost 20% extra (€3,90).</td></tr><tr><td><b>Placement groups, Labels, Cloud config</b></td><td>leeg</td><td></td></tr><tr><td><b>Name</b></td><td><code>klasserver</code></td><td>Vervang de naam die Hetzner zelf invult.</td></tr></tbody></table></div>
+<p class="prose">Controleer onderaan het totaal: <b>€19,99 per maand, zonder btw</b>. Klik dan op <b>Create &amp; Buy now</b>. Na een halve minuut tot een minuut staat de server aan.</p>
+<p class="prose"><b>Controle:</b> in de lijst met servers staat <b>klasserver</b>, met <i>CPX22 | x86 | 80 GB | eu-central</i> en het IPv4-adres. <b>Vul dat adres in het veld bovenaan deze pagina in.</b> Dan staat het in alle commando's hieronder op de plek van <span class="ip">&lt;IP&gt;</span>.</p>
+<div class="tabel"><table><thead><tr><th>Kosten</th><th>Per maand</th></tr></thead><tbody><tr><td>Server CPX22</td><td>€19,49</td></tr><tr><td>IPv4-adres</td><td>€0,50</td></tr><tr><td>IPv6, firewall, SSH-sleutel, projecten</td><td>gratis</td></tr><tr><td>Backups (uit)</td><td>€0</td></tr><tr><td><b>Totaal, zonder btw</b></td><td><b>€19,99</b> (met 21% btw ongeveer €24,19)</td></tr></tbody></table></div>
+<div class="tip t-let"><p class="tip-kop">De rekening</p><p class="prose">Hetzner rekent per uur, met het maandbedrag als maximum. Dat gebeurt ook als de server uitstaat. Pas als je de server <b>verwijdert</b>, stopt de rekening.</p></div>
+
+  </div>
+</section>
+<section class="deel" id="deel-b">
+  <p class="label">Deel B · stap 8 en 9</p>
+  <h2>Inloggen vanaf de laptop</h2>
+  <div class="prose">
+<p>Vanaf nu werk je in een terminal op de laptop. Je logt in op de server met <code>ssh</code>. Tot stap 13 doe je dat als <b>root</b>, de beheerder van Ubuntu. Daarna kan dat niet meer, en werk je als <b>beheer</b>.</p></div>
+</section>
+<section class="stap" id="s8">
+  <div class="stap-kop">
+    <span class="stap-nr">8</span>
+    <div class="stap-titel">
+      <p class="eyebrow"><span class="waar w-laptop">laptop</span><span class="duur">1 min</span></p>
+      <h3>De eerste keer inloggen, als root</h3>
+    </div>
+    <label class="klaar"><input type="checkbox" data-stap="8"><span>klaar</span></label>
+  </div>
+  <div class="stap-body">
+
+<p class="prose">Dit commando logt in met de sleutel, en laat in één keer zien wat voor server het is:</p>
+<pre class="cmd" data-waar="laptop"><code>ssh -o StrictHostKeyChecking=accept-new -o IdentitiesOnly=yes -i ~/.ssh/id_ed25519_adhibera root@<span class="ip">&lt;IP&gt;</span> 'hostname; cat /etc/os-release | grep PRETTY; uname -m; nproc; free -h | head -2; df -h / | tail -1; timedatectl | grep "Time zone"; systemctl --version | head -1'</code></pre>
+<pre class="out" data-waar="uitvoer bij ons"><code>Warning: Permanently added '<span class="ip">&lt;IP&gt;</span>' (ED25519) to the list of known hosts.
+klasserver
+PRETTY_NAME="Ubuntu 24.04.4 LTS"
+x86_64
+2
+               total        used        free      shared  buff/cache   available
+Mem:           3.7Gi       389Mi       3.4Gi       4.7Mi       217Mi       3.3Gi
+/dev/sda1        75G  1.2G   71G   2% /
+                Time zone: Etc/UTC (UTC, +0000)
+systemd 255 (255.4-1ubuntu8.17)</code></pre>
+<ul class="lijst"><li><code>accept-new</code> zegt: ken je deze server nog niet, onthoud dan zijn sleutel. Zonder die optie vraagt ssh <i>Are you sure you want to continue connecting</i>; dan typ je <b>yes</b>.</li><li>Let op de tijdzone: <b>UTC</b>. Die zet je in stap 11 goed.</li></ul>
+<div class="tip t-volgende"><p class="tip-kop">Volgende keer</p><p class="prose">Krijgt een nieuwe server een IP-adres dat je al eens gebruikt hebt, dan waarschuwt ssh dat de sleutel van de server veranderd is. Haal de oude sleutel dan weg met <code>ssh-keygen -R <span class="ip">&lt;IP&gt;</span></code>, en probeer het opnieuw.</p></div>
+
+  </div>
+</section>
+<section class="stap" id="s9">
+  <div class="stap-kop">
+    <span class="stap-nr">9</span>
+    <div class="stap-titel">
+      <p class="eyebrow"><span class="waar w-laptop">laptop</span><span class="duur">1 min</span></p>
+      <h3>Een korte naam: ssh klasserver</h3>
+    </div>
+    <label class="klaar"><input type="checkbox" data-stap="9"><span>klaar</span></label>
+  </div>
+  <div class="stap-body">
+
+<p class="prose">Met een blok in <code>~/.ssh/config</code> hoef je het IP-adres en de sleutel niet steeds te typen. Eerst maak je een reservekopie van het bestand.</p>
+<pre class="cmd" data-waar="laptop"><code>cp ~/.ssh/config ~/.ssh/config.bak-klasserver
+cat &gt;&gt; ~/.ssh/config &lt;&lt;'EOF'
+
+Host klasserver
+  HostName <span class="ip">&lt;IP&gt;</span>
+  User beheer
+  IdentityFile ~/.ssh/id_ed25519_adhibera
+  IdentitiesOnly yes
+EOF
+ssh root@klasserver 'echo "korte naam werkt: $(hostname)"'</code></pre>
+<pre class="out" data-waar="uitvoer bij ons"><code>korte naam werkt: klasserver</code></pre>
+<ul class="lijst"><li>Bestaat <code>~/.ssh/config</code> nog niet, sla de regel met <code>cp</code> dan over.</li><li>In het blok staat al <code>User beheer</code>, maar die gebruiker bestaat pas na stap 12. Tot dan schrijf je er <code>root@</code> voor: <code>ssh root@klasserver</code>.</li><li>Later werkt ook <code>ssh groep0@klasserver</code>: dan log je met dezelfde sleutel in als de testgroep.</li></ul>
+
+  </div>
+</section>
+<section class="deel" id="deel-c">
+  <p class="label">Deel C · stap 10 t/m 13</p>
+  <h2>De basis, als root</h2>
+  <div class="prose">
+<p>Log in met <code>ssh root@klasserver</code>, en typ de commando's op de server. Een commando met het label <i>laptop</i> typ je in een terminal op de laptop.</p>
+<p>Claude deed het iets anders: elk commando in één keer vanaf de laptop, als <code>ssh root@klasserver '…'</code>. De uitvoer is hetzelfde.</p></div>
+</section>
+<section class="stap" id="s10">
+  <div class="stap-kop">
+    <span class="stap-nr">10</span>
+    <div class="stap-titel">
+      <p class="eyebrow"><span class="waar w-root">server · root</span><span class="duur">1 min</span></p>
+      <h3>Rondkijken (alleen lezen)</h3>
+    </div>
+    <label class="klaar"><input type="checkbox" data-stap="10"><span>klaar</span></label>
+  </div>
+  <div class="stap-body">
+
+<p class="prose">Voordat je iets verandert, kijk je wat er al is: zijn de automatische updates en git er al, en staat er al iets in de map met SSH-instellingen?</p>
+<pre class="cmd" data-waar="server · root"><code>dpkg -l unattended-upgrades git 2&gt;/dev/null | grep ^ii | awk "{print \$2, \$3}"
+cat /etc/apt/apt.conf.d/20auto-upgrades
+systemctl is-enabled unattended-upgrades; systemctl is-active unattended-upgrades
+ls /etc/ssh/sshd_config.d/</code></pre>
+<pre class="out" data-waar="uitvoer bij ons"><code>git 1:2.43.0-1ubuntu7.3
+unattended-upgrades 2.9.1+nmu4ubuntu1
+APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::Unattended-Upgrade "1";
+enabled
+active</code></pre>
+<ul class="lijst"><li><b>unattended-upgrades en git</b> stonden al op het image van Hetzner, en de automatische beveiligingsupdates stonden al aan (twee keer <code>"1"</code>). Installeren was niet nodig.</li><li><b>De map <code>sshd_config.d/</code> was leeg.</b> Er was geen <code>50-cloud-init.conf</code>, dus die kan in stap 13 niet in de weg zitten.</li></ul>
+
+  </div>
+</section>
+<section class="stap" id="s11">
+  <div class="stap-kop">
+    <span class="stap-nr">11</span>
+    <div class="stap-titel">
+      <p class="eyebrow"><span class="waar w-root">server · root</span><span class="duur">± 3 min</span></p>
+      <h3>Bijwerken, de tijdzone, en herstarten</h3>
+    </div>
+    <label class="klaar"><input type="checkbox" data-stap="11"><span>klaar</span></label>
+  </div>
+  <div class="stap-body">
+
+<p class="prose">Je installeert alle updates en zet de klok op Nederlandse tijd. Zonder de tijdzone kloppen de tijden in het logboek straks niet met de klok in de klas.</p>
+<pre class="cmd" data-waar="server · root"><code>apt-get update
+DEBIAN_FRONTEND=noninteractive apt-get full-upgrade -y \
+  -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold
+timedatectl set-timezone Europe/Amsterdam
+ls /var/run/reboot-required 2&gt;/dev/null &amp;&amp; echo "HERSTART NODIG" || echo "geen herstart nodig"</code></pre>
+<ul class="lijst"><li><code>full-upgrade -y</code> installeert alle updates zonder te vragen. Dankzij <code>--force-confold</code> blijven bestaande instellingen staan, zodat er geen vragen tussendoor komen.</li><li>Het duurde ongeveer een minuut, zonder fouten.</li></ul>
+<p class="prose">Bij ons stond er <b>HERSTART NODIG</b>. Waarom?</p>
+<pre class="cmd" data-waar="server · root"><code>timedatectl | grep -E "Local time|Time zone|synchronized"
+cat /var/run/reboot-required.pkgs
+uname -r</code></pre>
+<pre class="out" data-waar="uitvoer bij ons"><code>               Local time: Sun 2026-10-18 22:12:53 CEST
+                Time zone: Europe/Amsterdam (CEST, +0200)
+System clock synchronized: yes
+libc6
+linux-image-6.8.0-147-generic
+linux-base
+6.8.0-138-generic</code></pre>
+<p class="prose">Er was een nieuwe kernel geïnstalleerd (147), maar de server draaide nog op de oude (138). Herstart de server:</p>
+<pre class="cmd" data-waar="server · root"><code>systemctl reboot</code></pre>
+<p class="prose">De verbinding valt weg. Na ongeveer 20 seconden kun je weer inloggen met <code>ssh root@klasserver</code>. Kijk dan of alles goed is opgestart:</p>
+<pre class="cmd" data-waar="server · root"><code>uname -r; uptime; timedatectl | grep "Time zone"
+echo "failed: $(systemctl --failed --no-legend | wc -l)"
+ls /var/run/reboot-required 2&gt;/dev/null || echo "geen herstart meer nodig"</code></pre>
+<pre class="out" data-waar="uitvoer bij ons"><code>6.8.0-147-generic
+ 22:13:57 up 0 min,  1 user,  load average: 0.27, 0.06, 0.02
+                Time zone: Europe/Amsterdam (CEST, +0200)
+failed: 0
+geen herstart meer nodig</code></pre>
+
+  </div>
+</section>
+<section class="stap" id="s12">
+  <div class="stap-kop">
+    <span class="stap-nr">12</span>
+    <div class="stap-titel">
+      <p class="eyebrow"><span class="waar w-root">server · root</span> <span class="waar w-laptop">laptop</span><span class="duur">± 3 min</span></p>
+      <h3>De beheerder maken</h3>
+    </div>
+    <label class="klaar"><input type="checkbox" data-stap="12"><span>klaar</span></label>
+  </div>
+  <div class="stap-body">
+
+<p class="prose">Je gaat niet als root werken, maar als een eigen gebruiker <b>beheer</b>, met sudo. In stap 13 zet je inloggen als root uit. <b>Sluit jezelf niet buiten:</b> werk in twee stappen, en test na elke stap.</p>
+<p class="prose"><b>1. Rondkijken:</b> hoe staat SSH nu ingesteld?</p>
+<pre class="cmd" data-waar="server · root"><code>sshd -T | grep -Ei "^(passwordauthentication|kbdinteractiveauthentication|permitrootlogin|pubkeyauthentication|usepam|authenticationmethods) "
+systemctl is-active ssh.socket ssh.service
+grep -E "^HOME_MODE" /etc/login.defs
+ls -l /etc/sudoers.d/</code></pre>
+<pre class="out" data-waar="uitvoer bij ons"><code>usepam yes
+permitrootlogin without-password
+pubkeyauthentication yes
+passwordauthentication yes
+kbdinteractiveauthentication no
+authenticationmethods any
+active
+active
+HOME_MODE	0750
+total 8
+-r--r----- 1 root root  135 Oct 18 22:08 90-cloud-init-users
+-r--r----- 1 root root 1068 Jan 29  2024 README</code></pre>
+<ul class="lijst"><li><b>passwordauthentication yes:</b> inloggen met een wachtwoord staat nog aan. Dat zet je in stap 13 uit.</li><li><b>permitrootlogin without-password:</b> root mag inloggen met een sleutel. Ook dat gaat uit.</li><li><b>HOME_MODE 0750:</b> nieuwe thuismappen krijgen de rechten 750. Andere gebruikers kunnen er dan niet in.</li></ul>
+<p class="prose"><b>2. Een vangnet.</b> Open een <b>tweede terminal</b> op de laptop, en log daar in met <code>ssh root@klasserver</code>. Laat die openstaan tot het eind van stap 13. Gaat er iets mis met SSH, dan kun je het daar herstellen. Een herstart van SSH laat open verbindingen staan:</p>
+<pre class="cmd" data-waar="server · root"><code>systemctl show ssh -p KillMode</code></pre>
+<pre class="out" data-waar="uitvoer bij ons"><code>KillMode=process</code></pre>
+<div class="tip t-let"><p class="tip-kop">Zo deed Claude het</p><p class="prose">Claude heeft geen tweede terminal. Daarom opende Claude een verbinding die op de achtergrond openbleef: <code>ssh -o ControlMaster=yes -o ControlPath=~/.ssh/cm-root -o ControlPersist=30m -fN root@klasserver</code>. Met de tweede terminal bereik je hetzelfde.</p></div>
+<p class="prose"><b>3. De gebruiker beheer:</b> zonder wachtwoord, met jouw sleutel, en met sudo zonder wachtwoord.</p>
+<pre class="cmd" data-waar="server · root"><code>adduser --disabled-password --gecos "" beheer
+usermod -aG sudo beheer
+install -d -m 700 -o beheer -g beheer /home/beheer/.ssh
+install -m 600 -o beheer -g beheer /root/.ssh/authorized_keys /home/beheer/.ssh/
+printf "beheer ALL=(ALL) NOPASSWD:ALL\n" &gt; /etc/sudoers.d/90-beheer
+chmod 440 /etc/sudoers.d/90-beheer &amp;&amp; visudo -c
+id beheer
+ls -ld /home/beheer /home/beheer/.ssh /home/beheer/.ssh/authorized_keys</code></pre>
+<pre class="out" data-waar="uitvoer bij ons"><code>info: Adding user `beheer' ...
+info: Selecting UID/GID from range 1000 to 59999 ...
+info: Adding new group `beheer' (1000) ...
+info: Adding new user `beheer' (1000) with group `beheer (1000)' ...
+info: Creating home directory `/home/beheer' ...
+info: Copying files from `/etc/skel' ...
+info: Adding new user `beheer' to supplemental / extra groups `users' ...
+info: Adding user `beheer' to group `users' ...
+/etc/sudoers: parsed OK
+/etc/sudoers.d/90-beheer: parsed OK
+/etc/sudoers.d/90-cloud-init-users: parsed OK
+/etc/sudoers.d/README: parsed OK
+uid=1000(beheer) gid=1000(beheer) groups=1000(beheer),27(sudo),100(users)
+drwxr-x--- 3 beheer beheer 4096 Oct 18 22:17 /home/beheer
+drwx------ 2 beheer beheer 4096 Oct 18 22:17 /home/beheer/.ssh
+-rw------- 1 beheer beheer   81 Oct 18 22:17 /home/beheer/.ssh/authorized_keys</code></pre>
+<ul class="lijst"><li><code>install</code> maakt de map en kopieert de sleutel in één keer, met de juiste eigenaar en rechten: 700 voor de map, 600 voor het bestand. Met andere rechten weigert ssh de sleutel.</li><li><code>visudo -c</code> controleert het sudo-bestand. Een fout in dat bestand kan sudo helemaal blokkeren; daarom staat er <i>parsed OK</i>.</li></ul>
+<p class="prose"><b>4. Test, in een nieuwe verbinding vanaf de laptop:</b> kan beheer inloggen, en werkt sudo?</p>
+<pre class="cmd" data-waar="laptop"><code>ssh klasserver 'whoami; sudo -n whoami'</code></pre>
+<pre class="out" data-waar="uitvoer bij ons"><code>beheer
+root</code></pre>
+<p class="prose">Pas als je <b>beheer</b> en <b>root</b> ziet, ga je door naar stap 13.</p>
+
+  </div>
+</section>
+<section class="stap" id="s13">
+  <div class="stap-kop">
+    <span class="stap-nr">13</span>
+    <div class="stap-titel">
+      <p class="eyebrow"><span class="waar w-root">server · root</span> <span class="waar w-laptop">laptop</span><span class="duur">± 3 min</span></p>
+      <h3>SSH dichtzetten</h3>
+    </div>
+    <label class="klaar"><input type="checkbox" data-stap="13"><span>klaar</span></label>
+  </div>
+  <div class="stap-body">
+
+<p class="prose">Nu mag er alleen nog met een sleutel ingelogd worden, en niet meer als root. Dat zet je in een eigen bestand. Bij sshd telt de eerste waarde die hij leest, en daarom begint de naam met <code>10-</code>.</p>
+<pre class="cmd" data-waar="server · root"><code>cat &gt; /etc/ssh/sshd_config.d/10-klasserver.conf &lt;&lt;'EOF'
+# Klasserver: alleen inloggen met een sleutel, niet als root
+PasswordAuthentication no
+KbdInteractiveAuthentication no
+PermitRootLogin no
+X11Forwarding no
+EOF
+sshd -t &amp;&amp; systemctl restart ssh
+echo "sshd herstart: $(systemctl is-active ssh)"
+sshd -T | grep -Ei "^(passwordauthentication|kbdinteractiveauthentication|permitrootlogin|x11forwarding|pubkeyauthentication) "</code></pre>
+<pre class="out" data-waar="uitvoer bij ons"><code>sshd herstart: active
+permitrootlogin no
+pubkeyauthentication yes
+passwordauthentication no
+kbdinteractiveauthentication no
+x11forwarding no</code></pre>
+<ul class="lijst"><li><code>sshd -t</code> test de instellingen eerst. Alleen als die kloppen, herstart <code>systemctl restart ssh</code> de SSH-server.</li><li><code>X11Forwarding no</code> zet het doorsturen van grafische programma's uit. Dat gebruiken we niet.</li><li>Ubuntu 24.04 start SSH via <code>ssh.socket</code>. Omdat de poort niet verandert, is <code>systemctl restart ssh</code> genoeg.</li></ul>
+<p class="prose"><b>Drie tests, in een nieuwe terminal op de laptop.</b> Laat de tweede terminal met root nog open.</p>
+<pre class="cmd" data-waar="laptop"><code>ssh klasserver 'echo "ingelogd als $(whoami), sudo: $(sudo -n whoami)"'
+ssh -o BatchMode=yes root@klasserver true
+ssh -o BatchMode=yes -o PubkeyAuthentication=no -o PreferredAuthentications=password,keyboard-interactive klasserver true</code></pre>
+<pre class="out" data-waar="uitvoer bij ons"><code>ingelogd als beheer, sudo: root
+root@<span class="ip">&lt;IP&gt;</span>: Permission denied (publickey).
+beheer@<span class="ip">&lt;IP&gt;</span>: Permission denied (publickey).</code></pre>
+<ol class="lijst"><li><b>beheer</b> kan inloggen, en sudo werkt.</li><li><b>root</b> wordt geweigerd, ook met de juiste sleutel.</li><li><b>Een wachtwoord</b> wordt niet eens gevraagd: ssh biedt alleen nog <i>publickey</i> aan.</li></ol>
+<p class="prose">Slagen alle drie, sluit dan de terminal met root (<code>exit</code>). Vanaf nu log je in met <code>ssh klasserver</code>, en dat is <b>beheer</b>.</p>
+<div class="tip t-let"><p class="tip-kop">Zo deed Claude het</p><p class="prose">Claude testte met <code>ssh -S none -o ControlMaster=no …</code>, zodat de test niet stilletjes de open vangnetverbinding gebruikte. Met een gewone tweede terminal heb je dat niet nodig.</p></div>
+
+  </div>
+</section>
+<section class="deel" id="deel-d">
+  <p class="label">Deel D · stap 14 t/m 16</p>
+  <h2>Voor alle groepen, als beheer</h2>
+  <div class="prose">
+<p>Log in met <code>ssh klasserver</code>. Je bent nu <b>beheer</b>, en zet <code>sudo</code> voor commando's die iets aan het systeem veranderen.</p></div>
+</section>
+<section class="stap" id="s14">
+  <div class="stap-kop">
+    <span class="stap-nr">14</span>
+    <div class="stap-titel">
+      <p class="eyebrow"><span class="waar w-beheer">server · beheer</span><span class="duur">1 min</span></p>
+      <h3>uv voor iedereen</h3>
+    </div>
+    <label class="klaar"><input type="checkbox" data-stap="14"><span>klaar</span></label>
+  </div>
+  <div class="stap-body">
+
+<p class="prose">De repo vraagt Python 3.13, en Ubuntu 24.04 heeft 3.12. <b>uv</b> regelt dat: het downloadt Python 3.13 per groep in de eigen thuismap. uv zelf zet je één keer neer, op een plek waar alle gebruikers het kunnen starten, maar niet kunnen veranderen.</p>
+<pre class="cmd" data-waar="server · beheer"><code>curl -LsSf https://astral.sh/uv/0.12.17/install.sh | sudo env UV_INSTALL_DIR=/usr/local/bin UV_NO_MODIFY_PATH=1 sh
+ls -l /usr/local/bin/uv /usr/local/bin/uvx
+echo "als $(whoami): $(uv --version)"</code></pre>
+<pre class="out" data-waar="uitvoer bij ons"><code>downloading uv 0.12.17 x86_64-unknown-linux-gnu
+installing to /usr/local/bin
+  uv
+  uvx
+everything's installed!
+-rwxr-xr-x 1 root root 50162872 Sep 18 20:33 /usr/local/bin/uv
+-rwxr-xr-x 1 root root   347000 Sep 18 20:33 /usr/local/bin/uvx
+als beheer: uv 0.12.17 (x86_64-unknown-linux-gnu)</code></pre>
+<ul class="lijst"><li>De versie (0.12.17) staat vast in de link, zodat de server dezelfde versie heeft als de laptop. Volgende keer mag je een nieuwere versie kiezen.</li><li>De bestanden zijn van root. Leerlingen kunnen uv dus niet zelf bijwerken of veranderen.</li></ul>
+
+  </div>
+</section>
+<section class="stap" id="s15">
+  <div class="stap-kop">
+    <span class="stap-nr">15</span>
+    <div class="stap-titel">
+      <p class="eyebrow"><span class="waar w-beheer">server · beheer</span><span class="duur">1 min</span></p>
+      <h3>Het logboek</h3>
+    </div>
+    <label class="klaar"><input type="checkbox" data-stap="15"><span>klaar</span></label>
+  </div>
+  <div class="stap-body">
+
+<p class="prose">Wat een programma print, komt in het logboek van systemd (het <i>journal</i>). Dat logboek moet bewaard blijven na een herstart, en mag niet onbeperkt groeien. Bij ons bestond <code>/var/log/journal</code> al, maar er was geen maximum: dan mag het tot 4 GB groeien.</p>
+<pre class="cmd" data-waar="server · beheer"><code>sudo mkdir -p /etc/systemd/journald.conf.d
+printf "[Journal]\nStorage=persistent\nSystemMaxUse=1G\n" | sudo tee /etc/systemd/journald.conf.d/50-klasserver.conf
+sudo systemctl restart systemd-journald
+echo "journald: $(systemctl is-active systemd-journald)"
+systemd-analyze cat-config systemd/journald.conf | grep -Ev "^\s*(#|$)"
+sudo journalctl --disk-usage</code></pre>
+<pre class="out" data-waar="uitvoer bij ons"><code>[Journal]
+Storage=persistent
+SystemMaxUse=1G
+journald: active
+[Journal]
+[Journal]
+Storage=persistent
+SystemMaxUse=1G
+[Journal]
+ForwardToSyslog=yes
+Archived and active journals take up 17.8M in the file system.</code></pre>
+<ul class="lijst"><li><code>Storage=persistent</code>: het logboek blijft bewaard na een herstart.</li><li><code>SystemMaxUse=1G</code>: alle logboeken samen worden niet groter dan 1 GB. Zijn ze vol, dan gaan de oudste berichten weg.</li><li><code>ForwardToSyslog=yes</code> stond er al, van Ubuntu zelf. Daardoor komt alles ook in <code>/var/log/syslog</code>. Zie <i>Waar we tegenaan liepen</i>.</li></ul>
+
+  </div>
+</section>
+<section class="stap" id="s16">
+  <div class="stap-kop">
+    <span class="stap-nr">16</span>
+    <div class="stap-titel">
+      <p class="eyebrow"><span class="waar w-beheer">server · beheer</span><span class="duur">± 3 min</span></p>
+      <h3>De testgroepen en hun grenzen</h3>
+    </div>
+    <label class="klaar"><input type="checkbox" data-stap="16"><span>klaar</span></label>
+  </div>
+  <div class="stap-body">
+
+<p class="prose">Elke groep leerlingen krijgt een eigen Linux-gebruiker. Nu maak je er twee om te testen: <b>groep0</b>, die blijft, voor jezelf; en <b>proef</b>, alleen voor de scheidingstest in stap 19. Beide krijgen jouw sleutel, zodat je als die groep kunt inloggen.</p>
+<p class="prose"><b>1. Rondkijken:</b> is er swap, en zijn er al grenzen voor gebruikers?</p>
+<pre class="cmd" data-waar="server · beheer"><code>free -h | grep -i swap; swapon --show; cat /proc/sys/vm/overcommit_memory
+systemctl show user.slice -p MemoryMax -p TasksMax</code></pre>
+<pre class="out" data-waar="uitvoer bij ons"><code>Swap:             0B          0B          0B
+0
+MemoryMax=infinity
+TasksMax=infinity</code></pre>
+<p class="prose">Er is geen swap, en er zijn nog geen grenzen. <b>2. De groepen maken:</b></p>
+<pre class="cmd" data-waar="server · beheer"><code>set -e
+for g in groep0 proef; do
+  sudo adduser --disabled-password --gecos "" "$g"
+  sudo install -d -m 700 -o "$g" -g "$g" "/home/$g/.ssh"
+  sudo install -m 600 -o "$g" -g "$g" /home/beheer/.ssh/authorized_keys "/home/$g/.ssh/authorized_keys"
+  sudo loginctl enable-linger "$g"
+  sudo systemctl set-property "user-$(id -u "$g").slice" \
+       MemoryMax=256M MemorySwapMax=0 TasksMax=128 CPUQuota=25%
+done</code></pre>
+<div class="tabel"><table><thead><tr><th>Wat</th><th>Waarom</th></tr></thead><tbody><tr><td><code>--disabled-password</code></td><td>Geen wachtwoord. Inloggen kan alleen met een sleutel.</td></tr><tr><td><code>loginctl enable-linger</code></td><td><b>Linger</b>: de timers van de groep draaien ook als niemand van de groep ingelogd is. Zonder linger stopt alles bij het uitloggen.</td></tr><tr><td><code>MemoryMax=256M</code></td><td>Hoogstens 256 MB geheugen per groep. Tien groepen en groep0 samen zijn dan ongeveer 2,75 GB van de 4 GB.</td></tr><tr><td><code>MemorySwapMax=0</code></td><td>Geen swap voor de groepen, ook niet als er ooit swap bijkomt.</td></tr><tr><td><code>TasksMax=128</code></td><td>Hoogstens 128 processen, tegen een programma dat eindeloos nieuwe processen start.</td></tr><tr><td><code>CPUQuota=25%</code></td><td>Een kwart van één CPU per groep.</td></tr></tbody></table></div>
+<ul class="lijst"><li>De grenzen gelden <b>per groep</b>, met <code>set-property</code>. Een bestand voor alle gebruikers kan ook, maar dan krijgt <b>beheer</b> dezelfde grenzen.</li><li><code>set-property</code> heeft het gebruikersnummer (UID) nodig. Daarom maak je eerst de gebruiker en dan de grenzen. Ze blijven bewaard na een herstart, in <code>/etc/systemd/system.control/</code>.</li></ul>
+<p class="prose"><b>3. Controle:</b></p>
+<pre class="cmd" data-waar="server · beheer"><code>for g in groep0 proef; do
+  u=$(id -u "$g")
+  echo "--- $g (UID $u)"
+  id "$g"
+  sudo stat -c "%n %U:%G %a" "/home/$g" "/home/$g/.ssh" "/home/$g/.ssh/authorized_keys"
+  loginctl show-user "$g" -p Linger -p State
+  systemctl show "user-$u.slice" -p ActiveState -p MemoryMax -p MemorySwapMax -p TasksMax -p CPUQuotaPerSecUSec
+done
+echo "--- beheer onbegrensd"
+systemctl show user-1000.slice -p MemoryMax -p TasksMax -p CPUQuotaPerSecUSec</code></pre>
+<pre class="out" data-waar="uitvoer bij ons (ingekort)"><code>--- groep0 (UID 1001)
+uid=1001(groep0) gid=1001(groep0) groups=1001(groep0),100(users)
+/home/groep0 groep0:groep0 750
+/home/groep0/.ssh groep0:groep0 700
+/home/groep0/.ssh/authorized_keys groep0:groep0 600
+State=lingering
+Linger=yes
+CPUQuotaPerSecUSec=250ms
+MemoryMax=268435456
+MemorySwapMax=0
+TasksMax=128
+ActiveState=active
+--- proef (UID 1002)
+(hetzelfde, met UID 1002)
+--- beheer onbegrensd
+CPUQuotaPerSecUSec=infinity
+MemoryMax=infinity
+TasksMax=9882</code></pre>
+<div class="tip t-valkuil"><p class="tip-kop">Waar we tegenaan liepen</p><p class="prose">De eerste controle stopte met <i>Permission denied</i>: <b>beheer</b> mocht zonder sudo niet in <code>/home/groep0/.ssh</code> kijken. Dat is juist goed, want zo kan ook een andere groep er niet in. Daarom staat er in de controle <code>sudo stat</code>.</p></div>
+<div class="tip t-volgende"><p class="tip-kop">Volgende keer</p><p class="prose">Gebruik voor groep0, en later voor elke groep, het script <code>nieuwe-groep</code> uit stap 23. Dat doet precies dit, en controleert eerst de sleutels. Zet het script dan vóór deze stap op de server.</p></div>
+
+  </div>
+</section>
+<section class="deel" id="deel-e">
+  <p class="label">Deel E · stap 17 t/m 21</p>
+  <h2>Testen met een testtimer</h2>
+  <div class="prose">
+<p>Nu test je of alles werkt zoals het moet, met een kleine testtimer die elke 2 minuten de tijd in een bestand schrijft. Dat staat los van les 19. Na de tests ruim je alles weer op.</p>
+<p>Deze tests kosten ongeveer 30 minuten, vooral door het wachten op de timer.</p></div>
+</section>
+<section class="stap" id="s17">
+  <div class="stap-kop">
+    <span class="stap-nr">17</span>
+    <div class="stap-titel">
+      <p class="eyebrow"><span class="waar w-laptop">laptop</span> <span class="waar w-groep0">server · groep0</span><span class="duur">± 3 min</span></p>
+      <h3>De testtimer, als groep0</h3>
+    </div>
+    <label class="klaar"><input type="checkbox" data-stap="17"><span>klaar</span></label>
+  </div>
+  <div class="stap-body">
+
+<p class="prose">Log in als de testgroep met <code>ssh groep0@klasserver</code>. Een timer bestaat uit twee bestanden: een <b>service</b> (wat er moet gebeuren) en een <b>timer</b> (wanneer).</p>
+<pre class="cmd" data-waar="server · groep0"><code>set -e
+mkdir -p ~/.config/systemd/user
+cat &gt; ~/.config/systemd/user/hallo.service &lt;&lt;'UNIT'
+# Testtimer voor de controlelijst, los van les 19
+[Unit]
+Description=Testtimer: schrijf de tijd naar hallo.txt
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c 'date "+%%F %%T" &gt;&gt; %h/hallo.txt &amp;&amp; echo "hallo van %u"'
+UNIT
+cat &gt; ~/.config/systemd/user/hallo.timer &lt;&lt;'UNIT'
+# Testtimer voor de controlelijst, los van les 19
+[Unit]
+Description=Start hallo.service elke 2 minuten
+
+[Timer]
+OnCalendar=*:0/2
+
+[Install]
+WantedBy=timers.target
+UNIT
+systemd-analyze --user verify ~/.config/systemd/user/hallo.service ~/.config/systemd/user/hallo.timer &amp;&amp; echo "verify: geen fouten"
+systemctl --user daemon-reload
+systemctl --user enable --now hallo.timer
+systemctl --user start hallo.service
+echo "--- hallo.txt:"; cat ~/hallo.txt
+systemctl --user list-timers hallo.timer --no-pager
+journalctl --user -u hallo --no-pager -n 5</code></pre>
+<pre class="out" data-waar="uitvoer bij ons"><code>verify: geen fouten
+Created symlink /home/groep0/.config/systemd/user/timers.target.wants/hallo.timer → /home/groep0/.config/systemd/user/hallo.timer.
+--- hallo.txt:
+2026-10-18 22:27:57
+NEXT                         LEFT LAST PASSED UNIT        ACTIVATES
+Sun 2026-10-18 22:28:00 CEST   2s -         - hallo.timer hallo.service
+
+1 timers listed.
+Pass --all to see loaded but inactive timers, too.
+Oct 18 22:27:57 klasserver systemd[2023]: Starting hallo.service - Testtimer: schrijf de tijd naar hallo.txt...
+Oct 18 22:27:57 klasserver sh[2271]: hallo van groep0
+Oct 18 22:27:57 klasserver systemd[2023]: Finished hallo.service - Testtimer: schrijf de tijd naar hallo.txt.</code></pre>
+<ul class="lijst"><li>In een unit-bestand betekent <code>%%</code> één <code>%</code>, <code>%h</code> de thuismap en <code>%u</code> de gebruikersnaam.</li><li><code>&amp;&amp;</code> zorgt dat een schrijffout ook een mislukte run oplevert.</li><li><code>OnCalendar=*:0/2</code> betekent: elke 2 minuten, op een even minuut.</li><li><code>systemctl --user start hallo.service</code> start één run meteen, zodat je niet hoeft te wachten.</li></ul>
+
+  </div>
+</section>
+<section class="stap" id="s18">
+  <div class="stap-kop">
+    <span class="stap-nr">18</span>
+    <div class="stap-titel">
+      <p class="eyebrow"><span class="waar w-groep0">server · groep0</span> <span class="waar w-beheer">server · beheer</span><span class="duur">± 3 min</span></p>
+      <h3>De grenzen testen</h3>
+    </div>
+    <label class="klaar"><input type="checkbox" data-stap="18"><span>klaar</span></label>
+  </div>
+  <div class="stap-body">
+
+<p class="prose"><b>1. Geheugen en CPU, als groep0.</b> Het script vraagt 400 MB geheugen (meer dan de 256 MB), en laat de CPU 10 seconden hard werken. Het telt in de bestanden van de cgroup hoe vaak er iets gestopt is (<code>oom_kill</code>), en hoeveel CPU-tijd er gebruikt is.</p>
+<pre class="cmd" data-waar="server · groep0"><code>cg=/sys/fs/cgroup/user.slice/user-1001.slice
+echo "== geheugen =="
+echo "mijn cgroup: $(cat /proc/self/cgroup)"
+echo "voor:  $(grep -E "^oom_kill" $cg/memory.events)"
+python3 -c 'x = bytearray(400*2**20); print("NIET gestopt: 400 MB gelukt")'
+echo "exitcode python: $?"
+echo "na:    $(grep -E "^oom_kill" $cg/memory.events)"
+echo "== CPU =="
+voor=$(awk '/^usage_usec/{print $2}' $cg/cpu.stat)
+timeout 10 sh -c 'while :; do :; done'
+na=$(awk '/^usage_usec/{print $2}' $cg/cpu.stat)
+echo "CPU-tijd van de slice in 10 s: $(( (na-voor)/1000 )) ms (grens: 2500 ms)"</code></pre>
+<pre class="out" data-waar="uitvoer bij ons"><code>== geheugen ==
+mijn cgroup: 0::/user.slice/user-1001.slice/session-30.scope
+voor:  oom_kill 0
+exitcode python: 137
+bash: line 5:  2331 Killed                  python3 -c 'x = bytearray(400*2**20); print("NIET gestopt: 400 MB gelukt")'
+na:    oom_kill 1
+== CPU ==
+CPU-tijd van de slice in 10 s: 2508 ms (grens: 2500 ms)</code></pre>
+<ul class="lijst"><li><b>Geheugen:</b> het programma werd gestopt (<i>Killed</i>, exitcode 137), en <code>oom_kill</code> ging van 0 naar 1. Alleen dat programma, niet de server. De regel <i>mijn cgroup</i> laat zien dat de test echt binnen de grenzen van groep0 draaide (<code>user-1001.slice</code>).</li><li><b>CPU:</b> in 10 seconden kreeg de groep 2,5 seconden CPU-tijd. Dat is precies 25%.</li><li><b>TasksMax</b> (128 processen) hebben we alleen als instelling gecontroleerd, niet echt bereikt.</li></ul>
+<p class="prose">Als beheer zie je in het logboek van de kernel dat het de grens van de groep was (<code>CONSTRAINT_MEMCG</code>):</p>
+<pre class="cmd" data-waar="server · beheer"><code>sudo journalctl -k --since "-3min" --no-pager | grep -iE "oom|killed process" | tail -2</code></pre>
+<pre class="out" data-waar="uitvoer bij ons"><code>Oct 18 22:28:18 klasserver kernel: oom-kill:constraint=CONSTRAINT_MEMCG,nodemask=(null),cpuset=/,mems_allowed=0,oom_memcg=/user.slice/user-1001.slice,task_memcg=/user.slice/user-1001.slice/session-30.scope,task=python3,pid=2331,uid=1001
+Oct 18 22:28:18 klasserver kernel: Memory cgroup out of memory: Killed process 2331 (python3) total-vm:427596kB, anon-rss:256128kB, file-rss:6656kB, shmem-rss:0kB, UID:1001 pgtables:572kB oom_score_adj:0</code></pre>
+<p class="prose"><b>2. Python en de packages, als groep0.</b> Kan een groep binnen de grenzen de lesrepo installeren, met Python 3.13? <code>systemd-run</code> start de installatie als een eigen service, zoals een timer dat later ook doet.</p>
+<pre class="cmd" data-waar="server · groep0"><code>set -e
+git clone --quiet https://github.com/Adhibera/ai-engineering ~/proef-sync
+cd ~/proef-sync &amp;&amp; cat .python-version
+systemd-run --user --wait --pipe --working-directory="$HOME/proef-sync" -p MemoryAccounting=yes /usr/local/bin/uv sync --locked 2&gt;&amp;1
+~/proef-sync/.venv/bin/python -c 'import sys, openai; print(sys.version.split()[0], "openai", openai.__version__)'</code></pre>
+<pre class="out" data-waar="uitvoer bij ons (ingekort: … is weggelaten)"><code>3.13
+Running as unit: run-u5.service
+Downloading cpython-3.13.15-linux-x86_64-gnu (download) (33.2MiB)
+ Downloaded cpython-3.13.15-linux-x86_64-gnu (download)
+Using CPython 3.13.15
+Creating virtual environment at: .venv
+Resolved 42 packages in 1ms
+…
+Prepared 40 packages in 2.59s
+Installed 40 packages in 685ms
+…
+Finished with result: success
+Main processes terminated with: code=exited/status=0
+Service runtime: 11.190s
+CPU time consumed: 2.770s
+Memory peak: 6.2M
+Memory swap peak: 0B
+3.13.15 openai 3</code></pre>
+<p class="prose">De installatie lukte in 11 seconden. De <i>Memory peak</i> van 6,2 MB is niet geloofwaardig; die hebben we niet gebruikt. <b>3. Ruimte meten en opruimen:</b></p>
+<pre class="cmd" data-waar="server · groep0"><code>du -sh ~/proef-sync ~/.cache/uv ~/.local/share/uv
+rm -rf ~/proef-sync &amp;&amp; echo "proef-sync verwijderd"</code></pre>
+<pre class="out" data-waar="uitvoer bij ons"><code>63M	/home/groep0/proef-sync
+2.5M	/home/groep0/.cache/uv
+108M	/home/groep0/.local/share/uv
+proef-sync verwijderd</code></pre>
+<pre class="cmd" data-waar="server · beheer"><code>sudo du -sh /home/groep0; df -h / | tail -1</code></pre>
+<pre class="out" data-waar="uitvoer bij ons"><code>165M	/home/groep0
+/dev/sda1        75G  1.9G   70G   3% /</code></pre>
+<p class="prose">Een groep gebruikt dus ongeveer 165 MB (Python 3.13 en de cache van uv), en er is 70 GB vrij. Python 3.13 blijft bij groep0 staan, voor les 19.</p>
+
+  </div>
+</section>
+<section class="stap" id="s19">
+  <div class="stap-kop">
+    <span class="stap-nr">19</span>
+    <div class="stap-titel">
+      <p class="eyebrow"><span class="waar w-beheer">server · beheer</span> <span class="waar w-proef">server · proef</span><span class="duur">± 3 min</span></p>
+      <h3>De scheiding testen</h3>
+    </div>
+    <label class="klaar"><input type="checkbox" data-stap="19"><span>klaar</span></label>
+  </div>
+  <div class="stap-body">
+
+<p class="prose">Kan een groep bij de bestanden of het logboek van een andere groep? Eerst controleer je als beheer, met sudo, dat er echt iets van groep0 te vinden is. Anders bewijst een lege uitkomst straks niets.</p>
+<pre class="cmd" data-waar="server · beheer"><code>sudo journalctl _UID=1001 --no-pager -o cat | grep -c "hallo van groep0"
+sudo ls -l /var/log/syslog /var/log/journal/*/user-1001.journal
+sudo grep -c "hallo van groep0" /var/log/syslog</code></pre>
+<pre class="out" data-waar="uitvoer bij ons"><code>2
+-rw-r-----+ 1 root   systemd-journal 8388608 Oct 18 22:29 /var/log/journal/f18b8ab3284b487695b03ded63076388/user-1001.journal
+-rw-r-----  1 syslog adm              482241 Oct 18 22:29 /var/log/syslog
+2</code></pre>
+<p class="prose">Log nu in als de andere groep, met <code>ssh proef@klasserver</code>, en probeer bij groep0 te komen:</p>
+<pre class="cmd" data-waar="server · proef"><code>t() { echo "\$ $1"; bash -c "$1" 2&gt;&amp;1 | head -3 | sed "s/^/    /"; }
+t "ls /home/groep0"
+t "cat /home/groep0/hallo.txt"
+t "ls /run/user/1001"
+t "journalctl --user -u hallo --no-pager | tail -2"
+t "journalctl _UID=1001 --no-pager -o cat | grep -c \"hallo van groep0\""
+t "journalctl --file /var/log/journal/*/user-1001.journal --no-pager -n 1"
+t "cat /var/log/syslog"
+t "systemctl --user -M groep0@ list-timers --no-pager"
+t "ps -u groep0 -o user,pid,cmd | head -3"</code></pre>
+<pre class="out" data-waar="uitvoer bij ons"><code>$ ls /home/groep0
+    ls: cannot open directory '/home/groep0': Permission denied
+$ cat /home/groep0/hallo.txt
+    cat: /home/groep0/hallo.txt: Permission denied
+$ ls /run/user/1001
+    ls: cannot open directory '/run/user/1001': Permission denied
+$ journalctl --user -u hallo --no-pager | tail -2
+    -- No entries --
+$ journalctl _UID=1001 --no-pager -o cat | grep -c "hallo van groep0"
+    0
+$ journalctl --file /var/log/journal/*/user-1001.journal --no-pager -n 1
+    Failed to open files: Permission denied
+$ cat /var/log/syslog
+    cat: /var/log/syslog: Permission denied
+$ systemctl --user -M groep0@ list-timers --no-pager
+    Failed to connect to bus: Permission denied
+    Failed to list units: Transport endpoint is not connected
+$ ps -u groep0 -o user,pid,cmd | head -3
+    USER         PID CMD
+    groep0      2023 /usr/lib/systemd/systemd --user
+    groep0      2025 (sd-pam)</code></pre>
+<p class="prose">Alles werd geweigerd of was leeg, behalve het laatste: <b>met <code>ps</code> ziet een groep wel welke programma's een andere groep draait</b>, met de commandoregel. Zet daarom nooit een geheim in een commandoregel. Het bestand <code>.env</code> is wel afgeschermd.</p>
+
+  </div>
+</section>
+<section class="stap" id="s20">
+  <div class="stap-kop">
+    <span class="stap-nr">20</span>
+    <div class="stap-titel">
+      <p class="eyebrow"><span class="waar w-beheer">server · beheer</span><span class="duur">± 15 min</span></p>
+      <h3>Uitloggen en herstarten</h3>
+    </div>
+    <label class="klaar"><input type="checkbox" data-stap="20"><span>klaar</span></label>
+  </div>
+  <div class="stap-body">
+
+<p class="prose">De belangrijkste test: draait de timer door als niemand van groep0 ingelogd is, en ook na een herstart van de server? <b>1. Uitloggen.</b> Log overal uit als groep0. Kijk als beheer wie er ingelogd is, en hoeveel regels er in <code>hallo.txt</code> staan:</p>
+<pre class="cmd" data-waar="server · beheer"><code>echo "nu: $(date +%T)"; echo "sessies:"; loginctl list-sessions --no-legend
+echo "regels in hallo.txt: $(sudo wc -l /home/groep0/hallo.txt | cut -d" " -f1)"; sudo cat /home/groep0/hallo.txt</code></pre>
+<p class="prose">Wacht ruim 3 minuten (een interval van 2 minuten, plus tot een minuut speling), en doe het nog een keer:</p>
+<pre class="out" data-waar="uitvoer bij ons"><code>nu: 22:33:41
+sessies:
+42 1000 beheer - - active no -
+regels in hallo.txt: 4
+2026-10-18 22:27:57
+2026-10-18 22:28:12
+2026-10-18 22:30:04
+2026-10-18 22:32:12</code></pre>
+<p class="prose">Er is alleen een sessie van beheer, en toch kwam er om 22:32:12 een regel bij. <b>Linger werkt.</b></p>
+<div class="tip t-valkuil"><p class="tip-kop">Waar we tegenaan liepen</p><p class="prose"><code>sudo wc -l &lt; /home/groep0/hallo.txt</code> gaf <i>Permission denied</i>. Het <code>&lt;</code> wordt gedaan door je eigen shell, en die heeft geen sudo. Schrijf de bestandsnaam daarom zonder <code>&lt;</code>: <code>sudo wc -l /home/groep0/hallo.txt</code>.</p></div>
+<p class="prose"><b>2. Herstarten:</b></p>
+<pre class="cmd" data-waar="server · beheer"><code>sudo systemctl reboot</code></pre>
+<p class="prose">Log na ongeveer 20 seconden weer in met <code>ssh klasserver</code>, en kijk of groep0 vanzelf weer draait. Log nog <b>niet</b> in als groep0.</p>
+<pre class="cmd" data-waar="server · beheer"><code>echo "opgestart: $(uptime -s)"
+echo "groep0: $(loginctl show-user groep0 -p State --value) (linger: $(loginctl show-user groep0 -p Linger --value))"
+loginctl list-sessions --no-legend
+echo "mislukte services: $(systemctl --failed --no-legend | wc -l)"</code></pre>
+<pre class="out" data-waar="uitvoer bij ons"><code>opgestart: 2026-10-18 22:34:09
+groep0: lingering (linger: yes)
+5 1000 beheer - - active no -
+mislukte services: 0</code></pre>
+<p class="prose">Wacht weer ruim 3 minuten, en kijk in <code>hallo.txt</code>:</p>
+<pre class="cmd" data-waar="server · beheer"><code>echo "nu: $(date +%T), opgestart: $(uptime -s)"; echo "sessies:"; loginctl list-sessions --no-legend
+echo "--- hallo.txt (als beheer, met sudo):"; sudo cat /home/groep0/hallo.txt</code></pre>
+<pre class="out" data-waar="uitvoer bij ons"><code>nu: 22:37:55, opgestart: 2026-10-18 22:34:09
+sessies:
+7 1000 beheer - - active no -
+--- hallo.txt (als beheer, met sudo):
+2026-10-18 22:27:57
+2026-10-18 22:28:12
+2026-10-18 22:30:04
+2026-10-18 22:32:12
+2026-10-18 22:34:00
+2026-10-18 22:36:01</code></pre>
+<p class="prose">Na de herstart om 22:34:09 kwam er om 22:36:01 een regel bij, terwijl groep0 niet ingelogd was. <b>3. Het eigen logboek, over de herstart heen:</b> log in als groep0 (<code>ssh groep0@klasserver</code>):</p>
+<pre class="cmd" data-waar="server · groep0"><code>echo "vorige boot: $(journalctl --user -u hallo -b -1 --no-pager -o cat | grep -c "hallo van groep0") keer hallo"
+echo "deze boot:  $(journalctl --user -u hallo -b 0 --no-pager -o cat | grep -c "hallo van groep0") keer hallo"
+journalctl --user -u hallo --no-pager -o short | grep "hallo van"</code></pre>
+<pre class="out" data-waar="uitvoer bij ons"><code>vorige boot: 5 keer hallo
+deze boot:  2 keer hallo
+Oct 18 22:27:57 klasserver sh[2271]: hallo van groep0
+Oct 18 22:28:12 klasserver sh[2278]: hallo van groep0
+Oct 18 22:30:04 klasserver sh[2837]: hallo van groep0
+Oct 18 22:32:12 klasserver sh[2915]: hallo van groep0
+Oct 18 22:34:00 klasserver sh[3006]: hallo van groep0
+Oct 18 22:36:01 klasserver sh[1112]: hallo van groep0
+Oct 18 22:38:01 klasserver sh[1192]: hallo van groep0</code></pre>
+<p class="prose">Het logboek heeft de runs van vóór en na de herstart. Kijk ook naar de tijden: 22:28:12, 22:30:04, 22:32:12. Een timer gaat tot een minuut later af dan de klok zegt. Dat is normaal.</p>
+
+  </div>
+</section>
+<section class="stap" id="s21">
+  <div class="stap-kop">
+    <span class="stap-nr">21</span>
+    <div class="stap-titel">
+      <p class="eyebrow"><span class="waar w-beheer">server · beheer</span> <span class="waar w-laptop">laptop</span> <span class="waar w-groep0">server · groep0</span><span class="duur">± 10 min</span></p>
+      <h3>De noodstop, en weer aanzetten</h3>
+    </div>
+    <label class="klaar"><input type="checkbox" data-stap="21"><span>klaar</span></label>
+  </div>
+  <div class="stap-body">
+
+<p class="prose">Doet een groep iets wat niet mag, dan wil je alles van die groep in één keer stoppen. Je test dat nu op groep0, terwijl de testtimer nog loopt. De volgorde is belangrijk: eerst de toegang dicht, dan de processen stoppen.</p>
+<p class="prose"><b>1. De noodstop, als beheer:</b></p>
+<pre class="cmd" data-waar="server · beheer"><code>sudo usermod --expiredate 1 groep0      # het account verloopt: ook inloggen met een sleutel lukt niet meer
+sudo loginctl disable-linger groep0     # niets start meer zonder login
+sudo loginctl terminate-user groep0     # alle processen en verbindingen van groep0 stoppen
+sleep 2
+sudo chage -l groep0 | grep -i "account expires"
+echo "processen van groep0: $(ps -u groep0 --no-headers | wc -l)"</code></pre>
+<pre class="out" data-waar="uitvoer bij ons"><code>Account expires						: Jan 02, 1970
+processen van groep0: 0</code></pre>
+<p class="prose">Probeer vanaf de laptop in te loggen als groep0:</p>
+<pre class="cmd" data-waar="laptop"><code>ssh -o BatchMode=yes groep0@klasserver 'echo "BINNEN, dit mag niet"'</code></pre>
+<pre class="out" data-waar="uitvoer bij ons"><code>Your account has expired; please contact your system administrator.
+Connection closed by <span class="ip">&lt;IP&gt;</span> port 22</code></pre>
+<p class="prose">Wacht ruim 3 minuten. Er mag niets bijkomen in <code>hallo.txt</code>. Bij ons kwam er in 3,5 minuut geen regel bij, en waren er 0 processen.</p>
+<ul class="lijst"><li><b>Waarom eerst <code>--expiredate</code>?</b> Kan de groep nog inloggen, dan kan ze de timer zelf weer aanzetten. En met alleen linger uit draaien de timers nog steeds zolang iemand ingelogd is.</li><li><b>Bij een echte noodstop</b> trek je daarna ook de OpenAI-key van de groep in, in het dashboard van OpenAI.</li></ul>
+<p class="prose"><b>2. Weer aanzetten, als beheer:</b></p>
+<pre class="cmd" data-waar="server · beheer"><code>sudo usermod --expiredate "" groep0     # geen vervaldatum meer
+sudo loginctl enable-linger groep0
+sudo chage -l groep0 | grep -i "account expires"</code></pre>
+<pre class="out" data-waar="uitvoer bij ons"><code>Account expires						: never</code></pre>
+<pre class="cmd" data-waar="laptop"><code>ssh groep0@klasserver 'echo "binnen als $(whoami)"; systemctl --user list-timers hallo.timer --no-pager | head -2'</code></pre>
+<pre class="out" data-waar="uitvoer bij ons"><code>binnen als groep0
+NEXT                            LEFT LAST PASSED UNIT        ACTIVATES
+Sun 2026-10-18 22:58:00 CEST 1min 2s -         - hallo.timer hallo.service</code></pre>
+<p class="prose">Inloggen werkt weer, en om 22:58:01 liep de timer weer. Let op: de timers lopen dus meteen weer, met de code die er stond.</p>
+<p class="prose"><b>3. Opruimen.</b> Bij groep0 gaat de testtimer weg. Python 3.13 en de uv-cache blijven staan, voor les 19.</p>
+<pre class="cmd" data-waar="server · groep0"><code>systemctl --user disable --now hallo.timer
+rm -f ~/.config/systemd/user/hallo.service ~/.config/systemd/user/hallo.timer ~/hallo.txt
+systemctl --user daemon-reload</code></pre>
+<pre class="out" data-waar="uitvoer bij ons"><code>Removed "/home/groep0/.config/systemd/user/timers.target.wants/hallo.timer".</code></pre>
+<p class="prose"><b>proef</b> gaat helemaal weg, met de map met de grenzen:</p>
+<pre class="cmd" data-waar="server · beheer"><code>sudo loginctl disable-linger proef
+sudo loginctl terminate-user proef 2&gt;/dev/null || true
+sleep 2
+sudo deluser --remove-home proef
+sudo rm -r /etc/systemd/system.control/user-1002.slice.d
+sudo systemctl daemon-reload
+id proef; ls -d /home/*; ls /var/lib/systemd/linger/</code></pre>
+<pre class="out" data-waar="uitvoer bij ons"><code>info: Looking for files to backup/remove ...
+info: Removing files ...
+info: Removing crontab ...
+info: Removing user `proef' ...
+id: ‘proef’: no such user
+/home/beheer
+/home/groep0
+groep0</code></pre>
+<p class="prose">Bij groep0 blijft daarna nog één timer zichtbaar in <code>systemctl --user list-timers</code>: <code>launchpadlib-cache-clean.timer</code>. Die hoort bij Ubuntu zelf, niet bij jou. Leerlingen zien hem straks ook.</p>
+
+  </div>
+</section>
+<section class="deel" id="deel-f">
+  <p class="label">Deel F · stap 22 t/m 24 · de volgende dag</p>
+  <h2>Afronden</h2>
+  <div class="prose">
+<p>Deze stappen deden we op 19 oktober, net na middernacht. Ze kwamen na de tests, en de docent koos er zelf voor.</p></div>
+</section>
+<section class="stap" id="s22">
+  <div class="stap-kop">
+    <span class="stap-nr">22</span>
+    <div class="stap-titel">
+      <p class="eyebrow"><span class="waar w-beheer">server · beheer</span><span class="duur">2 min</span></p>
+      <h3>'s Nachts herstarten na updates</h3>
+    </div>
+    <label class="klaar"><input type="checkbox" data-stap="22"><span>klaar</span></label>
+  </div>
+  <div class="stap-body">
+
+<p class="prose">De server installeert zelf beveiligingsupdates, maar een nieuwe kernel werkt pas na een herstart. Met deze instelling herstart de server dan zelf, 's nachts, en alleen als een update daarom vraagt. Eerst kijk je wanneer de updates draaien:</p>
+<pre class="cmd" data-waar="server · beheer"><code>systemctl cat apt-daily-upgrade.timer | grep -E "OnCalendar|Randomized"</code></pre>
+<pre class="out" data-waar="uitvoer bij ons"><code>OnCalendar=*-*-* 6:00
+RandomizedDelaySec=60m</code></pre>
+<pre class="cmd" data-waar="server · beheer"><code>printf "%s\n" \
+  'Unattended-Upgrade::Automatic-Reboot "true";' \
+  'Unattended-Upgrade::Automatic-Reboot-Time "03:17";' \
+  | sudo tee /etc/apt/apt.conf.d/52-klasserver
+apt-config dump | grep Automatic-Reboot</code></pre>
+<pre class="out" data-waar="uitvoer bij ons"><code>Unattended-Upgrade::Automatic-Reboot "true";
+Unattended-Upgrade::Automatic-Reboot-Time "03:17";
+Unattended-Upgrade::Automatic-Reboot "true";
+Unattended-Upgrade::Automatic-Reboot-Time "03:17";</code></pre>
+<ul class="lijst"><li>De updates draaien tussen 06:00 en 07:00. Vraagt een update om een herstart, dan herstart de server de nacht daarna om 03:17.</li><li>In stap 20 zag je dat linger en de timers na een herstart vanzelf terugkomen. Een run die om 03:17 bezig is, wordt afgebroken. Dankzij les 18 is dat veilig.</li><li>Getest is alleen dat de instelling gelezen wordt. Een echte herstart 's nachts hebben we nog niet meegemaakt.</li></ul>
+
+  </div>
+</section>
+<section class="stap" id="s23">
+  <div class="stap-kop">
+    <span class="stap-nr">23</span>
+    <div class="stap-titel">
+      <p class="eyebrow"><span class="waar w-laptop">laptop</span> <span class="waar w-beheer">server · beheer</span><span class="duur">± 10 min</span></p>
+      <h3>Het script nieuwe-groep</h3>
+    </div>
+    <label class="klaar"><input type="checkbox" data-stap="23"><span>klaar</span></label>
+  </div>
+  <div class="stap-body">
+
+<p class="prose">Per groep zijn het zes commando's (zie stap 16). Bij tien groepen vergeet je er makkelijk een. Het script doet ze in één keer, en controleert eerst de sleutels. <b>1. Op de laptop:</b> zet dit in een bestand <code>nieuwe-groep</code>.</p>
+<pre class="cmd" data-waar="laptop"><code>#!/usr/bin/env bash
+# Klasserver: maak een groep aan, met een gebruiker, sleutels, linger en grenzen.
+# Gebruik: sudo nieuwe-groep groep3 sleutels-groep3.pub
+set -euo pipefail
+
+[[ $# -eq 2 ]] || { echo "Gebruik: sudo nieuwe-groep groepN sleutels.pub"; exit 1; }
+[[ $EUID -eq 0 ]] || { echo "Start dit script met sudo."; exit 1; }
+naam="$1"; sleutels="$2"
+[[ "$naam" =~ ^groep[0-9]+$ ]] || { echo "De naam moet groepN zijn, bijvoorbeeld groep3."; exit 1; }
+[[ -f "$sleutels" ]] || { echo "Het bestand $sleutels bestaat niet."; exit 1; }
+
+# Controleer de sleutels voordat er iets verandert
+if grep -q "PRIVATE KEY" "$sleutels"; then
+  echo "Dit is een privésleutel. Die is nu niet meer geheim: laat de leerling een nieuwe maken."
+  exit 1
+fi
+regels=$(grep -cvE '^[[:space:]]*(#|$)' "$sleutels" || true)
+geldig=$(ssh-keygen -l -f "$sleutels" 2&gt;/dev/null | wc -l || true)
+[[ "$regels" -gt 0 &amp;&amp; "$regels" -eq "$geldig" ]] || { echo "Van de $regels sleutels zijn er $geldig geldig."; exit 1; }
+ssh-keygen -l -f "$sleutels"
+
+adduser --disabled-password --gecos "" "$naam"
+install -d -m 700 -o "$naam" -g "$naam" "/home/$naam/.ssh"
+install -m 600 -o "$naam" -g "$naam" "$sleutels" "/home/$naam/.ssh/authorized_keys"
+loginctl enable-linger "$naam"
+systemctl set-property "user-$(id -u "$naam").slice" \
+  MemoryMax=256M MemorySwapMax=0 TasksMax=128 CPUQuota=25%
+echo "Klaar: $naam (UID $(id -u "$naam"))"</code></pre>
+<p class="prose"><b>2. Controleren, en op de server zetten.</b> <code>bash -n</code> controleert alleen of de tekst klopt; het voert niets uit. Op de server komt het script in <code>/usr/local/sbin/</code>, waar alleen root het kan veranderen.</p>
+<pre class="cmd" data-waar="laptop"><code>bash -n nieuwe-groep &amp;&amp; echo "syntax ok"
+scp -q nieuwe-groep klasserver:/tmp/nieuwe-groep
+ssh klasserver 'sudo install -m 755 -o root -g root /tmp/nieuwe-groep /usr/local/sbin/nieuwe-groep &amp;&amp; rm /tmp/nieuwe-groep &amp;&amp; ls -l /usr/local/sbin/nieuwe-groep'</code></pre>
+<pre class="out" data-waar="uitvoer bij ons"><code>syntax ok
+-rwxr-xr-x 1 root root 1397 Oct 19 00:10 /usr/local/sbin/nieuwe-groep</code></pre>
+<p class="prose"><b>3. Testen met foute invoer, als beheer.</b> Eerst maak je testbestanden: een goed sleutelbestand, een wegwerp-privésleutel, een bestand met een kapotte regel, en een met alleen commentaar.</p>
+<pre class="cmd" data-waar="server · beheer"><code>d=$HOME/sleuteltest; mkdir -p "$d"; cd "$d"
+cp ~/.ssh/authorized_keys goed.pub
+ssh-keygen -q -t ed25519 -N "" -C wegwerp -f prive
+{ cat goed.pub; echo "dit is geen sleutel"; } &gt; kapot.pub
+printf "# alleen commentaar\n\n" &gt; leeg.pub
+t() { echo "== $1"; shift; "$@"; echo "exit: $?"; }
+t "zonder sudo" /usr/local/sbin/nieuwe-groep groep9 goed.pub
+t "verkeerde naam" sudo nieuwe-groep klas9 goed.pub
+t "een argument" sudo nieuwe-groep groep9
+t "bestaat niet" sudo nieuwe-groep groep9 bestaatniet.pub
+t "privesleutel" sudo nieuwe-groep groep9 prive
+t "kapotte regel" sudo nieuwe-groep groep9 kapot.pub
+t "alleen commentaar" sudo nieuwe-groep groep9 leeg.pub
+id groep9</code></pre>
+<pre class="out" data-waar="uitvoer bij ons"><code>== zonder sudo
+Start dit script met sudo.
+exit: 1
+== verkeerde naam
+De naam moet groepN zijn, bijvoorbeeld groep3.
+exit: 1
+== een argument
+Gebruik: sudo nieuwe-groep groepN sleutels.pub
+exit: 1
+== bestaat niet
+Het bestand bestaatniet.pub bestaat niet.
+exit: 1
+== privesleutel
+Dit is een privésleutel. Die is nu niet meer geheim: laat de leerling een nieuwe maken.
+exit: 1
+== kapotte regel
+Van de 2 sleutels zijn er 1 geldig.
+exit: 1
+== alleen commentaar
+Van de 0 sleutels zijn er 0 geldig.
+exit: 1
+id: ‘groep9’: no such user</code></pre>
+<p class="prose">Elke keer stopte het script voordat er iets veranderde: <code>groep9</code> bestaat niet. De regel die controleert of het bestand bestaat, kwam er tijdens het testen bij. Zonder die regel stopte het script ook, maar met een onduidelijke melding. Bij ons kwamen deze meldingen daarom uit twee testrondes: de melding bij <i>bestaat niet</i> is van de tweede ronde, met het script zoals het hierboven staat.</p>
+<p class="prose"><b>4. Een echte groep, en weer opruimen:</b></p>
+<pre class="cmd" data-waar="server · beheer"><code>cd ~/sleuteltest &amp;&amp; sudo nieuwe-groep groep9 goed.pub
+loginctl show-user groep9 -p Linger
+systemctl show "user-$(id -u groep9).slice" -p MemoryMax -p MemorySwapMax -p TasksMax -p CPUQuotaPerSecUSec</code></pre>
+<pre class="out" data-waar="uitvoer bij ons (ingekort)"><code>256 SHA256:5T3Nqv9zbyhqbg3agP49Z6lt6TO1X6f77FhPhrZDG0Y no comment (ED25519)
+info: Adding user `groep9' ...
+…
+Klaar: groep9 (UID 1002)
+Linger=yes
+CPUQuotaPerSecUSec=250ms
+MemoryMax=268435456
+MemorySwapMax=0
+TasksMax=128</code></pre>
+<pre class="cmd" data-waar="laptop"><code>ssh groep9@klasserver 'echo "ingelogd als $(whoami)"; systemctl --user is-system-running; uv --version'</code></pre>
+<pre class="out" data-waar="uitvoer bij ons"><code>ingelogd als groep9
+running
+uv 0.12.17 (x86_64-unknown-linux-gnu)</code></pre>
+<p class="prose">Nog een keer dezelfde groep maken, weigert het script (<code>fatal: The user `groep9' already exists.</code>), en de sleutels blijven zoals ze waren. Daarna ruim je groep9 en de testbestanden op, ook de wegwerpsleutel:</p>
+<pre class="cmd" data-waar="server · beheer"><code>sudo loginctl disable-linger groep9
+sudo loginctl terminate-user groep9 2&gt;/dev/null || true
+sudo deluser --remove-home groep9
+sudo rm -r /etc/systemd/system.control/user-1002.slice.d
+sudo systemctl daemon-reload
+rm -r ~/sleuteltest
+loginctl list-users --no-legend</code></pre>
+<pre class="out" data-waar="uitvoer bij ons (even later)"><code>1000 beheer no  active
+1001 groep0 yes lingering</code></pre>
+<p class="prose">Staat groep9 er nog bij met <i>closing</i>, wacht dan een paar seconden en kijk opnieuw. Bij ons was het daarna weg.</p>
+
+  </div>
+</section>
+<section class="stap" id="s24">
+  <div class="stap-kop">
+    <span class="stap-nr">24</span>
+    <div class="stap-titel">
+      <p class="eyebrow"><span class="waar w-laptop">laptop</span><span class="duur">± 15 min</span></p>
+      <h3>Opschrijven</h3>
+    </div>
+    <label class="klaar"><input type="checkbox" data-stap="24"><span>klaar</span></label>
+  </div>
+  <div class="stap-body">
+
+<p class="prose">Tot slot schreef Claude alles op, en dat deel kun je de volgende keer ook zelf doen:</p>
+<ul class="lijst"><li><b>Het draaiboek</b> <code>documents/serverdraaiboek.md</code>: hoe je een groep aanmaakt, het overzicht, de noodstop en het opruimen aan het eind van het jaar. Gecommit en gepusht in <code>368f73f</code>. Het IP-adres staat er bewust niet in, want de repo is openbaar.</li><li><b>De handoffs</b> <code>HANDOFF.md</code> en <code>HANDOFF-hetzner.md</code>, en het geheugen van Claude. Daar staat het IP-adres wel in, want die bestanden staan niet in git.</li><li><b>Voor jezelf:</b> schrijf het IP-adres op, en wat er anders ging dan op deze pagina.</li></ul>
+<p class="prose">Codex keek in de sessie mee bij het plan, bij SSH, bij de grenzen en bij de tests. De adviezen van Codex zitten al in de stappen op deze pagina, bijvoorbeeld <code>MemorySwapMax=0</code>, <code>X11Forwarding no</code> en de volgorde van de noodstop.</p>
+
+  </div>
+</section>
+
+<section class="sectie" id="valkuilen">
+  <h2>Waar we tegenaan liepen</h2>
+  <div class="tabel"><table><thead><tr><th>Wat</th><th>Wat je doet</th></tr></thead><tbody><tr><td><i>Verification pending</i> bij het maken van een project</td><td>Eerst het account laten verifiëren (stap 3). Bij ons duurde het een half uur.</td></tr><tr><td>Een venster <i>What's New</i> over de knop <b>Create Firewall</b></td><td>Klik op <b>Got it</b>.</td></tr><tr><td>Een stukje van de sleutel viel weg bij het invullen</td><td>Plakken in plaats van typen, het einde nakijken, en de vingerafdruk vergelijken (stap 5).</td></tr><tr><td><i>Cost-Optimized</i> was <i>Temporarily not available</i></td><td>Regular Performance, de CPX22.</td></tr><tr><td>Standaard stond Ubuntu 26.04</td><td>In het menu bij Ubuntu 24.04 kiezen.</td></tr><tr><td>beheer kreeg <i>Permission denied</i> op <code>/home/groep0/.ssh</code></td><td>Dat is goed: zo is de scheiding. Kijk als beheer met <code>sudo</code>.</td></tr><tr><td><code>sudo wc -l &lt; bestand</code> gaf <i>Permission denied</i></td><td>De bestandsnaam zonder <code>&lt;</code>: <code>sudo wc -l bestand</code>.</td></tr><tr><td><code>sudo -u groep0 systemctl --user …</code> werkt niet</td><td>Gebruik <code>sudo systemctl --user -M groep0@ …</code>, of log in als de groep.</td></tr><tr><td>Elke <code>systemctl --user -M groepN@</code> zet regels <i>Failed to release session: Access denied</i> in het logboek van die groep</td><td>Het commando werkt wel. De groep kan die regels zien.</td></tr><tr><td>De timer liep tot een minuut te laat</td><td>Dat is normaal (<code>AccuracySec</code>).</td></tr><tr><td><code>systemd-run</code> meldde een <i>Memory peak</i> van 6,2 MB voor de hele installatie</td><td>Niet geloofwaardig, en dus niet gebruikt.</td></tr><tr><td>Alles wat een groep print, staat ook in <code>/var/log/syslog</code></td><td>Alleen root en de groep <code>adm</code> kunnen dat lezen. Spreek bij de eindopdracht af: geen klantdata printen.</td></tr></tbody></table></div>
+</section>
+<section class="sectie" id="nu">
+  <h2>Wat er nu staat</h2>
+  <div class="tabel"><table><thead><tr><th>Waar</th><th>Wat</th></tr></thead><tbody><tr><td>Hetzner</td><td>project <code>klasserver</code>, server <code>klasserver</code> (CPX22, Nürnberg, Ubuntu 24.04), firewall <code>alleen-ssh</code>, sleutel <code>laptop-docent</code>. €19,99 per maand zonder btw.</td></tr><tr><td>Laptop</td><td><code>Host klasserver</code> in <code>~/.ssh/config</code>, en de reservekopie <code>~/.ssh/config.bak-klasserver</code>.</td></tr><tr><td>Gebruikers</td><td><code>beheer</code> (sudo zonder wachtwoord) en <code>groep0</code> (linger, grenzen, Python 3.13 al in de uv-cache).</td></tr><tr><td>Bestanden op de server</td><td><code>/etc/ssh/sshd_config.d/10-klasserver.conf</code>, <code>/etc/sudoers.d/90-beheer</code>, <code>/etc/systemd/journald.conf.d/50-klasserver.conf</code>, <code>/etc/apt/apt.conf.d/52-klasserver</code>, <code>/usr/local/bin/uv</code>, <code>/usr/local/sbin/nieuwe-groep</code>, en <code>/etc/systemd/system.control/user-1001.slice.d/</code>.</td></tr></tbody></table></div>
+  <div class="prose">
+    <p><b>Hoe het verder gaat:</b> een groep aanmaken, het overzicht, de noodstop en het opruimen aan het eind van het schooljaar staan in het <a href="serverdraaiboek.md">serverdraaiboek</a>. De volgende stap in de lessen is les 19: draaien op de server, getest op groep0.</p>
+  </div>
+</section>
+<footer class="voet">
+  <p>Gemaakt op 19 oktober 2026, uit het verloop van de sessie met Claude. De uitvoer is die van toen. Het IP-adres staat er niet in; dat vul je bovenaan zelf in.</p>
+</footer>
+</main>
+</div>
+<script>
+(function () {
+  // Bewaar per browser het IP-adres en welke stappen klaar zijn. Lukt opslaan niet, dan werkt de pagina gewoon zonder.
+  var opslag = {
+    get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  };
+
+  var veld = document.getElementById("ip");
+  function zetIP() {
+    var v = veld.value.trim();
+    document.querySelectorAll(".ip").forEach(function (s) { s.textContent = v || "<IP>"; });
+  }
+  veld.value = opslag.get("klasserver-ip") || "";
+  veld.addEventListener("input", function () { opslag.set("klasserver-ip", veld.value.trim()); zetIP(); });
+  zetIP();
+
+  var vakjes = document.querySelectorAll("input[data-stap]");
+  var teller = document.getElementById("voortgang");
+  function toon() {
+    var n = 0;
+    vakjes.forEach(function (v) {
+      var a = document.querySelector('a[data-nav="' + v.dataset.stap + '"]');
+      if (a) a.classList.toggle("af", v.checked);
+      if (v.checked) n++;
+    });
+    teller.textContent = n + " van " + vakjes.length + " klaar";
+  }
+  vakjes.forEach(function (v) {
+    v.checked = opslag.get("klasserver-stap-" + v.dataset.stap) === "1";
+    v.addEventListener("change", function () { opslag.set("klasserver-stap-" + v.dataset.stap, v.checked ? "1" : "0"); toon(); });
+  });
+  toon();
+
+  document.querySelectorAll("pre.cmd").forEach(function (pre) {
+    var knop = document.createElement("button");
+    knop.type = "button";
+    knop.className = "kopieer";
+    knop.textContent = "kopieer";
+    knop.addEventListener("click", function () {
+      var code = pre.querySelector("code");
+      function klaar(tekst) { knop.textContent = tekst; setTimeout(function () { knop.textContent = "kopieer"; }, 1600); }
+      function selecteer() {
+        var r = document.createRange(); r.selectNodeContents(code);
+        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+        klaar("geselecteerd: ctrl+c");
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(code.textContent).then(function () { klaar("gekopieerd"); }, selecteer);
+      } else {
+        selecteer();
+      }
+    });
+    pre.appendChild(knop);
+  });
+})();
+</script>
+</body>
+</html>
