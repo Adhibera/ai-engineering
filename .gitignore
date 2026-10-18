@@ -16,7 +16,7 @@ wheels/
 resources/
 
 # Handoff voor agents (niet voor leerlingen)
-HANDOFF.md
+HANDOFF*.md
 
 # Logboeken van de agent (les 14)
 agent.log
