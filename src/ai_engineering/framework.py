@@ -13,6 +13,10 @@ from agents import Agent, MaxTurnsExceeded, Runner, function_tool
 from ai_engineering.agent_loop import BESTELLINGEN, PAKKETTEN
 from ai_engineering.ai_call import MODEL
 
+# Let op: de SDK stuurt elke run, met de vragen en tool-resultaten, naar het
+# OpenAI-dashboard (tracing). Uitzetten: zet set_tracing_disabled bij de import
+# uit agents hierboven, en roep hier set_tracing_disabled(True) aan.
+
 
 # De beschrijving van de tool maakt de SDK zelf, uit de docstring en de type hints
 @function_tool
@@ -45,7 +49,7 @@ def main() -> None:
         print("AI:", resultaat.final_output)
     except MaxTurnsExceeded:
         # Plan B, net als in les 13
-        print("AI: Sorry, dat lukt me nu niet. Een medewerker neemt contact met je op.")
+        print("AI: Sorry, dat lukt me nu niet. Probeer het later nog eens.")
 
 
 if __name__ == "__main__":

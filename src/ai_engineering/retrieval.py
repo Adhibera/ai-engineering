@@ -1,9 +1,9 @@
 """
 Les 9: retrieval.
 
-Een LLM weet niets over jouw bedrijf, zoals het retourbeleid van je webshop.
-Daarom haalt je code die informatie eerst op uit een bron (hier een
-kennisbank) en stuurt die mee met de vraag.
+Een LLM kent jouw bedrijf niet, zoals het retourbeleid van je webshop.
+Daarom haalt je code die informatie eerst op uit een bron die jij beheert
+(hier een kennisbank) en stuurt die mee met de vraag.
 
 Starten:  uv run les9
 """

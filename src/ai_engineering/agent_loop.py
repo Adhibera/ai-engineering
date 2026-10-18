@@ -66,6 +66,9 @@ def voer_tool_uit(naam: str, args: dict) -> str:
         return zoek_bestelling(**args)
     elif naam == "volg_pakket":
         return volg_pakket(**args)
+    else:
+        # Staat een tool wel in tools, maar niet hier? Dan krijgt het LLM deze melding.
+        return f"onbekende tool: {naam}"
 
 
 def agent(vraag: str) -> str:
@@ -79,9 +82,11 @@ def agent(vraag: str) -> str:
             input=gesprek,
             tools=tools,
         )
+        # Bewaar alles wat het LLM terugstuurde, ook de tool-aanvragen
         gesprek += response.output
 
-        # Onze code voert de gekozen tools uit en geeft het resultaat terug
+        # Onze code voert de gekozen tools uit en geeft het resultaat terug.
+        # Twee tools in één ronde? Dan voert de for-lus ze na elkaar uit.
         tool_gebruikt = False
         for item in response.output:
             if item.type == "function_call":
@@ -99,7 +104,7 @@ def agent(vraag: str) -> str:
             return response.output_text
 
     # Plan B: de agent is na MAX_STAPPEN nog niet klaar
-    return "Sorry, dat lukt me nu niet. Een medewerker neemt contact met je op."
+    return "Sorry, dat lukt me nu niet. Probeer het later nog eens."
 
 
 def main() -> None:

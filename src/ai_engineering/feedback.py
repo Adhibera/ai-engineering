@@ -23,11 +23,14 @@ def schrijf_mail(klacht: str) -> None:
         # De mens beslist
         akkoord = input("Versturen? (j/n): ")
         if akkoord == "j":
-            print("De mail is verstuurd.")
+            print("Goedgekeurd. (Simulatie: er is geen echte mail verstuurd.)")
             break
 
-        # Niet akkoord: de feedback gaat terug naar het LLM
-        feedback = input("Wat moet er anders? ")
+        # Niet akkoord: de feedback gaat terug naar het LLM, of de mens stopt
+        feedback = input("Wat moet er anders? (typ stop om te stoppen) ")
+        if feedback == "stop":
+            print("Gestopt. Er gaat geen mail naar de klant.")
+            break
         gesprek.append({"role": "assistant", "content": concept})
         gesprek.append({"role": "user", "content": feedback})
 

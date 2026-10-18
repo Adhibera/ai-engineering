@@ -19,8 +19,9 @@ def huidige_temperatuur(latitude: float, longitude: float) -> float:
     """Haal de huidige temperatuur op bij Open-Meteo (gratis, geen key nodig)."""
     url = "https://api.open-meteo.com/v1/forecast"
     params = {"latitude": latitude, "longitude": longitude, "current": "temperature_2m"}
-    data = requests.get(url, params=params).json()
-    return data["current"]["temperature_2m"]
+    reactie = requests.get(url, params=params, timeout=10)  # wacht hoogstens 10 seconden
+    reactie.raise_for_status()  # bij een fout van Open-Meteo stopt het hier, met een duidelijke melding
+    return reactie.json()["current"]["temperature_2m"]
 
 
 # De beschrijving van de tool, zodat het LLM weet wat het kan vragen
@@ -38,7 +39,7 @@ tools = [
             "required": ["latitude", "longitude"],
             "additionalProperties": False,
         },
-        "strict": True,
+        "strict": True,  # de argumenten van het LLM passen dan precies in deze parameters
     }
 ]
 
@@ -51,23 +52,32 @@ def main() -> None:
     response = client.responses.create(
         model=MODEL, instructions=INSTRUCTIES, input=gesprek, tools=tools
     )
+    # Bewaar alles wat het LLM terugstuurde, ook de tool-aanvraag
     gesprek += response.output
 
     # Stap 2: jouw code voert de tool uit
+    tool_gebruikt = False
     for item in response.output:
         if item.type == "function_call":
+            tool_gebruikt = True
             args = json.loads(item.arguments)
             print("(tool:", item.name, args, ")")
             resultaat = huidige_temperatuur(**args)
             gesprek.append({
                 "type": "function_call_output",
-                "call_id": item.call_id,
+                "call_id": item.call_id,  # koppelt het resultaat aan precies deze aanvraag
                 "output": str(resultaat),
             })
 
-    # Stap 3: het LLM maakt een antwoord met het resultaat
+    # Geen tool nodig? Dan is het eerste antwoord al goed, en is stap 3 niet nodig.
+    if not tool_gebruikt:
+        print("AI:", response.output_text)
+        return
+
+    # Stap 3: het LLM maakt een antwoord met het resultaat.
+    # Met tool_choice="none" mag het geen nieuwe tool vragen: deze les doet één tool-ronde.
     response = client.responses.create(
-        model=MODEL, instructions=INSTRUCTIES, input=gesprek, tools=tools
+        model=MODEL, instructions=INSTRUCTIES, input=gesprek, tools=tools, tool_choice="none"
     )
     print("AI:", response.output_text)
 

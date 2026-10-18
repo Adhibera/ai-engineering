@@ -32,6 +32,11 @@ def main() -> None:
     )
     taak = response.output_parsed
 
+    # Soms vult het LLM het formulier niet in, bijvoorbeeld als het weigert
+    if taak is None:
+        print("Het LLM heeft het formulier niet ingevuld.")
+        return
+
     print("Omschrijving:", taak.omschrijving)
     print("Klaar:", taak.klaar)
     print("Prioriteit:", taak.prioriteit)

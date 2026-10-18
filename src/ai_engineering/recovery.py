@@ -1,15 +1,17 @@
 """
 Les 7: recovery.
 
-In het echt gaat er weleens iets mis: geen internet of een drukke server.
-Een goed programma crasht dan niet. Het probeert het opnieuw,
-en als het echt niet lukt, heeft het een plan B.
+In het echt gaat er weleens iets mis: geen internet, of een server die
+even niet bereikbaar is. Een goed programma crasht dan niet. Het probeert
+het opnieuw, en als het echt niet lukt, heeft het een plan B.
 
 Starten:  uv run les7
 """
 
 import random
 import time
+
+from openai import APIConnectionError  # de echte fout als OpenAI niet bereikbaar is
 
 from ai_engineering.ai_call import vraag_ai
 
@@ -18,7 +20,7 @@ KANS_OP_FOUT = 0.5
 
 
 def onbetrouwbare_vraag_ai(vraag: str) -> str:
-    """Doet alsof de server soms niet bereikbaar is."""
+    """Doet alsof de server soms niet bereikbaar is, met een nepfout: ConnectionError."""
     if random.random() < KANS_OP_FOUT:
         raise ConnectionError("de server is even niet bereikbaar")
     return vraag_ai(vraag)
@@ -28,7 +30,7 @@ def vraag_met_recovery(vraag: str) -> str:
     for poging in range(1, 4):  # maximaal 3 pogingen
         try:
             return onbetrouwbare_vraag_ai(vraag)
-        except ConnectionError as fout:
+        except (ConnectionError, APIConnectionError) as fout:
             print("Poging", poging, "mislukt:", fout)
             time.sleep(poging)  # wacht steeds iets langer
 

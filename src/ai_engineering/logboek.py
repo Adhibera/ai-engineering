@@ -57,7 +57,7 @@ def agent(vraag: str) -> str:
             return response.output_text
 
     logging.warning(f"Na {MAX_STAPPEN} stappen nog niet klaar, plan B")
-    return "Sorry, dat lukt me nu niet. Een medewerker neemt contact met je op."
+    return "Sorry, dat lukt me nu niet. Probeer het later nog eens."
 
 
 def main() -> None:

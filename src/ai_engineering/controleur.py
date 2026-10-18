@@ -58,12 +58,16 @@ def schrijf_mail(klacht: str) -> None:
         gesprek.append({"role": "assistant", "content": concept})
         gesprek.append({"role": "user", "content": controle.feedback})
 
+    # Ook het laatste concept kan afgekeurd zijn. Dat moet de mens weten.
+    if not controle.goedgekeurd:
+        print(f"\nLet op: ook na {MAX_RONDES} rondes keurt de controleur het af.")
+
     # De mens heeft het laatste woord
     akkoord = input("\nVersturen? (j/n): ")
     if akkoord == "j":
-        print("De mail is verstuurd.")
+        print("Goedgekeurd. (Simulatie: er is geen echte mail verstuurd.)")
     else:
-        print("De mail is niet verstuurd.")
+        print("Niet goedgekeurd. Er gaat geen mail naar de klant.")
 
 
 def main() -> None:

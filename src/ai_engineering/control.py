@@ -34,9 +34,10 @@ def main() -> None:
     print("Soort:", beoordeling.soort)
     print("Reden:", beoordeling.reden)
 
-    # Stap 2: onze eigen code beslist wat er gebeurt
+    # Stap 2: onze eigen code beslist wat er gebeurt.
+    # Het doorsturen doen we hier nog niet echt: we printen alleen wat er zou gebeuren.
     if beoordeling.soort == "klacht":
-        print("Je bericht is doorgestuurd naar de klachtenafdeling.")
+        print("Actie: doorsturen naar de klachtenafdeling (simulatie)")
     elif beoordeling.soort == "compliment":
         print("Bedankt voor je compliment!")
     elif beoordeling.soort == "vraag":

@@ -376,7 +376,7 @@ def les14():
 
 
 def les15():
-    s = Schema("les15", 720, 182, "De schrijver maakt een concept, de controleur keurt het. Afgekeurd gaat terug met feedback; goedgekeurd gaat naar de mens.")
+    s = Schema("les15", 720, 182, "De schrijver maakt een concept, de controleur keurt het. Afgekeurd gaat terug met feedback. Goedgekeurd, of na drie rondes nog afgekeurd, gaat naar de mens.")
     s.vak("in", "io", 10, 40, 90, 40, ["Klacht"])
     s.vak("schr", "llm", 140, 34, 160, 52, ["Schrijver", "LLM: maakt concept"])
     s.vak("ctrl", "llm", 390, 34, 160, 52, ["Controleur", "LLM: checkt de regels"])
@@ -388,16 +388,20 @@ def les15():
     s.tekst(575, 52, "goed")
     s.pijl((470, 86), (470, 140), (220, 140), (220, 86))
     s.tekst(345, 132, "afgekeurd + feedback")
-    s.tekst(345, 160, "max. 3 rondes, daarna beslist de mens", klasse="lbl zacht")
+    s.tekst(345, 160, "ronde 1 en 2: opnieuw schrijven", klasse="lbl zacht")
+    # De limietuitgang: ook na de laatste afkeuring beslist de mens
+    s.pijl((470, 140), (657, 140), (657, 86), stippel=True)
+    s.tekst(563, 132, "na 3 rondes")
+    s.tekst(563, 160, "nog afgekeurd: de mens beslist", klasse="lbl zacht")
     return s
 
 
 def les16():
-    s = Schema("les16", 720, 316, "Links de onderdelen van les 13, rechts waar ze in de SDK zitten. Gestippeld: dat zie je niet meer.")
-    s.tekst(20, 28, "Les 13 · zelf gebouwd (111 regels)", anker="start", klasse="hoofd")
-    s.tekst(420, 28, "Les 16 · met de SDK (52 regels)", anker="start", klasse="hoofd")
+    s = Schema("les16", 720, 316, "Links de onderdelen van les 13 en 14, rechts waar ze in de SDK zitten. Gestippeld: dat zie je niet meer.")
+    s.tekst(20, 28, "Les 13 en 14 · zelf gebouwd", anker="start", klasse="hoofd")
+    s.tekst(420, 28, "Les 16 · met de SDK", anker="start", klasse="hoofd")
     rijen = [
-        ("tools = [ … ]  (26 regels)", "@function_tool + docstring", False),
+        ("tools = [ … ]  (met de hand)", "@function_tool + docstring", False),
         ("voer_tool_uit()", "zit in de SDK", True),
         ("for stap in range(…)", "Runner.run_sync(max_turns=5)", False),
         ("plan B na de lus", "except MaxTurnsExceeded", False),
@@ -465,9 +469,10 @@ def bouw():
         lambda m: f'<pre class="py"><code>{kleur_python(m.group(1).rstrip())}</code></pre>',
         pagina,
     )
+    # Ook <pre class="term log"> (een logboek) krijgt de kleuren voor INFO en WARNING
     pagina = re.sub(
-        r'<pre class="term">\n?([\s\S]*?)</pre>',
-        lambda m: f'<pre class="term"><code>{kleur_terminal(m.group(1).rstrip())}</code></pre>',
+        r'<pre class="(term(?: log)?)">\n?([\s\S]*?)</pre>',
+        lambda m: f'<pre class="{m.group(1)}"><code>{kleur_terminal(m.group(2).rstrip())}</code></pre>',
         pagina,
     )
     DOEL.write_text(pagina)
