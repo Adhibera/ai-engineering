@@ -42,6 +42,7 @@ Je hebt [uv](https://docs.astral.sh/uv/) nodig. Controleer dat met `uv --version
 | 16. Framework | `uv run les16` | `src/ai_engineering/framework.py` |
 | 17. Werken zonder gesprek | `uv run les17` | `src/ai_engineering/batch.py` |
 | 18. Veilig opnieuw starten | `uv run les18` | `src/ai_engineering/herstart.py` |
+| 19. Draaien op de server | op de server: `./server/deploy.sh` | `server/` |
 
 ## Het lesboek aanpassen
 

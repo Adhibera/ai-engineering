@@ -1,0 +1,9 @@
+# Les 19: deze timer start inbox.service op vaste tijden.
+[Unit]
+Description=Start les 18 elke 5 minuten
+
+[Timer]
+OnCalendar=*:0/5
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,14 @@
+# Les 19: deze service start les 18 één keer. De timer bepaalt wanneer.
+[Unit]
+Description=Les 18: de mails in de inbox verwerken
+
+[Service]
+Type=oneshot
+# De map waarin het programma start: daar staan inbox, concepten en verwerkt
+WorkingDirectory=%h/werk
+# Het programma uit de .venv die deploy.sh klaarzet
+ExecStart=%h/ai-engineering/.venv/bin/les18
+# Laat print meteen in het logboek verschijnen, niet pas aan het eind
+Environment=PYTHONUNBUFFERED=1
+# Een run mag hoogstens 10 minuten duren
+TimeoutStartSec=10min
