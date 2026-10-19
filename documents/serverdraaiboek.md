@@ -368,6 +368,7 @@ Met de testtimer uit bijlage B, als `groep0`, en een tijdelijke tweede groep `pr
 | Les 19: deployen tijdens een run | Met 8 nieuwe mails en een gestarte run wachtte `deploy.sh` 23 seconden in de wachtlus (gezien met `bash -x`), en ging pas verder toen de run klaar was. De run maakte alle 8 concepten. |
 | Les 19: zonder `.env` | De run van 15:05 mislukte bij het opstarten; de mail bleef in de inbox en de timer liep door. Met `.env` terug verwerkte de run van 15:10 de mail vanzelf. |
 | Les 19: timer uit en aan | `disable --now`: 0 timers. `enable --now`: de volgende run om 15:15. |
+| Les 19: terugzetten | `deploy.sh` naar `4128ff5`, terug naar `6db69e6`, en weer vooruit: elke keer "Klaar" in 2 tot 3 seconden, met de juiste versie. De 13 concepten in `~/werk` bleven staan, en de timer liep door. Let op: die twee versies verschillen alleen in documentatie. Dit test dus het terugzetten zelf, niet het terugkomen van andere code of andere packages. |
 
 **Niet getest:** `TasksMax` echt bereiken, een echte nachtelijke herstart, en het rescue-systeem van Hetzner.
 
