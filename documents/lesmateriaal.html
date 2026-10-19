@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Lesboek AI Engineering</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Lesboek bij de lessenreeks AI engineering: in 19 lessen bouw je met Python de klantenservice van een webshop, van je eerste AI call tot een agent en een programma dat zelf draait op een server.">
+<meta name="description" content="Lesboek bij de lessenreeks AI engineering: in 19 lessen bouw je met Python de klantenservice van een webshop, van je eerste AI call tot een agent en een programma dat zelf draait op een server. In de eindopdracht bouw je iets voor een echt bedrijf.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:wght@400;600&family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,600;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
@@ -76,7 +76,7 @@ a:focus-visible, summary:focus-visible, input:focus-visible {
 }
 h1, h2, h3, h4 { font-family: var(--display); line-height: 1.15; text-wrap: balance; margin: 0; }
 p { margin: 0; }
-code { font-family: var(--mono); font-size: .88em; background: var(--code-bg); color: var(--code-ink); padding: .08em .35em; border-radius: 4px; }
+code { font-family: var(--mono); font-size: .88em; background: var(--code-bg); color: var(--code-ink); padding: .08em .35em; border-radius: 4px; overflow-wrap: anywhere; }
 strong { font-weight: 700; }
 
 .gutter {
@@ -285,6 +285,7 @@ td.nr, th.nr { white-space: nowrap; font-variant-numeric: tabular-nums; }
 .s-bouw { background: var(--llm-bg); color: var(--llm-ink); }
 .s-zoek { background: var(--code-bg); color: var(--code-ink); }
 .s-extra { border: 1px solid var(--line); color: var(--muted); }
+.s-fase { border: 1px solid var(--line); color: var(--ink); }
 
 details.onthul { border-top: 1px dashed var(--line); padding-top: 6px; }
 details.onthul summary { cursor: pointer; color: var(--accent); font-weight: 600; font-size: 15px; }
@@ -308,6 +309,8 @@ details.onthul > div { display: grid; gap: 8px; font-size: 15.5px; }
 .keuzehulp li::before { content: counter(keuze); font-family: var(--display); font-weight: 800; color: var(--accent); }
 .keuzehulp b { font-family: var(--display); font-size: 17px; }
 .keuzehulp .vb { color: var(--muted); font-size: 14.5px; }
+/* De fases van de eindopdracht: onder elkaar, want er staat meer tekst in */
+@media (min-width: 720px) { .keuzehulp.fases { grid-template-columns: 1fr; } }
 .let-op strong { color: var(--ink); }
 
 /* ---------- rollenspel */
@@ -348,9 +351,9 @@ details.onthul > div { display: grid; gap: 8px; font-size: 15.5px; }
     <div class="kop-tekst">
       <p class="bovenregel">Lesboek bij de lessenreeks AI engineering</p>
       <h1>Bouw je eigen <span>AI-agent</span></h1>
-      <p class="lead">In deze lessen bouw je de klantenservice van een webshop. Je begint met één vraag aan een taalmodel. Aan het eind van deel 3 heb je een agent die zelf bedenkt welke stappen hij zet. In deel 4 maak je je klaar voor een echte klant. Bij elke les hoort een Python-bestand dat je start, leest en aanpast.</p>
+      <p class="lead">In deze lessen bouw je de klantenservice van een webshop. Je begint met één vraag aan een taalmodel. Aan het eind van deel 3 heb je een agent die zelf bedenkt welke stappen hij zet. In deel 4 maak je je klaar voor een echte klant, en in de eindopdracht bouw je iets voor een echt bedrijf. Bij elke les hoort een Python-bestand dat je start, leest en aanpast.</p>
       <ul class="feiten">
-        <li><b>19</b> lessen</li>
+        <li><b>19</b> lessen en een eindopdracht</li>
         <li><b>4</b> delen</li>
         <li>Python en de OpenAI API</li>
         <li>Rode draad: een webshop</li>
@@ -404,6 +407,7 @@ Stel je vraag: <kbd>Waar blijft mijn bestelling 1001?</kbd>
     <li><a href="#les18"><span class="nr">18</span><span class="t">Veilig opnieuw starten</span><span class="tel"></span></a></li>
     <li><a href="#les19"><span class="nr">19</span><span class="t">Draaien op de server</span><span class="tel"></span></a></li>
   </ol>
+  <a class="los" href="#eindopdracht">Eindopdracht</a>
   <p class="nav-deel">Naslag</p>
   <a class="los" href="#overzicht">Alles op een rij</a>
   <a class="los" href="#woorden">Woordenlijst</a>
@@ -2170,7 +2174,7 @@ Stel je vraag: <kbd>Waar blijft mijn bestelling 1001?</kbd>
   <p class="label">Deel 4 · vanaf les 17</p>
   <h2>Naar een echte klant</h2>
   <div class="prose">
-    <p>Tot nu toe zat jij steeds achter het toetsenbord. Je typte een vraag, las het antwoord en besliste. Bij een bedrijf gaat dat anders: daar moet het werk ook gebeuren als er niemand naast het programma zit. In dit deel maak je van een les zo'n programma. Dat heb je nodig voor de eindopdracht, waarin je een taak automatiseert voor een echt bedrijf.</p>
+    <p>Tot nu toe zat jij steeds achter het toetsenbord. Je typte een vraag, las het antwoord en besliste. Bij een bedrijf gaat dat anders: daar moet het werk ook gebeuren als er niemand naast het programma zit. In dit deel maak je van een les zo'n programma. Dat heb je nodig voor de <a href="#eindopdracht">eindopdracht</a>, waarin je een taak automatiseert voor een echt bedrijf.</p>
   </div>
   <div class="tabel"><table>
     <thead><tr><th></th><th>In de lessen tot nu toe</th><th>Bij een bedrijf</th></tr></thead>
@@ -2493,7 +2497,7 @@ Klaar. Versie: 6db69e6 Les 19: draaien op de server (de bestanden) …</code></p
   </div>
   <p class="let-op"><strong>Zie je geen "Klaar"?</strong> Dan is de deploy niet afgerond. Staat er "Er is niets veranderd", dan draait de vorige versie gewoon door. Ging het later mis, dan staat de timer uit, ook als de server opnieuw opstart. Lees de foutmelding, los het op, en start <code>./server/deploy.sh</code> opnieuw. Met <code>systemctl --user list-timers inbox.timer</code> zie je of de timer aan staat.</p>
   <div class="prose">
-    <p><strong>Een nieuwe versie, of een oude terug.</strong> In de eindopdracht staat de code in jullie eigen repo. Hebben jullie iets veranderd en gepusht, start dan op de server opnieuw <code>./server/deploy.sh</code>. Werkt de nieuwe versie niet, zet dan een vorige terug. Zoek de code van die versie op met <code>git log --oneline origin/main</code>, bijvoorbeeld <code>a1b2c3d</code>, en start <code>./server/deploy.sh a1b2c3d</code>. Dat verandert alleen de code en de packages, niet de mails en de concepten in <code>~/werk</code>.</p>
+    <p><strong>Een nieuwe versie, of een oude terug.</strong> In de <a href="#eindopdracht">eindopdracht</a> staat de code in jullie eigen repo. Hebben jullie iets veranderd en gepusht, start dan op de server opnieuw <code>./server/deploy.sh</code>. Werkt de nieuwe versie niet, zet dan een vorige terug. Zoek de code van die versie op met <code>git log --oneline origin/main</code>, bijvoorbeeld <code>a1b2c3d</code>, en start <code>./server/deploy.sh a1b2c3d</code>. Dat verandert alleen de code en de packages, niet de mails en de concepten in <code>~/werk</code>.</p>
   </div>
 </section>
 
@@ -2639,6 +2643,191 @@ Created symlink /home/groep0/.config/systemd/user/timers.target.wants/inbox.time
   <div class="onthoud"><span class="kopje">Onthoud</span><p>Een timer op een server start je programma, ook als jij er niet bent. Wat er gebeurde, lees je in het logboek.</p></div>
 </section>
 
+<!-- ================================================================ EINDOPDRACHT -->
+<section class="sectie" id="eindopdracht">
+  <h2>Eindopdracht</h2>
+  <div class="prose">
+    <p>Nu doe je het echt. Kies samen met een bedrijf één taak die nu door een mens gedaan wordt, die vaak terugkomt (minstens tien keer per week), en waar tekst bij hoort. Bouw een programma dat het eerste werk doet, zoals in les 17 tot en met 19: het werk komt uit een map, de concepten gaan naar een map, en een timer op de klassenserver start het programma. Een medewerker van het bedrijf beoordeelt elk concept en verstuurt het zelf.</p>
+    <p>Jullie werken in een groep, in een eigen privé-repo. Alles wat jullie maken en meten, komt in één projectdossier: <code>eindopdracht/dossier.md</code>. Hoe zo'n dossier eruitziet, zie je in <code>eindopdracht/voorbeeld-webshop.md</code>, voor de webshop uit de lessen.</p>
+  </div>
+  <figure class="schema">
+    <div class="papier"><svg viewBox="0 0 720 250" role="img" aria-label="Vijf fases: klant en proces, ontwerp, lokaal bouwen, op de server, de pilot. Na fase 1 en 2 zegt de docent ja. Vóór echte gegevens zeggen de school en het bedrijf ja (stippellijn: alleen bij echte gegevens). Alles komt in het projectdossier." style="--min:562px">
+<defs><marker id="kop-eindopdracht" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="kop" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<polyline class="pijl" points="130,52.0 155,52.0" marker-end="url(#kop-eindopdracht)"/>
+<polyline class="pijl" points="275,52.0 300,52.0" marker-end="url(#kop-eindopdracht)"/>
+<polyline class="pijl" points="420,52.0 445,52.0" marker-end="url(#kop-eindopdracht)"/>
+<polyline class="pijl" points="565,52.0 590,52.0" marker-end="url(#kop-eindopdracht)"/>
+<polyline class="pijl" points="142.5,102 142.5,52"/>
+<polyline class="pijl" points="287.5,102 287.5,52"/>
+<polyline class="pijl stippel" points="577.5,102 577.5,52"/>
+<polyline class="pijl" points="70.0,80 70,186" marker-end="url(#kop-eindopdracht)"/>
+<polyline class="pijl" points="215.0,80 215,186" marker-end="url(#kop-eindopdracht)"/>
+<polyline class="pijl" points="360.0,80 360,186" marker-end="url(#kop-eindopdracht)"/>
+<polyline class="pijl" points="505.0,80 505,186" marker-end="url(#kop-eindopdracht)"/>
+<polyline class="pijl" points="650.0,80 650,186" marker-end="url(#kop-eindopdracht)"/>
+<rect class="v-io" x="10" y="24" width="120" height="56" rx="28.0"/>
+<text class="hoofd" x="70.0" y="49.0" text-anchor="middle">Fase 1</text>
+<text class="sub" x="70.0" y="67.0" text-anchor="middle">klant en proces</text>
+<rect class="v-io" x="155" y="24" width="120" height="56" rx="28.0"/>
+<text class="hoofd" x="215.0" y="49.0" text-anchor="middle">Fase 2</text>
+<text class="sub" x="215.0" y="67.0" text-anchor="middle">ontwerp</text>
+<rect class="v-io" x="300" y="24" width="120" height="56" rx="28.0"/>
+<text class="hoofd" x="360.0" y="49.0" text-anchor="middle">Fase 3</text>
+<text class="sub" x="360.0" y="67.0" text-anchor="middle">lokaal bouwen</text>
+<rect class="v-io" x="445" y="24" width="120" height="56" rx="28.0"/>
+<text class="hoofd" x="505.0" y="49.0" text-anchor="middle">Fase 4</text>
+<text class="sub" x="505.0" y="67.0" text-anchor="middle">op de server</text>
+<rect class="v-io" x="590" y="24" width="120" height="56" rx="28.0"/>
+<text class="hoofd" x="650.0" y="49.0" text-anchor="middle">Fase 5</text>
+<text class="sub" x="650.0" y="67.0" text-anchor="middle">de pilot</text>
+<rect class="v-mens" x="80.5" y="102" width="124" height="50" rx="24"/>
+<text class="hoofd" x="142.5" y="132.0" text-anchor="middle">ja: docent</text>
+<rect class="v-mens" x="225.5" y="102" width="124" height="50" rx="24"/>
+<text class="hoofd" x="287.5" y="132.0" text-anchor="middle">ja: docent</text>
+<rect class="v-mens stippel" x="515.5" y="102" width="124" height="50" rx="24"/>
+<text class="hoofd" x="577.5" y="124.0" text-anchor="middle">ja: school</text>
+<text class="sub" x="577.5" y="142.0" text-anchor="middle">en het bedrijf</text>
+<rect class="v-tool" x="10" y="186" width="700" height="46" rx="4"/>
+<text class="hoofd" x="360.0" y="206.0" text-anchor="middle">Projectdossier</text>
+<text class="sub" x="360.0" y="224.0" text-anchor="middle">eindopdracht/dossier.md</text>
+</svg></div>
+    <figcaption>Vijf fases. Na fase 1 en 2 zegt de docent ja, voordat jullie verder gaan. Werken jullie met echte gegevens, dan zeggen eerst de school en het bedrijf ja. De stippellijn betekent: alleen als dat zo is.</figcaption>
+  </figure>
+
+  <h3>De vijf fases</h3>
+  <ol class="keuzehulp fases">
+    <li><b>Klant en proces</b><span>Voer het intakegesprek, kijk mee met de medewerker, en teken het proces zoals een mens het nu doet. Meet hoe lang het nu duurt en hoe vaak het misgaat: de nulmeting.</span><span class="vb">In het dossier: het gesprek, de tekening en de nulmeting. Daarna zegt de docent ja.</span></li>
+    <li><b>Ontwerp</b><span>Beantwoord de ontwerpvragen, en kies met de keuzehulp uit <a href="#kiezen">Kiezen en bewijzen</a>. De klant bepaalt wanneer een resultaat goed is. Verzamel ongeveer 20 testgevallen, en geef er 5 aan de docent. Die bewaart ze voor de eindtest.</span><span class="vb">In het dossier: de antwoorden, wanneer iets goed is, en de testgevallen. Daarna zegt de docent ja.</span></li>
+    <li><b>Lokaal bouwen</b><span>Bouw op je laptop, met nagemaakte voorbeelden. Draai na elke verandering dezelfde testgevallen, en schrijf de versie erbij.</span><span class="vb">In het dossier: het testlog en de grenzen in de code. De code staat in jullie repo.</span></li>
+    <li><b>Op de server</b><span>Zet jullie repo op de server, deploy zoals in les 19, en laat de timer het werk doen.</span><span class="vb">In het dossier: het journal van een run die begon terwijl niemand ingelogd was.</span></li>
+    <li><b>De pilot</b><span>Een medewerker gebruikt het programma, twee weken lang. Jullie brengen de bestanden op vaste momenten naar de server, en halen de concepten terug. De medewerker beoordeelt elk concept. Daarna volgen de eindtest, de vergelijking met de nulmeting, de presentatie en de overdracht.</span><span class="vb">In het dossier: het pilotlog, de eindtest, de vergelijking en het overdrachtsdocument.</span></li>
+  </ol>
+  <p class="let-op">De deadlines per fase krijg je van de docent.</p>
+
+  <h3>De eisen</h3>
+  <p class="prose">Dit zijn geen punten, maar voorwaarden. Ontbreekt er een, dan herstel je die eerst. Pas daarna volgt het cijfer.</p>
+  <ol class="prose">
+    <li>Een medewerker beoordeelt elk resultaat. Het programma verstuurt, betaalt of beslist niets zelf.</li>
+    <li>Eén invoer en één uitvoer: bestanden in een map erin, concepten in een map eruit, zoals in les 17 en 18.</li>
+    <li>Herstartbaar, zoals les 18: geen dubbel werk, en niets wordt stil overschreven.</li>
+    <li>Het draait op de klassenserver met <code>server/deploy.sh</code> en een timer, vanuit jullie eigen privé-repo. Lukt dat door een technisch probleem niet, dan telt het programma op je laptop.</li>
+    <li>Grenzen in de code: hoeveel bestanden per run, hoeveel LLM-calls per bestand, en hoe lang de uitvoer mag zijn.</li>
+    <li>Jullie OpenAI-key staat alleen in <code>.env</code>, nooit in git.</li>
+    <li><code>store=False</code> bij elke call. Dan bewaart OpenAI het antwoord niet om het later op te halen. Gebruik je de Agents SDK (les 16), zet dan ook tracing uit.</li>
+    <li>Bestandsnamen zonder persoonsgegevens, zoals <code>mail-001.txt</code>. In het logboek en in foutmeldingen alleen de bestandsnaam, de status en de soort fout, nooit de tekst.</li>
+    <li>Bouwen doe je met nagemaakte voorbeelden. "Zonder namen" is nog niet anoniem: een adres, een ordernummer of een detail kan iemand ook herkenbaar maken. Echte gegevens alleen als de school en het bedrijf ja zeggen.</li>
+    <li>Een einddatum, afgesproken met het bedrijf.</li>
+  </ol>
+  <p class="code-titel">Eis 7 in de code van les 1: één regel erbij.</p>
+<pre class="py"><code>response = client.responses.create(
+    model=MODEL,
+    instructions=INSTRUCTIES,
+    input=vraag,
+    store=<span class="kw">False</span>,  <span class="com"># OpenAI bewaart het antwoord niet om het later op te halen</span>
+)</code></pre>
+  <p class="uitleg-in">Wij hebben dit getest met les 9 en met de agent van les 13: ze werkten zonder andere verandering. Een antwoord met <code>store=False</code> kon OpenAI daarna niet meer terugvinden. OpenAI kan gegevens nog wel een tijd bewaren om misbruik op te sporen; daarover gaat de afspraak tussen de school en het bedrijf.</p>
+
+  <h3>Jullie eigen repo</h3>
+  <div class="prose">
+    <p>Tot nu toe haalde je de code alleen op, met <code>git clone</code> en <code>git pull</code>. In de eindopdracht bewaren jullie je eigen werk, in een privé-repo op GitHub die alleen jullie groep en de docent kunnen zien. De server haalt de code op met een sleutel die alleen mag lezen.</p>
+  </div>
+  <ol class="stappen">
+    <li><div><p><strong>Maak de repo.</strong> Eén van jullie maakt op GitHub een nieuwe repository: kies <em>Private</em>, en voeg geen README toe. Voeg de anderen en de docent toe bij Settings → Collaborators.</p></div></li>
+    <li><div><p><strong>Zet de lessen erin.</strong> Typ op je laptop, in de map <code>ai-engineering</code>: <code>git remote set-url origin &lt;adres van jullie repo&gt;</code>. Daarmee wijst <code>origin</code> niet meer naar de lesrepo, maar naar jullie repo. Typ daarna <code>git push -u origin main</code>. GitHub vraagt dan om in te loggen. Je wachtwoord van GitHub werkt hier niet: de docent laat je vooraf zien hoe je inlogt, bijvoorbeeld met GitHub Desktop. De anderen halen de repo op met <code>git clone &lt;adres van jullie repo&gt;</code>.</p></div></li>
+    <li><div><p><strong>Bewaar je werk.</strong> Typ na een verandering <code>git add .</code>, en dan <code>git status</code>. Bij "Changes to be committed" mag geen <code>.env</code> staan, en geen mail of concept. Staat er toch iets, haal het er dan uit met <code>git restore --staged &lt;bestand&gt;</code>. Typ dan <code>git commit -m "wat je veranderde"</code> en <code>git push</code>. De anderen halen het op met <code>git pull</code>.</p></div></li>
+    <li><div><p><strong>Een sleutel voor de server.</strong> Log in op de server en typ <code>ssh-keygen -t ed25519</code>. Druk bij elke vraag op Enter. Typ <code>cat ~/.ssh/id_ed25519.pub</code>, en zet die regel in jullie repo bij Settings → Deploy keys → Add deploy key. Laat <em>Allow write access</em> uit: de server mag de code alleen lezen.</p></div></li>
+    <li><div><p><strong>Controleer de sleutel.</strong> Typ op de server <code>ssh -T git@github.com</code>. De eerste keer vraagt ssh of je GitHub vertrouwt. Typ alleen <code>yes</code> als de vingerafdruk <code>SHA256:+DiY3wvvV6TuJJhbpZisF/zLDA0zPMSvHdkr4UvCOqU</code> is. Die staat ook op de site van GitHub.</p></div></li>
+    <li><div><p><strong>Haal jullie repo op.</strong> Dit doe je één keer. Ga naar je thuismap met <code>cd ~</code>. Zet de timer uit met <code>systemctl --user disable --now inbox.timer</code>, en stop een run die misschien nog loopt met <code>systemctl --user stop inbox.service</code>. Dat mag, dankzij les 18. Kijk met <code>ls</code> of er al een map <code>ai-engineering-les19</code> is. Staat die er al, stop dan en vraag de docent. Zo niet, zet dan de lesrepo opzij: <code>mv ai-engineering ai-engineering-les19</code>. Typ <code>git clone &lt;ssh-adres&gt; ai-engineering</code>. Het ssh-adres vind je op GitHub bij Code → SSH; het begint met <code>git@github.com:</code>. Zet de key terug met <code>cp -p ai-engineering-les19/.env ai-engineering/</code>, en start <code>./server/deploy.sh</code> in de map <code>ai-engineering</code>, zoals in les 19.</p></div></li>
+  </ol>
+<pre class="term"><code><span class="prompt">$</span> <span class="cmd">ssh -T git@github.com</span>
+The authenticity of host &#x27;github.com (140.82.121.4)&#x27; can&#x27;t be established.
+ED25519 key fingerprint is SHA256:+DiY3wvvV6TuJJhbpZisF/zLDA0zPMSvHdkr4UvCOqU.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? <kbd>yes</kbd>
+…
+Hi Adhibera/eindopdracht-test! You&#x27;ve successfully authenticated, but GitHub does not provide shell access.</code></pre>
+  <p class="uitleg-in">Zo ging het bij ons, met een testrepo. "Hi" met de naam van de repo betekent: de sleutel werkt. Een shell krijg je niet, en dat hoeft ook niet: de server gebruikt de sleutel alleen voor git.</p>
+  <h4>Jullie eigen programma</h4>
+  <div class="prose">
+    <p>Zet jullie code bijvoorbeeld in <code>src/ai_engineering/eindopdracht.py</code>, met een functie <code>main()</code>. Geef het programma een eigen commando, net als <code>les18</code>. Zet in <code>pyproject.toml</code> deze regel onder het kopje <code>[project.scripts]</code> dat er al staat, na de regel van <code>les18</code>:</p>
+  </div>
+<pre class="ini"><code><span class="dec">eindopdracht </span>= &quot;ai_engineering.eindopdracht:main&quot;</code></pre>
+  <p class="prose">Vervang in <code>server/inbox.service</code> de regel met <code>ExecStart</code> door deze. Er mag maar één <code>ExecStart</code> in staan:</p>
+<pre class="ini"><code><span class="dec">ExecStart</span>=%h/ai-engineering/.venv/bin/eindopdracht</code></pre>
+  <p class="prose">Push, en start op de server <code>./server/deploy.sh</code>. Werkt de nieuwe versie niet, zet dan een vorige terug, zoals in de voorbereiding van les 19.</p>
+<pre class="term"><code><span class="prompt">$</span> <span class="cmd">./server/deploy.sh</span>
+…
+Klaar. Versie: 6001904 Test: de service start het eigen commando
+<span class="prompt">$</span> <span class="cmd">journalctl --user -u inbox</span>
+…
+Oct 19 17:06:09 klasserver eindopdracht[9062]: 1 mails in /home/groep0/werk/inbox
+Oct 19 17:06:09 klasserver eindopdracht[9062]: Verwerkt: mail-01.txt</code></pre>
+  <p class="uitleg-in">Bij ons was het eigen commando les 18 met een andere naam. In het journal staat nu <code>eindopdracht</code>. <code>uv.lock</code> hoefde niet te veranderen.</p>
+
+  <h3>Het intakegesprek</h3>
+  <p class="prose">Oefen het gesprek eerst in de klas, met de docent als de webshop. Neem in het echte gesprek deze vragen mee:</p>
+  <ol class="prose">
+    <li>Welke taak kost jullie veel tijd en komt vaak terug? Hoe vaak per week?</li>
+    <li>Wie doet het nu, en hoe? Mogen we meekijken?</li>
+    <li>Waar komt het werk vandaan (mail, formulier, export), en waar gaat het resultaat heen?</li>
+    <li>Wanneer is een resultaat goed? Mogen we voorbeelden zien, nagemaakt of zonder herkenbare gegevens?</li>
+    <li>Wat mag nooit misgaan? Wat gebeurt er bij een fout?</li>
+    <li>Zitten er persoonsgegevens in? Wie beslist daar bij jullie over?</li>
+    <li>Wie is onze contactpersoon, hoeveel tijd heeft die, en wie beoordeelt de concepten in de pilot?</li>
+    <li>Wat moet er na de einddatum gebeuren?</li>
+  </ol>
+
+  <h3>De ontwerpvragen</h3>
+  <p class="prose">Een agent hoeft niet. Gewone code of één LLM-call is net zo goed, als je laat zien dat het werkt.</p>
+  <ol class="prose">
+    <li>Welke taak, en voor wie bij het bedrijf?</li>
+    <li>Wat gaat erin, en wat komt eruit?</li>
+    <li>Welke oplossing uit de keuzehulp, en waarom niet een eenvoudigere?</li>
+    <li>Als er een LLM in zit: welke instructie krijgt het, en welke voorbeelden of gegevens?</li>
+    <li>Als er tools nodig zijn: welke, en wat doen ze?</li>
+    <li>Wanneer is een bestand klaar, en wat gebeurt er als het misgaat?</li>
+    <li>Hoe weten jullie en de klant dat het resultaat goed is?</li>
+  </ol>
+
+  <h3>Testen en meten</h3>
+  <div class="prose">
+    <p><strong>Wanneer is een resultaat goed?</strong> Dat bepaalt de klant, voordat jullie gaan bouwen. Een oud antwoord van het bedrijf is niet vanzelf goed. Laat de klant zeggen waar een goed antwoord aan moet voldoen.</p>
+    <p><strong>Het testlog.</strong> Noteer per geval wat er moest gebeuren, wat er gebeurde, en je oordeel: goed, deels of fout. Commit je verandering vóór de run, en schrijf de versie erbij (<code>git log --oneline -1</code>), en hoe lang de run duurde. De kosten zie je in het OpenAI-dashboard, bij Usage van jullie project.</p>
+    <p><strong>Begin elke testrun schoon.</strong> Net als les 18 slaat jullie programma een bestand over als het concept al bestaat. Draai je dezelfde testgevallen nog een keer in dezelfde map, dan gebeurt er dus niets. Gebruik daarom voor elke testrun een lege werkmap, met alleen de testgevallen in de inbox.</p>
+    <p><strong>In de pilot</strong> beoordeelt de medewerker elk concept: bruikbaar zoals het is, bruikbaar na aanpassing, of niet bruikbaar. De medewerker noteert ook hoeveel minuten het nakijken kostte. Tel ook de tijd mee voor het exporteren, uploaden, terughalen en afleveren van de bestanden, ook als jullie dat doen. Anders lijkt het programma tijd te besparen, terwijl het werk alleen bij iemand anders terechtkomt.</p>
+    <p><strong>Wat bewijzen 20 gevallen?</strong> Genoeg om te leren, en om voor en na een verandering te vergelijken. Niet dat het programma altijd goed werkt. Zeg dat er eerlijk bij.</p>
+  </div>
+
+  <h3>De beoordeling</h3>
+  <p class="prose">Voldoende betekent: het verplichte stuk is er, en het klopt. Goed betekent: jullie hebben het grondig onderzocht. Een oplossing met gewone code, of een eerlijke uitkomst zonder tijdwinst, kan ook Goed zijn.</p>
+  <div class="tabel"><table>
+    <thead><tr><th>Onderdeel</th><th>Beginnend</th><th>Voldoende</th><th>Goed</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Procesbegrip</strong></td><td>beschrijft de taak in algemene woorden</td><td>een tekening van het proces zoals een medewerker het nu doet, met invoer, stappen en uitvoer, en een nulmeting</td><td>legt uit waar het nu misgaat en waarom, met de nulmeting en de klant als bron</td></tr>
+      <tr><td><strong>Passende techniek</strong></td><td>kiest een techniek zonder uitleg</td><td>kiest met de keuzehulp en legt uit waarom niet eenvoudiger; wijst elke LLM-call en elke tool aan in de code</td><td>laat met testgevallen zien waarom deze keuze nodig is, of dat een eenvoudiger oplossing volstond</td></tr>
+      <tr><td><strong>Aantoonbare kwaliteit</strong></td><td>een paar voorbeelden die goed gingen</td><td>een testlog voor en na elke verandering, de eindtest, en de vergelijking met de nulmeting</td><td>legt uit waar en waarom het misgaat, wat een verandering deed, en wat de cijfers wel en niet bewijzen</td></tr>
+      <tr><td><strong>Foutgedrag</strong></td><td>stopt bij de eerste fout, en er gaat werk verloren</td><td>herstartbaar, mislukte bestanden zichtbaar, grenzen in de code, bekende fouten beschreven</td><td>getest met lastige gevallen (vreemde invoer, geen verbinding, een mail met een opdracht voor het LLM), en weet wat de medewerker dan ziet</td></tr>
+      <tr><td><strong>Overdracht</strong></td><td>de code staat in de repo</td><td>een overdrachtsdocument: starten, stoppen (de timer én een lopende run), kosten, grenzen, wie controleert</td><td>iemand anders, bijvoorbeeld de docent, kan met alleen het document stoppen, starten en een mislukte run vinden</td></tr>
+    </tbody>
+  </table></div>
+  <p class="let-op">Elk onderdeel telt even zwaar. <strong>Het cijfer:</strong> een 6 als alles Voldoende is, plus 0,8 voor elk onderdeel op Goed, en min 1 voor elk onderdeel dat na de hersteltermijn nog op Beginnend staat. Hosten is een eis, maar levert geen punten op. De mening van de klant telt mee voor de docent, maar is geen cijfer.</p>
+
+  <h3>Afvinken</h3>
+  <ul class="taken">
+    <li><input type="checkbox" id="tea"><div class="tekst"><label for="tea"><span class="soort s-fase">Fase 1</span>Het intakegesprek is gevoerd, en staat in het dossier.</label></div></li>
+    <li><input type="checkbox" id="teb"><div class="tekst"><label for="teb"><span class="soort s-fase">Fase 1</span>Het proces is getekend, de nulmeting staat in het dossier, en de docent zei ja.</label></div></li>
+    <li><input type="checkbox" id="tec"><div class="tekst"><label for="tec"><span class="soort s-fase">Fase 2</span>De ontwerpvragen zijn beantwoord, en de klant heeft gezegd wanneer een resultaat goed is.</label></div></li>
+    <li><input type="checkbox" id="ted"><div class="tekst"><label for="ted"><span class="soort s-fase">Fase 2</span>De testgevallen staan in het dossier, 5 gevallen liggen bij de docent, en de docent zei ja.</label></div></li>
+    <li><input type="checkbox" id="tee"><div class="tekst"><label for="tee"><span class="soort s-fase">Fase 3</span>Jullie privé-repo staat er, en iedereen in de groep kan pushen.</label></div></li>
+    <li><input type="checkbox" id="tef"><div class="tekst"><label for="tef"><span class="soort s-fase">Fase 3</span>Het testlog heeft een run voor en na elke verandering, en de grenzen staan in de code.</label></div></li>
+    <li><input type="checkbox" id="teg"><div class="tekst"><label for="teg"><span class="soort s-fase">Fase 4</span>Het programma draait op de server vanuit jullie repo, en het journal laat een run zien terwijl niemand ingelogd was.</label></div></li>
+    <li><input type="checkbox" id="teh"><div class="tekst"><label for="teh"><span class="soort s-fase">Fase 5</span>Het pilotlog is ingevuld, en de eindtest is gedraaid.</label></div></li>
+    <li><input type="checkbox" id="tei"><div class="tekst"><label for="tei"><span class="soort s-fase">Fase 5</span>De vergelijking met de nulmeting staat in het dossier, met wat die wel en niet bewijst.</label></div></li>
+    <li><input type="checkbox" id="tej"><div class="tekst"><label for="tej"><span class="soort s-fase">Fase 5</span>Het overdrachtsdocument is klaar, en de presentatie is gegeven.</label></div></li>
+  </ul>
+  <div class="onthoud"><span class="kopje">Onthoud</span><p>De klant bepaalt wat goed is. Jullie bewijzen het met testgevallen, en een medewerker houdt de laatste stap.</p></div>
+</section>
+
 <!-- ================================================================ NASLAG -->
 <section class="sectie" id="overzicht">
   <h2>Alles op een rij</h2>
@@ -2665,6 +2854,7 @@ Created symlink /home/groep0/.config/systemd/user/timers.target.wants/inbox.time
       <tr><td class="nr"><a href="#les17">17</a></td><td>Werken zonder gesprek</td><td>Lees uit een map, schrijf naar een map, en stop. De mens kijkt later.</td></tr>
       <tr><td class="nr"><a href="#les18">18</a></td><td>Veilig opnieuw starten</td><td>Een mail verlaat de inbox pas als zijn concept klaarstaat.</td></tr>
       <tr><td class="nr"><a href="#les19">19</a></td><td>Draaien op de server</td><td>Een timer start je programma, ook als jij er niet bent. Wat er gebeurde, lees je in het logboek.</td></tr>
+      <tr><td class="nr"><a href="#eindopdracht">★</a></td><td>Eindopdracht</td><td>De klant bepaalt wat goed is. Jullie bewijzen het met testgevallen, en een medewerker houdt de laatste stap.</td></tr>
     </tbody>
   </table></div>
   <h3>Een agent is een systeem</h3>
@@ -2682,6 +2872,7 @@ Created symlink /home/groep0/.config/systemd/user/timers.target.wants/inbox.time
 <section class="sectie" id="woorden">
   <h2>Woordenlijst</h2>
   <dl class="woorden">
+    <div><dt>Acceptatiecriteria</dt><dd>Wat de klant vooraf vastlegt: wanneer is een resultaat goed? (eindopdracht)</dd></div>
     <div><dt>Agent</dt><dd>Een programma waarin het LLM zelf de volgende stap kiest, in een lus, tot het klaar is (les 13).</dd></div>
     <div><dt>API</dt><dd>De manier waarop programma's met elkaar praten. Jouw code praat via de API met OpenAI.</dd></div>
     <div><dt>API-key</dt><dd>Je geheime sleutel voor de API. Hij staat in <code>.env</code> en hoort nooit in git.</dd></div>
@@ -2691,6 +2882,7 @@ Created symlink /home/groep0/.config/systemd/user/timers.target.wants/inbox.time
     <div><dt>Classificeren</dt><dd>Een label kiezen uit vaste keuzes, zoals klacht, compliment of vraag (les 6).</dd></div>
     <div><dt>Context</dt><dd>Alles wat bij één call naar het LLM meegaat: de instructie, het gesprek, de bron en de vraag. Wat jij niet meestuurt, zoals een eerder gesprek of de gegevens van jouw webshop, weet het LLM in die call niet. Wat het in zijn training leerde wel, maar dat kan verouderd of fout zijn (les 3, 9 en 10).</dd></div>
     <div><dt>Deployen</dt><dd>Een nieuwe versie van je code op de server klaarzetten. In les 19 doet <code>deploy.sh</code> dat.</dd></div>
+    <div><dt>Deploy key</dt><dd>Een sleutel waarmee de server jullie privé-repo mag lezen, maar niet veranderen (eindopdracht).</dd></div>
     <div><dt>Framework</dt><dd>Kant-en-klare code die veel werk voor je doet, zoals de OpenAI Agents SDK (les 16).</dd></div>
     <div><dt>Gate</dt><dd>Een <code>if</code> tussen twee stappen die de keten kan stoppen (les 10).</dd></div>
     <div><dt>Guardrail</dt><dd>Een check die bepaalt of een bericht door mag (les 12).</dd></div>
@@ -2703,7 +2895,10 @@ Created symlink /home/groep0/.config/systemd/user/timers.target.wants/inbox.time
     <div><dt>Kennisbank</dt><dd>Een bestand met vragen en antwoorden over jouw bedrijf (les 9).</dd></div>
     <div><dt>LLM</dt><dd><em>Large language model</em>, een groot taalmodel. Het leest tekst en schrijft tekst.</dd></div>
     <div><dt>Logboek</dt><dd>Een bestand waarin je programma opschrijft wat het deed. In het Engels: <em>log</em> (les 14).</dd></div>
+    <div><dt>Nulmeting</dt><dd>Hoe lang een taak nu duurt en hoe vaak hij misgaat, gemeten voordat jullie programma er is. In de pilot vergelijk je daarmee (eindopdracht).</dd></div>
+    <div><dt>Pilot</dt><dd>Een proef bij het bedrijf: een medewerker gebruikt het programma een tijd, en beoordeelt elk resultaat (eindopdracht).</dd></div>
     <div><dt>Plan B</dt><dd>Wat je programma doet als het echt niet lukt. In het Engels: <em>fallback</em> (les 7 en 13).</dd></div>
+    <div><dt>Privé-repo</dt><dd>Een repository op GitHub die alleen jullie groep en de docent kunnen zien (eindopdracht).</dd></div>
     <div><dt>Pydantic</dt><dd>Een Python-package waarmee je vastlegt welke velden en types je verwacht (les 5).</dd></div>
     <div><dt>RAG</dt><dd><em>Retrieval-augmented generation</em>: eerst zoeken in je eigen bronnen, dan het LLM laten antwoorden. Les 9 is de eerste stap.</dd></div>
     <div><dt>Retry</dt><dd>Opnieuw proberen na een fout (les 7).</dd></div>
@@ -2773,7 +2968,7 @@ Created symlink /home/groep0/.config/systemd/user/timers.target.wants/inbox.time
       if (link) { link.classList.add("actief"); link.setAttribute("aria-current", "location"); actief = link; }
     });
   }, { rootMargin: "-30% 0px -60% 0px" });
-  document.querySelectorAll(".les, #kiezen").forEach(function (les) { waarnemer.observe(les); });
+  document.querySelectorAll(".les, #kiezen, #eindopdracht").forEach(function (les) { waarnemer.observe(les); });
 })();
 </script>
 </body>

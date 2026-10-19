@@ -43,6 +43,13 @@ Je hebt [uv](https://docs.astral.sh/uv/) nodig. Controleer dat met `uv --version
 | 17. Werken zonder gesprek | `uv run les17` | `src/ai_engineering/batch.py` |
 | 18. Veilig opnieuw starten | `uv run les18` | `src/ai_engineering/herstart.py` |
 | 19. Draaien op de server | op de server: `./server/deploy.sh` | `server/` |
+| Eindopdracht | in jullie eigen privé-repo | `eindopdracht/` |
+
+## Eindopdracht
+
+De opdracht staat in het lesboek, in de sectie "Eindopdracht". Leerlingen vullen `eindopdracht/dossier.md` in; een ingevuld voorbeeld staat in `eindopdracht/voorbeeld-webshop.md`.
+
+Voor de docent: `documents/eindopdracht-docent.md` (een goede opdracht kiezen, privacy, de pilot, een afspraaksjabloon en beoordelen) en `documents/serverdraaiboek.md` (de klassenserver).
 
 ## Het lesboek aanpassen
 

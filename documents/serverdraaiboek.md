@@ -223,8 +223,8 @@ Wat een groep zelf doet, staat in het lesboek, in de voorbereiding vóór les 19
 
 **Gegevens bij OpenAI** (bekeken op 19 oktober, onder Data controls):
 - "Share inputs and outputs with OpenAI" staat op **Disabled**. Laat dat zo, ook al biedt OpenAI er gratis tokens voor. Aan betekent: wat je stuurt, mag OpenAI gebruiken om modellen te trainen.
-- Bewaren: OpenAI bewaart API-verkeer tot 30 dagen om misbruik op te sporen. Zero Data Retention en een EU-locatie kan alleen na goedkeuring door OpenAI. De projecten staan op "Global" en "None (Standard retention)".
-- De Responses API bewaart elke call standaard, minstens 30 dagen, zichtbaar als Logs in het dashboard. Het account staat op "Enabled per call": de code beslist. Met `store=False` in de code gebeurt dat niet. De lessen zetten dat niet; voor de eindopdracht met echte klantdata is het een eis.
+- Bewaren: OpenAI bewaart API-verkeer om misbruik op te sporen, standaard tot 30 dagen en soms langer. `store=False` verandert daar niets aan. Zero Data Retention en een EU-locatie kan alleen na goedkeuring door OpenAI. De projecten staan op "Global" en "None (Standard retention)".
+- De Responses API bewaart elke call standaard, minstens 30 dagen, zichtbaar als Logs in het dashboard. Het account staat op "Enabled per call": de code beslist. Met `store=False` in de code gebeurt dat niet. De lessen zetten dat niet; in de eindopdracht is het een eis, bij elke call (zie `documents/eindopdracht-docent.md`).
 
 ### Wat je ziet als het misgaat
 
@@ -318,6 +318,7 @@ sudo loginctl enable-linger groep3
 
 1. **Bewaar wat moet blijven.** De code staat in git. Het werk op de server, zoals de inbox, de concepten en de logboeken, wordt niet bewaard: er zijn geen backups. Klantdata bewaar je alleen als dat met het bedrijf is afgesproken.
 2. **OpenAI:** trek per groep de key in, en archiveer de projecten.
+   **GitHub:** verwijder bij de privé-repo's van de eindopdracht de deploy key van de server (Settings → Deploy keys).
 3. **Hetzner:** verwijder de server in de console. Pas dan stopt de rekening. Kijk daarna bij Primary IPs of het IPv4-adres ook weg is; dat is niet getest. De firewall, de SSH-sleutel en het project kosten niets en mogen blijven.
 4. **De laptop:** haal `Host klasserver` uit `~/.ssh/config`, en de oude sleutel van de server uit `known_hosts` met `ssh-keygen -R <IP>`.
 
@@ -369,6 +370,7 @@ Met de testtimer uit bijlage B, als `groep0`, en een tijdelijke tweede groep `pr
 | Les 19: zonder `.env` | De run van 15:05 mislukte bij het opstarten; de mail bleef in de inbox en de timer liep door. Met `.env` terug verwerkte de run van 15:10 de mail vanzelf. |
 | Les 19: timer uit en aan | `disable --now`: 0 timers. `enable --now`: de volgende run om 15:15. |
 | Les 19: terugzetten | `deploy.sh` naar `4128ff5`, terug naar `6db69e6`, en weer vooruit: elke keer "Klaar" in 2 tot 3 seconden, met de juiste versie. De 13 concepten in `~/werk` bleven staan, en de timer liep door. Let op: die twee versies verschillen alleen in documentatie. Dit test dus het terugzetten zelf, niet het terugkomen van andere code of andere packages. |
+| Eindopdracht: een privé-repo | Een privé-kopie van de lesrepo (`Adhibera/eindopdracht-test`). Op de server een sleutel gemaakt als `groep0`, als read-only deploy key toegevoegd. Bij de eerste verbinding vroeg `ssh` om de vingerafdruk van GitHub; die klopte met wat GitHub publiceert (`SHA256:+DiY3wvvV6TuJJhbpZisF/zLDA0zPMSvHdkr4UvCOqU`). Gekloond naar `~/ai-engineering`, met dezelfde `.env`: `deploy.sh` gaf "Klaar" in 4,6 seconden. Daarna een tweede versie met een eigen commando in `pyproject.toml` en een andere `ExecStart`: `uv sync --locked` slaagde zonder nieuwe `uv.lock`, de service startte het eigen commando, terugzetten gaf weer `les18`, en vooruit weer het eigen commando. Daarna is de lesrepo teruggezet en staat de timer uit. |
 
 **Niet getest:** `TasksMax` echt bereiken, een echte nachtelijke herstart, en het rescue-systeem van Hetzner.
 

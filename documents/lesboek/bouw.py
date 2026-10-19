@@ -498,10 +498,29 @@ def les19():
     return s
 
 
+def eindopdracht():
+    s = Schema("eindopdracht", 720, 250, "Vijf fases: klant en proces, ontwerp, lokaal bouwen, op de server, de pilot. Na fase 1 en 2 zegt de docent ja. Vóór echte gegevens zeggen de school en het bedrijf ja (stippellijn: alleen bij echte gegevens). Alles komt in het projectdossier.")
+    namen = ["klant en proces", "ontwerp", "lokaal bouwen", "op de server", "de pilot"]
+    for i, naam in enumerate(namen):
+        s.vak(f"f{i + 1}", "io", 10 + 145 * i, 24, 120, 56, [f"Fase {i + 1}", naam])
+    for i in range(1, 5):
+        s.pijl(s.p(f"f{i}", "r"), s.p(f"f{i + 1}", "l"))
+    # Wie ja zegt, staat onder de pijl tussen twee fases
+    for na, regels, stippel in ((1, ["ja: docent"], False), (2, ["ja: docent"], False),
+                                (4, ["ja: school", "en het bedrijf"], True)):
+        x = 10 + 145 * na - 12.5
+        s.vak(f"ja{na}", "mens", x - 62, 102, 124, 50, regels, stippel=stippel)
+        s.pijl((x, 102), (x, 52), kop=False, stippel=stippel)
+    s.vak("dossier", "tool", 10, 186, 700, 46, ["Projectdossier", "eindopdracht/dossier.md"])
+    for i in range(1, 6):
+        s.pijl(s.p(f"f{i}", "b"), (70 + 145 * (i - 1), 186))
+    return s
+
+
 SCHEMAS = {f.__name__: f for f in (
     augmented, les1, les2, les3, les4, les5, les6, les7, les8, les9,
     les10, les11, les12, les12_tijd, les13, les14, les15, les16, les17, les18,
-    server, les19,
+    server, les19, eindopdracht,
 )}
 
 
