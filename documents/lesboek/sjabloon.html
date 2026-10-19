@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Lesboek AI Engineering</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Lesboek bij de lessenreeks AI engineering: in 16 lessen bouw je met Python de klantenservice van een webshop, van je eerste AI call tot een eigen agent.">
+<meta name="description" content="Lesboek bij de lessenreeks AI engineering: in 19 lessen bouw je met Python de klantenservice van een webshop, van je eerste AI call tot een agent en een programma dat zelf draait op een server.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:wght@400;600&family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,600;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
@@ -255,6 +255,7 @@ pre.term { position: relative; padding-top: 34px; white-space: pre-wrap; overflo
 pre.term::before { content: "terminal"; position: absolute; top: 9px; left: 18px; font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--pre-com); }
 pre.term.log::before { content: "agent.log"; }
 pre.py { border-left: 4px solid var(--llm-line); }
+pre.ini { border-left: 4px solid var(--code-line); }
 .code-titel { font-size: 14px; color: var(--muted); margin-bottom: -10px; }
 .code-titel code { font-size: 13.5px; }
 .uitleg-in { font-size: 14.5px; color: var(--muted); }
@@ -349,7 +350,7 @@ details.onthul > div { display: grid; gap: 8px; font-size: 15.5px; }
       <h1>Bouw je eigen <span>AI-agent</span></h1>
       <p class="lead">In deze lessen bouw je de klantenservice van een webshop. Je begint met één vraag aan een taalmodel. Aan het eind van deel 3 heb je een agent die zelf bedenkt welke stappen hij zet. In deel 4 maak je je klaar voor een echte klant. Bij elke les hoort een Python-bestand dat je start, leest en aanpast.</p>
       <ul class="feiten">
-        <li><b>18</b> lessen</li>
+        <li><b>19</b> lessen</li>
         <li><b>4</b> delen</li>
         <li>Python en de OpenAI API</li>
         <li>Rode draad: een webshop</li>
@@ -403,6 +404,7 @@ AI: Je koptelefoon ligt in het sorteercentrum in Utrecht en wordt volgens de pak
   <ol>
     <li><a href="#les17"><span class="nr">17</span><span class="t">Werken zonder gesprek</span><span class="tel"></span></a></li>
     <li><a href="#les18"><span class="nr">18</span><span class="t">Veilig opnieuw starten</span><span class="tel"></span></a></li>
+    <li><a href="#les19"><span class="nr">19</span><span class="t">Draaien op de server</span><span class="tel"></span></a></li>
   </ol>
   <p class="nav-deel">Naslag</p>
   <a class="los" href="#overzicht">Alles op een rij</a>
@@ -1990,6 +1992,179 @@ tijdelijk.replace(concept_bestand)
   <div class="onthoud"><span class="kopje">Onthoud</span><p>Een mail verlaat de inbox pas als zijn concept klaarstaat. Dan mag het programma crashen: je start het gewoon opnieuw.</p></div>
 </section>
 
+<!-- ---------------------------------------------------------------- voorbereiding les 19 -->
+<section class="sectie" id="server">
+  <h3>Eerst: je eigen plek op de server</h3>
+  <div class="prose">
+    <p>Een laptop gaat 's avonds dicht. Een <strong>server</strong> is een computer die dag en nacht aan staat. Jullie klas heeft er één, bij Hetzner in Duitsland. Elke groep heeft daarop een eigen gebruiker, bijvoorbeeld <code>groep3</code>, met een eigen map. Andere groepen kunnen daar niet in. De docent maakt die gebruiker voor jullie aan.</p>
+    <p>Je werkt op de server met <strong>SSH</strong>: je typt op je laptop, maar de opdrachten draaien op de server. Er zijn geen vensters, alleen de terminal.</p>
+  </div>
+  <figure class="schema">
+    <div class="papier">{{schema:server}}</div>
+    <figcaption>De code en het werk staan in twee aparte mappen. Zo kan <code>deploy.sh</code> de code vervangen zonder je mails en concepten te raken.</figcaption>
+  </figure>
+  <h4>Zo zet je alles klaar</h4>
+  <ol class="stappen">
+    <li><div><p><strong>Maak een sleutel.</strong> Typ op je laptop <code>ssh-keygen -t ed25519</code>, en druk bij elke vraag op Enter. Dat werkt ook in PowerShell op Windows. Geef het bestand <code>.ssh/id_ed25519.pub</code> uit je thuismap aan de docent. Alleen het bestand met <code>.pub</code>: het bestand zonder <code>.pub</code> is geheim, net als een wachtwoord.</p></div></li>
+    <li><div><p><strong>Log in.</strong> Typ <code>ssh groep3@&lt;adres&gt;</code>, met jullie groep en het adres van de docent. De eerste keer vraagt ssh of je de server vertrouwt: typ <code>yes</code>. Alles wat je nu typt, draait op de server. Met <code>exit</code> log je weer uit.</p></div></li>
+    <li><div><p><strong>Haal de code op.</strong> Typ op de server <code>git clone https://github.com/Adhibera/ai-engineering</code>.</p></div></li>
+    <li><div><p><strong>Zet jullie key klaar.</strong> Jullie groep krijgt van de docent een eigen key, met een limiet. Typ <code>cd ai-engineering</code>, dan <code>touch .env &amp;&amp; chmod 600 .env</code>, en dan <code>nano .env</code>. Zet er één regel in: <code>OPENAI_API_KEY=</code> met de key erachter. Sla op met <kbd>Ctrl+O</kbd> en <kbd>Enter</kbd>, en sluit af met <kbd>Ctrl+X</kbd>. Door <code>chmod 600</code> kan alleen jullie groep het bestand lezen.</p></div></li>
+    <li><div><p><strong>Start <code>deploy.sh</code>.</strong> Typ in de map <code>ai-engineering</code>: <code>./server/deploy.sh</code>.</p></div></li>
+  </ol>
+<pre class="term">
+$ ./server/deploy.sh
+Created symlink /home/groep0/.config/systemd/user/timers.target.wants/inbox.timer → /home/groep0/.config/systemd/user/inbox.timer.
+Klaar. Versie: 6db69e6 Les 19: draaien op de server (de bestanden) …
+</pre>
+  <p class="uitleg-in">Bij ons heette de groep <code>groep0</code>, en de regel met de versie is ingekort. Achter "Versie" staat welke versie uit git er nu op de server staat.</p>
+  <div class="prose">
+    <p><code>deploy.sh</code> doet vier dingen:</p>
+    <ol>
+      <li>Het haalt de nieuwste versie van GitHub, en controleert dat die alles heeft wat de server nodig heeft.</li>
+      <li>Het zet de timer uit, en wacht tot een run die nog bezig is, klaar is.</li>
+      <li>Het zet de code en de packages klaar.</li>
+      <li>Het zet de timer weer aan.</li>
+    </ol>
+  </div>
+  <p class="let-op"><strong>Zie je geen "Klaar"?</strong> Dan is de deploy niet afgerond. Staat er "Er is niets veranderd", dan draait de vorige versie gewoon door. Ging het later mis, dan staat de timer uit, ook als de server opnieuw opstart. Lees de foutmelding, los het op, en start <code>./server/deploy.sh</code> opnieuw. Met <code>systemctl --user list-timers inbox.timer</code> zie je of de timer aan staat.</p>
+  <div class="prose">
+    <p><strong>Een nieuwe versie, of een oude terug.</strong> In de eindopdracht staat de code in jullie eigen repo. Hebben jullie iets veranderd en gepusht, start dan op de server opnieuw <code>./server/deploy.sh</code>. Werkt de nieuwe versie niet, zet dan een vorige terug. Zoek de code van die versie op met <code>git log --oneline origin/main</code>, bijvoorbeeld <code>a1b2c3d</code>, en start <code>./server/deploy.sh a1b2c3d</code>. Dat verandert alleen de code en de packages, niet de mails en de concepten in <code>~/werk</code>.</p>
+  </div>
+</section>
+
+<!-- ---------------------------------------------------------------- les 19 -->
+<section class="les" id="les19">
+  <header class="les-kop">
+    <span class="les-nr">19</span>
+    <p class="eyebrow">Begrip: timer</p>
+    <h3>Draaien op de server</h3>
+    <div class="meta"><span class="start">./server/deploy.sh</span><span>server/</span><span>timer → les 18</span></div>
+  </header>
+  <p class="doel"><strong>Na deze les</strong> kun je een programma op een server op vaste tijden laten starten, en in het logboek nagaan wat het deed terwijl jij er niet was.</p>
+  <div class="probleem">
+    <h4>Het probleem</h4>
+    <p>Les 18 kan veilig opnieuw starten, maar iemand moet hem wel starten. Komt er om tien uur een mail binnen, dan blijft die liggen tot jij les 18 weer start. En je laptop gaat 's avonds dicht.</p>
+  </div>
+  <p class="idee"><strong>Laat een timer op de server het programma starten.</strong> Elke vijf minuten start de timer les 18, ook als er niemand ingelogd is. De Python-code verandert niet. Dankzij les 18 is opnieuw starten veilig, ook als er niets te doen is. Wat les 18 print, komt niet op een scherm, maar in het logboek van de server: het <em>journal</em>.</p>
+  <figure class="schema">
+    <div class="papier">{{schema:les19}}</div>
+    <figcaption>De timer start les 18 in de map <code>~/werk</code>. Les 18 werkt zoals altijd. Wat het print, lees je achteraf in het journal, net als <code>agent.log</code> in les 14.</figcaption>
+  </figure>
+  <h4>De kern van de code</h4>
+  <p class="code-titel"><code>server/inbox.timer</code>: wanneer les 18 start.</p>
+<pre class="ini">
+[Timer]
+OnCalendar=*:0/5
+</pre>
+  <p class="code-titel"><code>server/inbox.service</code>: hoe les 18 start.</p>
+<pre class="ini">
+[Service]
+Type=oneshot
+# De map waarin het programma start: daar staan inbox, concepten en verwerkt
+WorkingDirectory=%h/werk
+# Het programma uit de .venv die deploy.sh klaarzet
+ExecStart=%h/ai-engineering/.venv/bin/les18
+</pre>
+  <p class="uitleg-in"><code>OnCalendar=*:0/5</code> betekent: elk uur, op minuut 0, 5, 10, enzovoort. <code>%h</code> is je thuismap. Een <em>service</em> is hier gewoon de opdracht waarmee les 18 start: welk programma, en in welke map. <code>Type=oneshot</code> zegt dat het programma één keer draait en dan stopt. <code>deploy.sh</code> kopieert beide bestanden naar <code>~/.config/systemd/user/</code>, en zet de timer aan. In de bestanden zelf staan nog een paar instellingen, met uitleg erbij, bijvoorbeeld dat een run hoogstens tien minuten mag duren.</p>
+  <p class="let-op">De timer is niet op de seconde precies: hij kan tot een minuut later starten. En hij start les 18 nooit een tweede keer zolang de vorige run nog bezig is. Dat was de tweede afspraak uit les 18.</p>
+  <h4>Probeer het</h4>
+  <p class="prose">Doe dit met je groep. Zet de voorbeeldmails vanaf je laptop in de inbox op de server. Typ dit op je laptop, in de projectmap, en niet op de server. Werkt de <code>*</code> niet op Windows, kopieer de mails dan één voor één.</p>
+<pre class="term">
+$ scp voorbeelden/mails/*.txt groep3@<adres>:werk/inbox/
+</pre>
+  <p class="prose">Log nu allemaal uit. Wacht tot na de eerstvolgende kloktijd op :00, :05, :10 enzovoort, plus een minuut, plus de tijd die les 18 nodig heeft. Log dan weer in, en kijk wat er gebeurd is terwijl jullie weg waren:</p>
+<pre class="term">
+$ systemctl --user list-timers inbox.timer
+NEXT                             LEFT LAST                               PASSED UNIT        ACTIVATES
+Mon 2026-10-19 15:00:00 CEST 2min 29s Mon 2026-10-19 14:55:01 CEST 2min 29s ago inbox.timer inbox.service
+$ journalctl --user -u inbox
+Oct 19 14:55:01 klasserver systemd[1576]: Starting inbox.service - Les 18: de mails in de inbox verwerken...
+Oct 19 14:55:06 klasserver les18[7071]: 4 mails in /home/groep0/werk/inbox
+Oct 19 14:55:12 klasserver les18[7071]: Verwerkt: mail-01.txt
+Oct 19 14:55:14 klasserver les18[7071]: Verwerkt: mail-02.txt
+Oct 19 14:55:17 klasserver les18[7071]: Verwerkt: mail-03.txt
+Oct 19 14:55:20 klasserver les18[7071]: Verwerkt: mail-04.txt
+Oct 19 14:55:20 klasserver les18[7071]: Klaar. Een medewerker leest de concepten na en verstuurt ze zelf.
+Oct 19 14:55:21 klasserver systemd[1576]: Finished inbox.service - Les 18: de mails in de inbox verwerken.
+Oct 19 14:55:21 klasserver systemd[1576]: inbox.service: Consumed 1.881s CPU time.
+$ ls ~/werk/concepten
+mail-01.txt  mail-02.txt  mail-03.txt  mail-04.txt
+</pre>
+  <p class="uitleg-in">Bij ons zette <code>scp</code> de mails om 14:50 in de inbox, en daarna was er niemand van de groep ingelogd. Om 14:55:01 startte de timer les 18, en om 14:55:20 stonden de vier concepten klaar. Kijk in het journal of jullie run begon nadat jullie uitlogden. Alleen dan weet je dat de timer het deed, en niet jij. <code>journalctl</code> opent een lijst waarin je kunt scrollen. Met <kbd>q</kbd> stop je. Doe je het nog een keer, geef de mails dan nieuwe namen: een mail met een oude naam krijgt geen nieuw concept (les 18).</p>
+  <h4>Opdrachten</h4>
+  <ul class="taken">
+    <li><input type="checkbox" id="t19a"><div class="tekst"><label for="t19a"><span class="soort s-voorspel">Voorspel</span>Om 10:02 zet je vier mails in de inbox. Wanneer begint de verwerking? En wanneer staan de concepten er?</label><details class="onthul"><summary>Bekijk het antwoord</summary><div>
+        <p>De timer start om 10:05, of tot een minuut later. Daarna duurt het nog even: bij ons stonden de vier concepten er 19 seconden na de start. Een timer maakt je programma dus niet sneller. Hij zorgt alleen dat het start.</p>
+      </div></details></div></li>
+    <li><input type="checkbox" id="t19b"><div class="tekst"><label for="t19b"><span class="soort s-zoek">Zoek uit</span>Kijk naar de uitvoer van <code>list-timers</code>. Wat betekenen NEXT, LEFT, LAST en PASSED? Zegt LAST of de vorige run gelukt is? Typ ook <code>systemctl --user status inbox.service</code>. Wat staat er achter "Active"?</label><details class="onthul"><summary>Bekijk wat er bij ons gebeurde</summary><div>
+        <p>NEXT is de volgende start, en LEFT hoe lang dat nog duurt. LAST is de vorige start, en PASSED hoe lang geleden die was. Of de run gelukt is, zie je daar niet. Dat zie je met <code>status</code>, in het journal en in de mappen.</p>
+<pre class="term">
+$ systemctl --user status inbox.service
+○ inbox.service - Les 18: de mails in de inbox verwerken
+     Loaded: loaded (/home/groep0/.config/systemd/user/inbox.service; static)
+     Active: inactive (dead) since Mon 2026-10-19 14:55:21 CEST; 2min 9s ago
+TriggeredBy: ● inbox.timer
+    Process: 7071 ExecStart=/home/groep0/ai-engineering/.venv/bin/les18 (code=exited, status=0/SUCCESS)
+</pre>
+        <p>"inactive (dead)" klinkt eng, maar na een geslaagde run is dat normaal: les 18 draait één keer, en stopt dan. <code>status=0/SUCCESS</code> zegt dat het goed ging.</p>
+      </div></details></div></li>
+    <li><input type="checkbox" id="t19c"><div class="tekst"><label for="t19c"><span class="soort s-zoek">Zoek uit</span>Lees jullie run in het journal. Wanneer begon hij, hoeveel mails waren er, en hoe lang duurde hij? Welke regels komen van les 18, en welke niet? In les 14 schreef je zelf een logboek. Wat doet de server hier voor je?</label><details class="onthul"><summary>Bekijk het antwoord</summary><div>
+        <p>Bij ons: begonnen om 14:55:01, vier mails, klaar om 14:55:21. De regels met <code>les18[7071]</code> zijn de prints van les 18; 7071 is het nummer van het proces. De regels met <code>systemd</code> komen van de server zelf: Starting, Finished, en hoeveel rekentijd het kostte. De server zet bij elke print de tijd, zonder dat je daar code voor schrijft.</p>
+      </div></details></div></li>
+    <li><input type="checkbox" id="t19d"><div class="tekst"><label for="t19d"><span class="soort s-experiment">Experiment</span>Hernoem op de server het bestand <code>.env</code>: <code>mv ~/ai-engineering/.env ~/ai-engineering/.env.weg</code>. Zet daarna een nieuwe mail in de inbox, bijvoorbeeld <code>mail-05.txt</code>. Wacht tot na de volgende run, en kijk naar <code>status</code>, het journal en de inbox. Zet <code>.env</code> dan terug, met <code>mv ~/ai-engineering/.env.weg ~/ai-engineering/.env</code>, en wacht weer. Wie merkte de fout? En wie probeerde het opnieuw?</label><details class="onthul"><summary>Bekijk wat er bij ons gebeurde</summary><div>
+        <p>Bij ons heette de nieuwe mail <code>mail-19.txt</code>. De run van 15:05 crashte al bij het opstarten, nog voordat les 18 in de inbox keek. Het journal is ingekort:</p>
+<pre class="term">
+$ systemctl --user status inbox.service
+× inbox.service - Les 18: de mails in de inbox verwerken
+     Loaded: loaded (/home/groep0/.config/systemd/user/inbox.service; static)
+     Active: failed (Result: exit-code) since Mon 2026-10-19 15:05:03 CEST; 1min 19s ago
+TriggeredBy: ● inbox.timer
+    Process: 7628 ExecStart=/home/groep0/ai-engineering/.venv/bin/les18 (code=exited, status=1/FAILURE)
+$ journalctl --user -u inbox
+Oct 19 15:05:01 klasserver systemd[1576]: Starting inbox.service - Les 18: de mails in de inbox verwerken...
+Oct 19 15:05:03 klasserver les18[7628]: Traceback (most recent call last):
+…
+Oct 19 15:05:03 klasserver les18[7628]: openai.OpenAIError: Missing credentials. Please pass an `api_key`, `workload_identity`, `admin_api_key`, or set the `OPENAI_API_KEY` or `OPENAI_ADMIN_KEY` environment variable.
+Oct 19 15:05:03 klasserver systemd[1576]: Failed to start inbox.service - Les 18: de mails in de inbox verwerken.
+</pre>
+        <p>De mail bleef in de inbox, en de timer liep gewoon door. Om 15:10 stond <code>.env</code> weer terug, en de volgende run verwerkte de mail vanzelf:</p>
+<pre class="term">
+Oct 19 15:10:01 klasserver systemd[1576]: Starting inbox.service - Les 18: de mails in de inbox verwerken...
+Oct 19 15:10:03 klasserver les18[7727]: 1 mails in /home/groep0/werk/inbox
+Oct 19 15:10:06 klasserver les18[7727]: Verwerkt: mail-19.txt
+Oct 19 15:10:06 klasserver les18[7727]: Klaar. Een medewerker leest de concepten na en verstuurt ze zelf.
+Oct 19 15:10:07 klasserver systemd[1576]: Finished inbox.service - Les 18: de mails in de inbox verwerken.
+</pre>
+        <p>Wie merkte de fout? Niemand: er kwam geen melding. Je ziet het alleen als je zelf kijkt, met <code>status</code>, in het journal, of met <code>systemctl --user --failed</code>. Wie probeerde het opnieuw? De timer, elke vijf minuten. En omdat de mail dankzij les 18 nog in de inbox lag, ging het vanzelf goed zodra de oorzaak weg was.</p>
+      </div></details></div></li>
+    <li><input type="checkbox" id="t19e"><div class="tekst"><label for="t19e"><span class="soort s-zoek">Zoek uit</span>Waarom start les 18 in de map <code>~/werk</code>, en niet in <code>~/ai-engineering</code>, waar de code staat? Denk aan opdracht t17e, en aan wat <code>deploy.sh</code> doet.</label><details class="onthul"><summary>Bekijk het antwoord</summary><div>
+        <p>Les 18 zoekt <code>inbox</code>, <code>concepten</code> en <code>verwerkt</code> in de map waar het start (t17e). Met <code>WorkingDirectory=%h/werk</code> leg je die map vast. De eerste regel in het journal laat zien dat het klopt: <code>4 mails in /home/groep0/werk/inbox</code>. En omdat het werk los staat van de code, kan <code>deploy.sh</code> de code vervangen, of een oude versie terugzetten, zonder je mails en concepten te raken.</p>
+      </div></details></div></li>
+    <li><input type="checkbox" id="t19f"><div class="tekst"><label for="t19f"><span class="soort s-experiment">Experiment</span>Zet de timer uit met <code>systemctl --user disable --now inbox.timer</code>. Kijk met <code>list-timers</code>, en zet hem weer aan met <code>systemctl --user enable --now inbox.timer</code>. Wanneer zou je de timer uitzetten?</label><details class="onthul"><summary>Bekijk wat er bij ons gebeurde</summary><div>
+<pre class="term">
+$ systemctl --user disable --now inbox.timer
+Removed "/home/groep0/.config/systemd/user/timers.target.wants/inbox.timer".
+$ systemctl --user list-timers inbox.timer
+NEXT LEFT LAST PASSED UNIT ACTIVATES
+
+0 timers listed.
+Pass --all to see loaded but inactive timers, too.
+$ systemctl --user enable --now inbox.timer
+Created symlink /home/groep0/.config/systemd/user/timers.target.wants/inbox.timer → /home/groep0/.config/systemd/user/inbox.timer.
+</pre>
+        <p>Met de timer uit start les 18 niet meer, ook niet als de server opnieuw opstart. Een run die al bezig is, loopt wel door. Die breek je af met <code>systemctl --user stop inbox.service</code>. Je zet de timer bijvoorbeeld uit als het programma steeds dezelfde fout maakt, of als de klant wil dat het even stopt.</p>
+      </div></details></div></li>
+  </ul>
+  <div class="denk">
+    <h4>Denkvraag</h4>
+    <p class="vraag">Les 18 mag crashen, want je start hem opnieuw. Wie start hem nu opnieuw? En wie merkt een crash?</p>
+    <details class="onthul"><summary>Bekijk een hint</summary><div>
+      <p>De timer start les 18 elke vijf minuten opnieuw. Een fout die vanzelf weggaat, zoals een storing bij OpenAI, lost zich dus op. Maar niemand merkt een crash, tenzij iemand in het journal kijkt, of ziet dat de inbox volloopt. Bij een echt bedrijf spreek je daarom af wie er kijkt, en hoe vaak.</p>
+    </div></details>
+  </div>
+  <div class="onthoud"><span class="kopje">Onthoud</span><p>Een timer op een server start je programma, ook als jij er niet bent. Wat er gebeurde, lees je in het logboek.</p></div>
+</section>
+
 <!-- ================================================================ NASLAG -->
 <section class="sectie" id="overzicht">
   <h2>Alles op een rij</h2>
@@ -2015,6 +2190,7 @@ tijdelijk.replace(concept_bestand)
       <tr><td class="nr"><a href="#kiezen">✓</a></td><td>Kiezen en bewijzen</td><td>De eenvoudigste oplossing die werkt, en testgevallen als bewijs.</td></tr>
       <tr><td class="nr"><a href="#les17">17</a></td><td>Werken zonder gesprek</td><td>Lees uit een map, schrijf naar een map, en stop. De mens kijkt later.</td></tr>
       <tr><td class="nr"><a href="#les18">18</a></td><td>Veilig opnieuw starten</td><td>Een mail verlaat de inbox pas als zijn concept klaarstaat.</td></tr>
+      <tr><td class="nr"><a href="#les19">19</a></td><td>Draaien op de server</td><td>Een timer start je programma, ook als jij er niet bent. Wat er gebeurde, lees je in het logboek.</td></tr>
     </tbody>
   </table></div>
   <h3>Een agent is een systeem</h3>
@@ -2040,6 +2216,7 @@ tijdelijk.replace(concept_bestand)
     <div><dt>call_id</dt><dd>Het nummer van één tool-aanvraag. Jouw code zet het bij het resultaat, zodat het LLM weet bij welke aanvraag het hoort (les 4).</dd></div>
     <div><dt>Classificeren</dt><dd>Een label kiezen uit vaste keuzes, zoals klacht, compliment of vraag (les 6).</dd></div>
     <div><dt>Context</dt><dd>Alles wat bij één call naar het LLM meegaat: de instructie, het gesprek, de bron en de vraag. Wat jij niet meestuurt, zoals een eerder gesprek of de gegevens van jouw webshop, weet het LLM in die call niet. Wat het in zijn training leerde wel, maar dat kan verouderd of fout zijn (les 3, 9 en 10).</dd></div>
+    <div><dt>Deployen</dt><dd>Een nieuwe versie van je code op de server klaarzetten. In les 19 doet <code>deploy.sh</code> dat.</dd></div>
     <div><dt>Framework</dt><dd>Kant-en-klare code die veel werk voor je doet, zoals de OpenAI Agents SDK (les 16).</dd></div>
     <div><dt>Gate</dt><dd>Een <code>if</code> tussen twee stappen die de keten kan stoppen (les 10).</dd></div>
     <div><dt>Guardrail</dt><dd>Een check die bepaalt of een bericht door mag (les 12).</dd></div>
@@ -2047,6 +2224,7 @@ tijdelijk.replace(concept_bestand)
     <div><dt>Human-in-the-loop</dt><dd>Een mens beslist mee voordat er iets gebeurt (les 8).</dd></div>
     <div><dt>Idempotent</dt><dd>Als je iets nog een keer doet, verandert het resultaat niet. Dezelfde mail opnieuw aanbieden verandert het concept niet (les 18).</dd></div>
     <div><dt>Instructie</dt><dd>De tekst die het LLM vertelt welke rol het heeft en hoe het moet antwoorden. Ook wel de <em>prompt</em>.</dd></div>
+    <div><dt>Journal</dt><dd>Het logboek van de server. Wat een programma print dat door de timer start, komt hierin, met de tijd erbij. Je leest het met <code>journalctl</code> (les 19).</dd></div>
     <div><dt>JSON</dt><dd>Een tekstvorm voor data, met velden en waarden. Pydantic maakt er een Python-object van (les 5).</dd></div>
     <div><dt>Kennisbank</dt><dd>Een bestand met vragen en antwoorden over jouw bedrijf (les 9).</dd></div>
     <div><dt>LLM</dt><dd><em>Large language model</em>, een groot taalmodel. Het leest tekst en schrijft tekst.</dd></div>
@@ -2056,8 +2234,12 @@ tijdelijk.replace(concept_bestand)
     <div><dt>RAG</dt><dd><em>Retrieval-augmented generation</em>: eerst zoeken in je eigen bronnen, dan het LLM laten antwoorden. Les 9 is de eerste stap.</dd></div>
     <div><dt>Retry</dt><dd>Opnieuw proberen na een fout (les 7).</dd></div>
     <div><dt>Ronde</dt><dd>Eén keer door de agent-loop: één LLM-call, en de tools die het LLM in die call vroeg (les 13).</dd></div>
+    <div><dt>Server</dt><dd>Een computer die dag en nacht aan staat, zodat programma's er ook draaien als jij er niet bent (les 19).</dd></div>
+    <div><dt>Service</dt><dd>De opdracht waarmee de server een programma start: welk programma, en in welke map (les 19).</dd></div>
     <div><dt>Simulatie</dt><dd>Doen alsof. In deze lessen wordt er geen echte mail verstuurd; het programma print alleen wat er zou gebeuren.</dd></div>
+    <div><dt>SSH</dt><dd>Een veilige verbinding met een server. Je typt op je laptop, en de opdrachten draaien op de server. Je logt in met een sleutel in plaats van een wachtwoord (les 19).</dd></div>
     <div><dt>Testgeval</dt><dd>Een vaste invoer, met wat er moet gebeuren. Met dezelfde testgevallen vergelijk je een oplossing voor en na een verandering.</dd></div>
+    <div><dt>Timer</dt><dd>Een klok op de server die een programma op vaste tijden start, bijvoorbeeld elke vijf minuten (les 19).</dd></div>
     <div><dt>Tool</dt><dd>Een functie die het LLM mag laten uitvoeren door jouw code (les 4).</dd></div>
     <div><dt>Tracing</dt><dd>Het logboek van een framework, als overzicht in een dashboard (les 16).</dd></div>
     <div><dt>Workflow</dt><dd>Een programma waarin jouw code de mogelijke routes en stappen vastlegt (les 10 t/m 12 en 15).</dd></div>

@@ -461,9 +461,47 @@ def les18():
     return s
 
 
+def server():
+    s = Schema("server", 720, 262, "Jij start deploy.sh op de server. Het script haalt de code van GitHub naar de map ai-engineering. Je mails zet je met scp in de map werk. Code en werk staan los van elkaar.")
+    s.vak("github", "tool", 10, 40, 150, 52, ["GitHub", "de code"])
+    s.vak("jij", "mens", 10, 176, 150, 52, ["Jij", "op je laptop"])
+    s.vak("deploy", "code", 230, 40, 160, 52, ["deploy.sh", "zet de code klaar"])
+    s.vak("code", "tool", 470, 22, 240, 96, ["~/ai-engineering/", "de code uit git", ".venv: de packages", ".env: jouw key"], links=True)
+    s.vak("werk", "tool", 470, 150, 240, 96, ["~/werk/", "inbox/", "concepten/", "verwerkt/"], links=True)
+    s.pijl(s.p("github", "r"), s.p("deploy", "l"))
+    s.tekst(195, 58, "haalt")
+    s.pijl(s.p("deploy", "r"), (470, 66))
+    s.tekst(430, 58, "zet klaar")
+    # Jij start het script via ssh, en zet de mails met scp in de inbox
+    s.pijl((110, 176), (110, 130), (310, 130), (310, 92))
+    s.tekst(210, 122, "ssh: ./server/deploy.sh")
+    s.pijl(s.p("jij", "r"), (470, 202))
+    s.tekst(315, 194, "scp: de mails")
+    s.tekst(590, 14, "op de server", klasse="lbl zacht")
+    return s
+
+
+def les19():
+    s = Schema("les19", 720, 252, "Elke 5 minuten start de timer les 18 in de map werk, ook als niemand ingelogd is. Les 18 maakt concepten in de mappen. Wat les 18 print, komt in het logboek van de server.")
+    s.vak("timer", "code", 10, 46, 150, 52, ["Timer", "elke 5 minuten"])
+    s.vak("les18", "code", 250, 46, 170, 52, ["Les 18", "in de map ~/werk"])
+    s.vak("mappen", "tool", 510, 22, 200, 96, ["~/werk/", "inbox/", "concepten/", "verwerkt/"], links=True)
+    s.vak("journal", "tool", 250, 150, 460, 76, ["Logboek (journal)", "14:55:06  4 mails in /home/groep0/werk/inbox", "14:55:12  Verwerkt: mail-01.txt"], links=True)
+    s.pijl(s.p("timer", "r"), s.p("les18", "l"))
+    s.tekst(205, 64, "start")
+    s.pijl(s.p("les18", "r"), (510, 72))
+    s.tekst(465, 64, "concepten")
+    s.pijl(s.p("les18", "b", 0.3), (301, 150))
+    s.tekst(309, 130, "print", anker="start")
+    s.tekst(85, 122, "ook als niemand", klasse="lbl zacht")
+    s.tekst(85, 140, "ingelogd is", klasse="lbl zacht")
+    return s
+
+
 SCHEMAS = {f.__name__: f for f in (
     augmented, les1, les2, les3, les4, les5, les6, les7, les8, les9,
     les10, les11, les12, les12_tijd, les13, les14, les15, les16, les17, les18,
+    server, les19,
 )}
 
 
@@ -503,6 +541,22 @@ def kleur_terminal(tekst):
     return "\n".join(regels)
 
 
+def kleur_ini(tekst):
+    """Een bestand voor systemd (les 19): commentaar, [kopjes] en sleutel=waarde."""
+    regels = []
+    for regel in tekst.split("\n"):
+        r = esc(regel)
+        if regel.startswith("#"):
+            r = f'<span class="com">{r}</span>'
+        elif regel.startswith("["):
+            r = f'<span class="kw">{r}</span>'
+        elif "=" in regel:
+            sleutel, waarde = r.split("=", 1)
+            r = f'<span class="dec">{sleutel}</span>={waarde}'
+        regels.append(r)
+    return "\n".join(regels)
+
+
 def bouw():
     pagina = SJABLOON.read_text()
 
@@ -513,6 +567,11 @@ def bouw():
     pagina = re.sub(
         r'<pre class="py">\n?([\s\S]*?)</pre>',
         lambda m: f'<pre class="py"><code>{kleur_python(m.group(1).rstrip())}</code></pre>',
+        pagina,
+    )
+    pagina = re.sub(
+        r'<pre class="ini">\n?([\s\S]*?)</pre>',
+        lambda m: f'<pre class="ini"><code>{kleur_ini(m.group(1).rstrip())}</code></pre>',
         pagina,
     )
     # Ook <pre class="term log"> (een logboek) krijgt de kleuren voor INFO en WARNING

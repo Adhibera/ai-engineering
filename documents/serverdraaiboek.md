@@ -2,7 +2,7 @@
 
 Dit draaiboek is voor de docent. Het beschrijft hoe de klassenserver is ingericht, hoe je een groep aanmaakt, hoe je een groep stopzet, en wat je aan het eind van het schooljaar opruimt.
 
-**Getest op 18 en 19 oktober 2026**, op de echte server: Hetzner Cloud, Ubuntu 24.04.4 LTS, systemd 255. De commando's hieronder zijn de commando's die toen werkten. **Les 19 zelf** (`server/deploy.sh` en de inbox-timer) **is nog niet op de server getest.**
+**Getest op 18 en 19 oktober 2026**, op de echte server: Hetzner Cloud, Ubuntu 24.04.4 LTS, systemd 255. De commando's hieronder zijn de commando's die toen werkten. Les 19 (`server/deploy.sh` en de inbox-timer) is op 19 oktober getest met de testgroep `groep0`; zie "Les 19 op de server".
 
 Het IP-adres staat hier niet in, want deze repo is openbaar. Je vindt het in de Hetzner Console. Waar `<IP>` staat, vul je het zelf in.
 
@@ -209,6 +209,41 @@ Daarmee zijn de thuismap, de timers, het werk en de grenzen weg. De OpenAI-key t
 
 ---
 
+## Les 19 op de server
+
+Wat een groep zelf doet, staat in het lesboek, in de voorbereiding vóór les 19: een sleutel maken, inloggen, de repo clonen, `.env` maken en `./server/deploy.sh` starten. Jij regelt vooraf per groep twee dingen: de gebruiker (zie "Een groep aanmaken") en een OpenAI-key.
+
+### Een OpenAI-key per groep
+
+1. Maak op [platform.openai.com](https://platform.openai.com) per groep een project, bijvoorbeeld `klasserver-groep3`. Kies het project daarna linksboven.
+2. Ga naar Project settings → **Limits**. Kies bij Spend **Set spend limit**, vul een bedrag in (bij `groep0`: $5 per maand), zet **Enforce a hard limit** aan en sla op. Daarna staat er "Limit enforced". Bij de limiet krijgt elk verzoek een fout 429 (`project_spend_limit_exceeded`). Volgens OpenAI grijpt de limiet niet meteen in, dus het project kan er iets overheen gaan. Een spend alert alleen houdt niets tegen. Bron: [OpenAI Docs, Spend limits](https://developers.openai.com/api/docs/guides/spend-limits).
+3. Kijk op dezelfde pagina bij "Allow or block models" of het model van de lessen (`gpt-6-astra`) mag. In een nieuw project staat "Alle modellen toestaan" aan.
+4. Maak de key op [platform.openai.com/api-keys](https://platform.openai.com/api-keys), met het project linksboven gekozen: **Create new secret key**. Je ziet de key maar één keer.
+5. Geef de key aan de groep. De groep zet hem zelf in `~/ai-engineering/.env`, met `chmod 600`. Zet een key nooit in een chat of in git.
+
+**Gegevens bij OpenAI** (bekeken op 19 oktober, onder Data controls):
+- "Share inputs and outputs with OpenAI" staat op **Disabled**. Laat dat zo, ook al biedt OpenAI er gratis tokens voor. Aan betekent: wat je stuurt, mag OpenAI gebruiken om modellen te trainen.
+- Bewaren: OpenAI bewaart API-verkeer tot 30 dagen om misbruik op te sporen. Zero Data Retention en een EU-locatie kan alleen na goedkeuring door OpenAI. De projecten staan op "Global" en "None (Standard retention)".
+- De Responses API bewaart elke call standaard, minstens 30 dagen, zichtbaar als Logs in het dashboard. Het account staat op "Enabled per call": de code beslist. Met `store=False` in de code gebeurt dat niet. De lessen zetten dat niet; voor de eindopdracht met echte klantdata is het een eis.
+
+### Wat je ziet als het misgaat
+
+- Een mislukte run zet de service op `failed (Result: exit-code)`, en staat bij `--failed` (zie "Overzicht"). De timer loopt gewoon door, en de mails blijven in de inbox. Is de oorzaak weg, dan verwerkt de volgende run ze vanzelf. Er komt geen melding: iemand moet kijken.
+- Zonder `.env` crasht elke run al bij het opstarten, met `openai.OpenAIError: Missing credentials`.
+- Ziet een groep geen "Klaar" na `deploy.sh`, dan is de deploy niet afgerond. Mislukte de controle in stap 1 ("Er is niets veranderd"), dan draait de vorige versie door. Ging het later mis, dan staat de timer uit, ook na een herstart, tot een deploy wel lukt.
+
+### Gemeten op `groep0` (19 oktober)
+
+| | |
+|---|---|
+| Eerste deploy | 2,5 seconden (Python 3.13 stond al in de cache van uv) |
+| Run met 4 mails | 19 seconden, 1,9 seconden CPU |
+| Run met 8 mails | 27 seconden, 1,1 seconden CPU, 25 MB geheugen |
+| Run zonder mails | 3 seconden, 4 regels in het journal: ongeveer 1.150 regels per dag per groep |
+| Opstarten tot de eerste print | 5 seconden bij de eerste run, daarna 2 tot 4 seconden |
+
+---
+
 ## Grenzen per groep
 
 Het script zet de grenzen per groep met `systemctl set-property`. Ze gelden dus niet voor `beheer`.
@@ -302,11 +337,11 @@ Wil je de server houden voor volgend jaar, verwijder dan alleen de groepen (zie 
 
 **Vóór de groepen van leerlingen:**
 - [ ] beslissen over quota voor de schijf, of alleen controleren met `du`
-- [ ] les 19 testen op `groep0`: `server/deploy.sh`, de inbox-timer, en `scp` naar de inbox
+- [x] les 19 testen op `groep0`: `server/deploy.sh`, de inbox-timer, en `scp` naar de inbox (19 oktober)
 - [ ] afspreken wie de mislukte runs controleert, en de mails die in de inbox blijven liggen
 
 **Bij les 19:**
-- [ ] per groep een OpenAI-project met een eigen key, en "Enforce a hard limit" aan. Een melding over de kosten houdt niets tegen. Volgens Codex kan een harde limiet door vertraging iets worden overschreden; dat is niet door Claude gecontroleerd.
+- [ ] per groep een OpenAI-project met een eigen key, en "Enforce a hard limit" aan (zie "Les 19 op de server"). Voor `groep0` is dat gedaan, met $5 per maand.
 
 **Vóór er klantdata op de server komt:**
 - [ ] een wachtwoordzin op de sleutel van de docent (`ssh-keygen -p -f ~/.ssh/id_ed25519_adhibera`), met een ssh-agent. Nu heeft de sleutel geen wachtwoordzin. De schijf van de laptop is wel versleuteld.
@@ -328,8 +363,13 @@ Met de testtimer uit bijlage B, als `groep0`, en een tijdelijke tweede groep `pr
 | Weer aanzetten | Inloggen werkte, en de timer liep weer. |
 | `nieuwe-groep` | Zeven soorten foute invoer geweigerd, zonder dat er iets veranderde. Een goede groep klopte: de rechten, linger, de grenzen en inloggen. |
 | 's Nachts herstarten | Alleen de instelling (`apt-config dump`). |
+| Les 19: deployen | De eerste deploy lukte in 2,5 seconden: de timer stond aan, de map `~/werk/inbox` bestond. |
+| Les 19: uitgelogd | Mails met `scp` in de inbox gezet om 14:50, daarna geen sessie van `groep0` (gecontroleerd in het log van logind). De timer startte les 18 om 14:55:01; om 14:55:20 stonden de vier concepten er. |
+| Les 19: deployen tijdens een run | Met 8 nieuwe mails en een gestarte run wachtte `deploy.sh` 23 seconden in de wachtlus (gezien met `bash -x`), en ging pas verder toen de run klaar was. De run maakte alle 8 concepten. |
+| Les 19: zonder `.env` | De run van 15:05 mislukte bij het opstarten; de mail bleef in de inbox en de timer liep door. Met `.env` terug verwerkte de run van 15:10 de mail vanzelf. |
+| Les 19: timer uit en aan | `disable --now`: 0 timers. `enable --now`: de volgende run om 15:15. |
 
-**Niet getest:** `TasksMax` echt bereiken, een echte nachtelijke herstart, les 19 op de server, en het rescue-systeem van Hetzner.
+**Niet getest:** `TasksMax` echt bereiken, een echte nachtelijke herstart, en het rescue-systeem van Hetzner.
 
 ---
 
