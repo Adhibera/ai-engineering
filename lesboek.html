@@ -123,6 +123,7 @@ main { min-width: 0; max-width: 780px; }
 /* Op een smal scherm zie je alleen het nummer. De titel blijft voor schermlezers. */
 .inhoud .t { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .inhoud .tel { display: none; }
+.inhoud ol a.opt { border-style: dashed; }
 .inhoud ol a.af { background: var(--llm-bg); border-color: var(--llm-line); color: var(--llm-ink); }
 .inhoud ol a.actief { border-color: var(--accent); color: var(--accent); }
 @media (min-width: 1080px) {
@@ -351,7 +352,7 @@ details.onthul > div { display: grid; gap: 8px; font-size: 15.5px; }
     <div class="kop-tekst">
       <p class="bovenregel">Lesboek bij de lessenreeks AI engineering</p>
       <h1>Bouw je eigen <span>AI-agent</span></h1>
-      <p class="lead">In deze lessen bouw je de klantenservice van een webshop. Je begint met één vraag aan een taalmodel. Aan het eind van deel 3 heb je een agent die zelf bedenkt welke stappen hij zet. In deel 4 maak je je klaar voor een echte klant, en in de eindopdracht bouw je iets voor een echt bedrijf. Bij elke les hoort een Python-bestand dat je start, leest en aanpast.</p>
+      <p class="lead">In deze lessen bouw je de klantenservice van een webshop. Je begint met één vraag aan een taalmodel. Aan het eind van deel 3 heb je een agent die zelf bedenkt welke stappen hij zet. In deel 4 maak je je klaar voor een echte klant, en in de eindopdracht bouw je iets voor een echt bedrijf. Bij les 1 t/m 18 hoort een Python-bestand dat je start, leest en aanpast. Les 19 gebruikt de map <code>server/</code>.</p>
       <ul class="feiten">
         <li><b>19</b> lessen en een eindopdracht</li>
         <li><b>4</b> delen</li>
@@ -398,7 +399,7 @@ Stel je vraag: <kbd>Waar blijft mijn bestelling 1001?</kbd>
     <li><a href="#les13"><span class="nr">13</span><span class="t">Agent-loop</span><span class="tel"></span></a></li>
     <li><a href="#les14"><span class="nr">14</span><span class="t">Logging</span><span class="tel"></span></a></li>
     <li><a href="#les15"><span class="nr">15</span><span class="t">Controleur</span><span class="tel"></span></a></li>
-    <li><a href="#les16"><span class="nr">16</span><span class="t">Framework</span><span class="tel"></span></a></li>
+    <li><a class="opt" href="#les16"><span class="nr">16</span><span class="t">Framework (optioneel)</span><span class="tel"></span></a></li>
   </ol>
   <a class="los" href="#kiezen">Kiezen en bewijzen</a>
   <p class="nav-deel">Deel 4 · Naar een echte klant</p>
@@ -483,7 +484,7 @@ Stel je vraag: <kbd>Waar blijft mijn bestelling 1001?</kbd>
 
   <h3>Wat je al moet kunnen</h3>
   <div class="prose">
-    <p>De lessen gaan ervan uit dat je de basis van Python kent. Lees de code hieronder en beantwoord de vijf vragen, zonder de code te draaien.</p>
+    <p>De lessen gaan ervan uit dat je de basis van Python kent. Lees de code hieronder en beantwoord de vijf vragen, zonder de code te draaien. Elke vraag gaat uit van de code zoals hij hieronder staat.</p>
   </div>
 <pre class="py"><code><span class="kw">def</span> groet(naam):
     <span class="kw">return</span> <span class="str">&quot;Hoi &quot;</span> + naam
@@ -515,7 +516,7 @@ producten = [<span class="str">&quot;koptelefoon&quot;</span>, <span class="str"
 
   <h3>Installeren</h3>
   <ol class="stappen">
-    <li><div><p>Open de projectmap <code>ai-engineering</code> in de terminal.</p></div></li>
+    <li><div><p>Haal de code op met <code>git clone https://github.com/Adhibera/ai-engineering.git</code>. Ga daarna de map in met <code>cd ai-engineering</code>, en open dezelfde map in je editor.</p></div></li>
     <li><div><p><code>uv sync</code> installeert alle packages.</p></div></li>
     <li><div><p><code>cp .env.example .env</code> maakt je eigen <code>.env</code>. Op Windows typ je <code>copy .env.example .env</code>. Zet daar je API-key in: <code>OPENAI_API_KEY=sk-…</code></p></div></li>
     <li><div><p><code>uv run les1</code> start les 1. Elke les start je zo, met zijn eigen nummer.</p></div></li>
@@ -1542,7 +1543,7 @@ response = client.responses.create(
   <h4>Opdrachten</h4>
   <ul class="taken">
     <li><input type="checkbox" id="t11a"><div class="tekst"><label for="t11a"><span class="soort s-experiment">Experiment</span>Stuur dezelfde berichten naar les 6 en naar les 11. De soorten zijn hetzelfde. Wat is het verschil?</label></div></li>
-    <li><input type="checkbox" id="t11b"><div class="tekst"><label for="t11b"><span class="soort s-zoek">Zoek uit</span>Kijk naar de imports bovenaan <code>les11_routing.py</code>. Welke functie komt uit welke les, en wat voegt les 11 er zelf aan toe?</label></div></li>
+    <li><input type="checkbox" id="t11b"><div class="tekst"><label for="t11b"><span class="soort s-zoek">Zoek uit</span>Welke onderdelen hergebruikt <code>les11_routing.py</code>? Volg daarna een klacht: welke code kiest de route, en welke functie voert die uit?</label></div></li>
     <li><input type="checkbox" id="t11c"><div class="tekst"><label for="t11c"><span class="soort s-zoek">Zoek uit</span>Is "Waarom is mijn pakket nog steeds niet bezorgd?" een vraag of een klacht? Het LLM koos klacht. Lees de <code>Reden</code>. Ben je het ermee eens?</label></div></li>
     <li><input type="checkbox" id="t11d"><div class="tekst"><label for="t11d"><span class="soort s-zoek">Zoek uit</span>In les 10 noemde het antwoord Sanne niet. Hier begint de mail met "Beste Sanne". Hoe kan dat?</label><details class="onthul"><summary>Bekijk het antwoord</summary><div>
         <p>De mail-route krijgt het hele bericht, met de naam erin. Stap 3 van les 10 kreeg alleen het product en het probleem.</p>

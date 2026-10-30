@@ -1,6 +1,6 @@
 # Dave Ebbelaar: AI Agents bouwen (2 video's)
 
-> Samenvatting per hoofdstuk en alle links uit twee YouTube-video's van Dave Ebbelaar (Datalumina).
+> Samenvatting per hoofdstuk en de links uit twee YouTube-video's van Dave Ebbelaar (Datalumina).
 > Bron: de automatische Engelse ondertitels en videobeschrijvingen, opgehaald op 2026-10-16.
 > De timestamps linken direct naar dat moment in de video.
 
@@ -13,7 +13,7 @@ Video 1 verwijst naar video 2 als vervolg. Inhoudelijk werkt het het beste om **
 
 ---
 
-## Alle links
+## Links
 
 ### Video 1: How to Build Reliable AI Agents (without the hype)
 
@@ -24,9 +24,6 @@ Uit de videobeschrijving:
 | GitHub-repository (code bij deze video) | https://github.com/daveebbelaar/ai-cookbook/tree/main/agents/building-blocks |
 | Python Agents Beginner Course (= video 2) | https://www.youtube.com/watch?v=bZzyPscbtI8 |
 | VS Code / Cursor setup (video) | https://youtu.be/mpk4Q5feWaw |
-| Werk met Dave / hulp bij een project | https://go.datalumina.com/TMGbUvO |
-| Freelancen starten (Datalumina) | https://go.datalumina.com/BleVjFI |
-| "Real AI Engineering" leren (Datalumina) | https://go.datalumina.com/AjnKsj0 |
 
 Ook genoemd in de video (staat niet in de beschrijving, link zelf opgezocht):
 
@@ -43,9 +40,6 @@ Uit de videobeschrijving:
 | OpenAI API reference | https://platform.openai.com/docs/api-reference/introduction |
 | Gratis "Python for AI" cursus (video) | https://youtu.be/ygXn5nV5qFc |
 | VS Code / Cursor setup (video) | https://youtu.be/mpk4Q5feWaw |
-| Werk met Dave / hulp bij een project | https://go.datalumina.com/TMGbUvO |
-| Freelancen starten (Datalumina) | https://go.datalumina.com/AnPJSFV |
-| "Real AI Engineering" leren (Datalumina) | https://go.datalumina.com/nxqQtsA |
 
 Ook genoemd in de video (staat niet in de beschrijving, link zelf opgezocht):
 

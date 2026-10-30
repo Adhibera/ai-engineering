@@ -17,11 +17,12 @@ Open `lesboek.html` in je browser. Daarin staan per les de uitleg, een schema, o
 
 ## Installeren
 
-Je hebt [uv](https://docs.astral.sh/uv/) nodig. Controleer dat met `uv --version`.
+Je hebt [git](https://git-scm.com/) en [uv](https://docs.astral.sh/uv/) nodig. Controleer dat met `git --version` en `uv --version`.
 
-1. Installeer de packages: `uv sync`
-2. Maak je eigen `.env`: `cp .env.example .env` (op Windows: `copy .env.example .env`) en zet je OpenAI API key erin.
-3. Test het: `uv run les1`
+1. Haal de code op: `git clone https://github.com/Adhibera/ai-engineering.git`, en ga de map in: `cd ai-engineering`. Open dezelfde map in je editor.
+2. Installeer de packages: `uv sync`
+3. Maak je eigen `.env`: `cp .env.example .env` (op Windows: `copy .env.example .env`) en zet je OpenAI API key erin.
+4. Test het: `uv run les1`
 
 ### Werkt het niet?
 
@@ -32,6 +33,8 @@ Je hebt [uv](https://docs.astral.sh/uv/) nodig. Controleer dat met `uv --version
 | `Error code: 404` met `model_not_found` | De key mag het model uit `les01_ai_call.py` (`MODEL`) niet gebruiken. Kies een model waar de key wel bij kan. |
 
 ## Starten
+
+De bestanden hebben twee cijfers (`les01_ai_call.py`), zodat ze op volgorde staan. Het commando gebruikt het gewone nummer: `uv run les1`.
 
 | Les | Starten | Code |
 |---|---|---|
@@ -50,7 +53,7 @@ Je hebt [uv](https://docs.astral.sh/uv/) nodig. Controleer dat met `uv --version
 | 13. Agent-loop | `uv run les13` | `src/ai_engineering/les13_agent_loop.py` |
 | 14. Logging | `uv run les14` | `src/ai_engineering/les14_logboek.py` |
 | 15. Controleur | `uv run les15` | `src/ai_engineering/les15_controleur.py` |
-| 16. Framework | `uv run les16` | `src/ai_engineering/les16_framework.py` |
+| 16. Framework (optioneel) | `uv run les16` | `src/ai_engineering/les16_framework.py` |
 | 17. Werken zonder gesprek | `uv run les17` | `src/ai_engineering/les17_batch.py` |
 | 18. Veilig opnieuw starten | `uv run les18` | `src/ai_engineering/les18_herstart.py` |
 | 19. Draaien op de server | op de server: `./server/deploy.sh` | `server/` |
