@@ -1,6 +1,6 @@
 # Projectdossier: <naam van jullie project>
 
-Dit is het dossier van jullie eindopdracht. Vul het per fase in. Het staat in jullie privé-repo, dus de docent ziet elke versie. Schrijf kort: een paar zinnen of een tabel is genoeg. Een ingevuld voorbeeld staat in `voorbeeld-webshop.md`.
+Dit is het dossier van jullie eindopdracht. Vul het per fase in. Het staat in jullie privé-repo, dus de docent ziet elke versie. Schrijf kort: een paar zinnen of een tabel is genoeg. Een ingevuld voorbeeld staat in `voorbeeld-dossier-webshop.md`.
 
 Zet hier nooit persoonsgegevens in: geen namen, adressen of mails van klanten van het bedrijf.
 

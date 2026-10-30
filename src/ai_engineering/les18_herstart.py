@@ -11,7 +11,7 @@ Starten:  uv run les18
 
 from pathlib import Path
 
-from ai_engineering.retrieval import beantwoord_vraag
+from ai_engineering.les09_retrieval import beantwoord_vraag
 
 # De mappen staan in de map waar je het programma start
 INBOX = Path("inbox")

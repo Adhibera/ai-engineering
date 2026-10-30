@@ -11,7 +11,7 @@ from typing import Literal
 
 from pydantic import BaseModel
 
-from ai_engineering.ai_call import MODEL, client, vraag_ai
+from ai_engineering.les01_ai_call import MODEL, client, vraag_ai
 
 
 class Beoordeling(BaseModel):

@@ -1,12 +1,12 @@
 """
-Bouwt het lesboek documents/lesmateriaal.html uit sjabloon.html.
+Bouwt het lesboek lesboek.html uit sjabloon.html.
 
 Het script tekent de schema's (op de plekken met {{schema:naam}}) en kleurt
 de code- en terminalblokken. Pas de tekst aan in sjabloon.html en een schema
-hieronder, en draai daarna dit script. Bewerk lesmateriaal.html niet met de
+hieronder, en draai daarna dit script. Bewerk lesboek.html niet met de
 hand, want het script overschrijft dat bestand.
 
-Starten:  uv run python documents/lesboek/bouw.py
+Starten:  uv run python docent/lesboek-bron/bouw.py
 """
 
 import html
@@ -15,7 +15,7 @@ from pathlib import Path
 
 HIER = Path(__file__).parent
 SJABLOON = HIER / "sjabloon.html"
-DOEL = HIER.parent / "lesmateriaal.html"
+DOEL = HIER.parent.parent / "lesboek.html"
 
 RX = {"llm": 12, "code": 4, "tool": 4, "mens": 24, "io": None}
 
@@ -242,7 +242,7 @@ def les9():
     s = Schema("les9", 700, 208, "Jouw code haalt eerst informatie uit de kennisbank en stuurt die samen met de vraag naar het LLM.")
     s.vak("in", "io", 10, 40, 100, 40, ["Vraag"])
     s.vak("code", "code", 150, 34, 160, 52, ["Stap 1: zoeken", "jouw code"])
-    s.vak("kb", "tool", 150, 140, 160, 52, ["kennisbank.json", "3 vragen + antwoorden"])
+    s.vak("kb", "tool", 142, 140, 176, 52, ["les09_kennisbank.json", "3 vragen + antwoorden"])
     s.vak("llm", "llm", 400, 34, 160, 52, ["LLM · stap 2", "antwoordt met de info"])
     s.vak("uit", "io", 595, 40, 100, 40, ["Antwoord"])
     s.pijl(s.p("in", "r"), s.p("code", "l"))

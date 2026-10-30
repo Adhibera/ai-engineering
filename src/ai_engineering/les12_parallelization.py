@@ -14,7 +14,7 @@ import time
 from openai import AsyncOpenAI
 from pydantic import BaseModel
 
-from ai_engineering.ai_call import MODEL
+from ai_engineering.les01_ai_call import MODEL
 
 # Een client die op meerdere antwoorden tegelijk kan wachten
 async_client = AsyncOpenAI()

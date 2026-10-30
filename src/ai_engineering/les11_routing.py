@@ -9,10 +9,10 @@ goedkeurt (les 8).
 Starten:  uv run les11
 """
 
-from ai_engineering.ai_call import MODEL, client
-from ai_engineering.control import Beoordeling
-from ai_engineering.feedback import schrijf_mail
-from ai_engineering.retrieval import beantwoord_vraag
+from ai_engineering.les01_ai_call import MODEL, client
+from ai_engineering.les06_control import Beoordeling
+from ai_engineering.les08_feedback import schrijf_mail
+from ai_engineering.les09_retrieval import beantwoord_vraag
 
 
 def main() -> None:

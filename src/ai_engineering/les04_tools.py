@@ -12,7 +12,7 @@ import json
 
 import requests
 
-from ai_engineering.ai_call import INSTRUCTIES, MODEL, client
+from ai_engineering.les01_ai_call import INSTRUCTIES, MODEL, client
 
 
 def huidige_temperatuur(latitude: float, longitude: float) -> float:

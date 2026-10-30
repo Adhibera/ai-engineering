@@ -10,8 +10,8 @@ Starten:  uv run les16
 
 from agents import Agent, MaxTurnsExceeded, Runner, function_tool
 
-from ai_engineering.agent_loop import BESTELLINGEN, PAKKETTEN
-from ai_engineering.ai_call import MODEL
+from ai_engineering.les01_ai_call import MODEL
+from ai_engineering.les13_agent_loop import BESTELLINGEN, PAKKETTEN
 
 # Let op: de SDK stuurt elke run, met de vragen en tool-resultaten, naar het
 # OpenAI-dashboard (tracing). Uitzetten: zet set_tracing_disabled bij de import

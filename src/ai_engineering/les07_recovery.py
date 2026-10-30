@@ -13,7 +13,7 @@ import time
 
 from openai import APIConnectionError  # de echte fout als OpenAI niet bereikbaar is
 
-from ai_engineering.ai_call import vraag_ai
+from ai_engineering.les01_ai_call import vraag_ai
 
 # Hoe vaak het misgaat: 0.5 is de helft van de keren. Zet op 1.0 om plan B te zien.
 KANS_OP_FOUT = 0.5

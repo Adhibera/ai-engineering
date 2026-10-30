@@ -8,7 +8,7 @@ dan geeft de mens feedback en schrijft het LLM een nieuwe versie.
 Starten:  uv run les8
 """
 
-from ai_engineering.ai_call import vraag_ai
+from ai_engineering.les01_ai_call import vraag_ai
 
 
 def schrijf_mail(klacht: str) -> None:

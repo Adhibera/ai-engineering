@@ -11,8 +11,8 @@ Starten:  uv run les14   (en open daarna agent.log)
 import json
 import logging
 
-from ai_engineering.agent_loop import tools, voer_tool_uit
-from ai_engineering.ai_call import MODEL, client
+from ai_engineering.les01_ai_call import MODEL, client
+from ai_engineering.les13_agent_loop import tools, voer_tool_uit
 
 # Alles vanaf INFO gaat naar agent.log. Zet op logging.WARNING om alleen problemen te zien.
 logging.basicConfig(

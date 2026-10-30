@@ -47,7 +47,7 @@ Een mail komt binnen (wit) → de medewerker leest hem (roze) → zoekt het antw
 1. Concept-antwoorden voor de medewerkers van de klantenservice.
 2. Erin: één mail per bestand in `inbox/`. Eruit: één concept per mail in `concepten/`, met de originele mail erboven.
 3. Eén LLM-call met de kennisbank (les 9). Gewone code kan geen antwoord schrijven op een vrije vraag. Een agent is niet nodig, want de stappen staan vast: lees de mail, schrijf het antwoord.
-4. De instructie van les 9, met de kennisbank (`kennisbank.json`) erbij.
+4. De instructie van les 9, met de kennisbank (`les09_kennisbank.json`) erbij.
 5. Geen tools: de hele kennisbank past in één prompt.
 6. Klaar als het concept in `concepten/` staat; de mail gaat dan naar `verwerkt/` (les 18). Mislukt een call, dan blijft de mail in de inbox, en de volgende run probeert hem opnieuw.
 7. Met de testgevallen hieronder, en in de pilot beoordeelt de medewerker elk concept.

@@ -7,7 +7,7 @@ Maar let op: onthoudt de AI wat je eerder zei?
 Starten:  uv run les2   (typ "stop" om te stoppen)
 """
 
-from ai_engineering.ai_call import vraag_ai
+from ai_engineering.les01_ai_call import vraag_ai
 
 
 def main() -> None:

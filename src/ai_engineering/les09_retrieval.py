@@ -10,10 +10,10 @@ Starten:  uv run les9
 
 from pathlib import Path
 
-from ai_engineering.ai_call import MODEL, client
+from ai_engineering.les01_ai_call import MODEL, client
 
 # De kennisbank staat in een bestand naast deze code
-KENNISBANK = Path(__file__).parent / "kennisbank.json"
+KENNISBANK = Path(__file__).parent / "les09_kennisbank.json"
 
 
 def zoek_in_kennisbank(vraag: str) -> str:

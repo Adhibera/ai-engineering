@@ -10,7 +10,7 @@ Starten:  uv run les13
 
 import json
 
-from ai_engineering.ai_call import MODEL, client
+from ai_engineering.les01_ai_call import MODEL, client
 
 # Maximaal aantal stappen, zodat de agent niet eindeloos doorgaat. Zet op 2 om plan B te zien.
 MAX_STAPPEN = 5

@@ -224,7 +224,7 @@ Wat een groep zelf doet, staat in het lesboek, in de voorbereiding vóór les 19
 **Gegevens bij OpenAI** (bekeken op 19 oktober, onder Data controls):
 - "Share inputs and outputs with OpenAI" staat op **Disabled**. Laat dat zo, ook al biedt OpenAI er gratis tokens voor. Aan betekent: wat je stuurt, mag OpenAI gebruiken om modellen te trainen.
 - Bewaren: OpenAI bewaart API-verkeer om misbruik op te sporen, standaard tot 30 dagen en soms langer. `store=False` verandert daar niets aan. Zero Data Retention en een EU-locatie kan alleen na goedkeuring door OpenAI. De projecten staan op "Global" en "None (Standard retention)".
-- De Responses API bewaart elke call standaard, minstens 30 dagen, zichtbaar als Logs in het dashboard. Het account staat op "Enabled per call": de code beslist. Met `store=False` in de code gebeurt dat niet. De lessen zetten dat niet; in de eindopdracht is het een eis, bij elke call (zie `documents/eindopdracht-docent.md`).
+- De Responses API bewaart elke call standaard, minstens 30 dagen, zichtbaar als Logs in het dashboard. Het account staat op "Enabled per call": de code beslist. Met `store=False` in de code gebeurt dat niet. De lessen zetten dat niet; in de eindopdracht is het een eis, bij elke call (zie `docent/eindopdracht-handleiding.md`).
 
 ### Wat je ziet als het misgaat
 

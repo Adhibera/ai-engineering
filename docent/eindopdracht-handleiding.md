@@ -1,6 +1,6 @@
 # Eindopdracht: het deel voor de docent
 
-Leerlingen lezen de opdracht in het lesboek, in de sectie "Eindopdracht", en vullen `eindopdracht/dossier.md` in. Dit deel is voor de docent: hoe je een opdracht kiest, wat niet mag, wat de school met het bedrijf afspreekt, hoe de pilot verloopt, en hoe je beoordeelt. Het hosten staat in `documents/serverdraaiboek.md`.
+Leerlingen lezen de opdracht in het lesboek, in de sectie "Eindopdracht", en vullen `eindopdracht/dossier.md` in. Dit deel is voor de docent: hoe je een opdracht kiest, wat niet mag, wat de school met het bedrijf afspreekt, hoe de pilot verloopt, en hoe je beoordeelt. Het hosten staat in `docent/serverdraaiboek.md`.
 
 **Dit is geen juridisch advies.** Laat de privacyfunctionaris van de school dit deel en het afspraaksjabloon controleren voordat je ermee begint.
 

@@ -7,7 +7,7 @@ dan stuur je bij elke vraag de hele geschiedenis mee.
 Starten:  uv run les3   (typ "stop" om te stoppen)
 """
 
-from ai_engineering.ai_call import vraag_ai
+from ai_engineering.les01_ai_call import vraag_ai
 
 
 def main() -> None:
