@@ -1,6 +1,6 @@
 # Serverdraaiboek: de klassenserver
 
-Dit draaiboek is voor de docent. Het beschrijft hoe de klassenserver is ingericht, hoe je een groep aanmaakt, hoe je een groep stopzet, en wat je aan het eind van het schooljaar opruimt.
+Dit draaiboek is voor de docent. Het beschrijft hoe de klassenserver is ingericht, hoe je een groep aanmaakt, hoe je een groep stopzet, en wat je aan het eind van het schooljaar opruimt. Ook de OpenAI-keys staan hier: per leerling voor de lessen, per groep voor de server.
 
 **Getest op 18 en 19 oktober 2026**, op de echte server: Hetzner Cloud, Ubuntu 24.04.4 LTS, systemd 255. De commando's hieronder zijn de commando's die toen werkten. Les 19 (`server/deploy.sh` en de inbox-timer) is op 19 oktober getest met de testgroep `groep0`; zie "Les 19 op de server".
 
@@ -209,6 +209,20 @@ Daarmee zijn de thuismap, de timers, het werk en de grenzen weg. De OpenAI-key t
 
 ---
 
+## Een OpenAI-key per leerling
+
+In les 1 t/m 18 werkt elke leerling alleen, op de eigen laptop. Elke leerling krijgt daarvoor een eigen key, in een eigen project:
+
+1. Maak per leerling een project met een nummer, geen naam: `leerling-07`. Houd buiten deze repo bij wie welk nummer heeft.
+2. Zet een harde limiet (bijvoorbeeld $5 per maand, zoals bij `groep0`), en kijk of het model van de lessen mag. Dat gaat zoals in stap 2 en 3 van "Een OpenAI-key per groep".
+3. Maak één key in dat project, en geef die aan de leerling. De leerling zet hem in `.env` in de projectmap; dat staat bij de installatie in het lesboek. Zet een key nooit in een chat of in git.
+
+**Waarom een project per leerling:** de limiet hoort bij het project, niet bij de key. Zitten alle leerlingen in één project, dan kan één leerling de limiet van de hele klas opmaken, bijvoorbeeld met een agent-loop die niet stopt. Dan werkt het midden in de les bij niemand meer.
+
+**In de eindopdracht** houdt de leerling deze key voor het werk op de laptop. Het project van de groep krijgt alleen de key voor de server, en die key komt niet op een laptop.
+
+---
+
 ## Les 19 op de server
 
 Wat een groep zelf doet, staat in het lesboek, in de voorbereiding vóór les 19: een sleutel maken, inloggen, de repo clonen, `.env` maken en `./server/deploy.sh` starten. Jij regelt vooraf per groep twee dingen: de gebruiker (zie "Een groep aanmaken") en een OpenAI-key.
@@ -317,7 +331,7 @@ sudo loginctl enable-linger groep3
 ## Einde van het schooljaar
 
 1. **Bewaar wat moet blijven.** De code staat in git. Het werk op de server, zoals de inbox, de concepten en de logboeken, wordt niet bewaard: er zijn geen backups. Klantdata bewaar je alleen als dat met het bedrijf is afgesproken.
-2. **OpenAI:** trek per groep de key in, en archiveer de projecten.
+2. **OpenAI:** trek de keys van de groepen en van de leerlingen in, en archiveer de projecten.
    **GitHub:** verwijder bij de privé-repo's van de eindopdracht de deploy key van de server (Settings → Deploy keys).
 3. **Hetzner:** verwijder de server in de console. Pas dan stopt de rekening. Kijk daarna bij Primary IPs of het IPv4-adres ook weg is; dat is niet getest. De firewall, de SSH-sleutel en het project kosten niets en mogen blijven.
 4. **De laptop:** haal `Host klasserver` uit `~/.ssh/config`, en de oude sleutel van de server uit `known_hosts` met `ssh-keygen -R <IP>`.
@@ -335,6 +349,9 @@ Wil je de server houden voor volgend jaar, verwijder dan alleen de groepen (zie 
 - **Buitengesloten?** Root en `beheer` hebben geen wachtwoord, dus de webconsole van Hetzner helpt niet zomaar. Hetzner heeft in de console een rescue-systeem en een knop om het rootwachtwoord opnieuw in te stellen. Dat is niet getest.
 
 ## Nog te doen
+
+**Vóór les 1:**
+- [ ] per leerling een OpenAI-project met een eigen key en een harde limiet (zie "Een OpenAI-key per leerling")
 
 **Vóór de groepen van leerlingen:**
 - [ ] beslissen over quota voor de schijf, of alleen controleren met `du`

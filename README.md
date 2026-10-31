@@ -21,7 +21,7 @@ Je hebt [git](https://git-scm.com/) en [uv](https://docs.astral.sh/uv/) nodig. C
 
 1. Haal de code op: `git clone https://github.com/Adhibera/ai-engineering.git`, en ga de map in: `cd ai-engineering`. Open dezelfde map in je editor.
 2. Installeer de packages: `uv sync`
-3. Maak je eigen `.env`: `cp .env.example .env` (op Windows: `copy .env.example .env`) en zet je OpenAI API key erin.
+3. Maak je eigen `.env`: `cp .env.example .env` (op Windows: `copy .env.example .env`) en zet de key erin die je van je docent krijgt. Die key is alleen voor jou: deel hem met niemand.
 4. Test het: `uv run les1`
 
 ### Werkt het niet?

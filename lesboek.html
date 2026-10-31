@@ -518,7 +518,7 @@ producten = [<span class="str">&quot;koptelefoon&quot;</span>, <span class="str"
   <ol class="stappen">
     <li><div><p>Haal de code op met <code>git clone https://github.com/Adhibera/ai-engineering.git</code>. Ga daarna de map in met <code>cd ai-engineering</code>, en open dezelfde map in je editor.</p></div></li>
     <li><div><p><code>uv sync</code> installeert alle packages.</p></div></li>
-    <li><div><p><code>cp .env.example .env</code> maakt je eigen <code>.env</code>. Op Windows typ je <code>copy .env.example .env</code>. Zet daar je API-key in: <code>OPENAI_API_KEY=sk-…</code></p></div></li>
+    <li><div><p><code>cp .env.example .env</code> maakt je eigen <code>.env</code>. Op Windows typ je <code>copy .env.example .env</code>. Zet daar de API-key in die je van je docent krijgt: <code>OPENAI_API_KEY=sk-…</code></p></div></li>
     <li><div><p><code>uv run les1</code> start les 1. Elke les start je zo, met zijn eigen nummer.</p></div></li>
   </ol>
   <ul class="prose">
@@ -2480,7 +2480,7 @@ tijdelijk.replace(concept_bestand)</code></pre><details class="onthul"><summary>
     <li><div><p><strong>Maak een sleutel.</strong> Typ op je laptop <code>ssh-keygen -t ed25519</code>, en druk bij elke vraag op Enter. Dat werkt ook in PowerShell op Windows. Geef het bestand <code>.ssh/id_ed25519.pub</code> uit je thuismap aan de docent. Alleen het bestand met <code>.pub</code>: het bestand zonder <code>.pub</code> is geheim, net als een wachtwoord.</p></div></li>
     <li><div><p><strong>Log in.</strong> Typ <code>ssh groep3@&lt;adres&gt;</code>, met jullie groep en het adres van de docent. De eerste keer vraagt ssh of je de server vertrouwt: typ <code>yes</code>. Alles wat je nu typt, draait op de server. Met <code>exit</code> log je weer uit.</p></div></li>
     <li><div><p><strong>Haal de code op.</strong> Typ op de server <code>git clone https://github.com/Adhibera/ai-engineering</code>.</p></div></li>
-    <li><div><p><strong>Zet jullie key klaar.</strong> Jullie groep krijgt van de docent een eigen key, met een limiet. Typ <code>cd ai-engineering</code>, dan <code>touch .env &amp;&amp; chmod 600 .env</code>, en dan <code>nano .env</code>. Zet er één regel in: <code>OPENAI_API_KEY=</code> met de key erachter. Sla op met <kbd>Ctrl+O</kbd> en <kbd>Enter</kbd>, en sluit af met <kbd>Ctrl+X</kbd>. Door <code>chmod 600</code> kan alleen jullie groep het bestand lezen.</p></div></li>
+    <li><div><p><strong>Zet jullie key klaar.</strong> Jullie groep krijgt van de docent een eigen key, met een limiet. Dat is een andere key dan die op je laptop. Typ <code>cd ai-engineering</code>, dan <code>touch .env &amp;&amp; chmod 600 .env</code>, en dan <code>nano .env</code>. Zet er één regel in: <code>OPENAI_API_KEY=</code> met de key erachter. Sla op met <kbd>Ctrl+O</kbd> en <kbd>Enter</kbd>, en sluit af met <kbd>Ctrl+X</kbd>. Door <code>chmod 600</code> kan alleen jullie groep het bestand lezen.</p></div></li>
     <li><div><p><strong>Start <code>deploy.sh</code>.</strong> Typ in de map <code>ai-engineering</code>: <code>./server/deploy.sh</code>.</p></div></li>
   </ol>
 <pre class="term"><code><span class="prompt">$</span> <span class="cmd">./server/deploy.sh</span>
