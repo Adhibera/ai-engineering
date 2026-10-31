@@ -8,9 +8,9 @@ Wat jij regelt, en wanneer: van de eerste les tot het einde van het schooljaar. 
 
 ## 1. Vóór blok 1: per leerling
 
-- [ ] **Een project per leerling.** Maak bij OpenAI `leerling-01`, `leerling-02`, enzovoort: een nummer, geen naam. Houd buiten de repo bij wie welk nummer heeft. *Meer: draaiboek, "Een OpenAI-key per leerling".*
+- [ ] **Een project per leerling.** Maak bij OpenAI `leerling-01`, `leerling-02`, enzovoort: een nummer, geen naam. Houd in je eigen klassenadministratie bij wie welk nummer heeft, niet in de repo. Dit kan al vroeg: zonder key kost een project niets. *Meer: draaiboek, "Een OpenAI-key per leerling".*
 - [ ] **Een harde limiet.** Per project: Limits → Set spend limit, bijvoorbeeld $5 per maand, en **Enforce a hard limit** aan. Kijk op dezelfde pagina of `gpt-6.1-terra` mag.
-- [ ] **Eén key per project.** Vervaldatum: het einde van het schooljaar (31 juli). Geef de key persoonlijk aan de leerling, niet via chat of mail.
+- [ ] **Eén key per project, vlak voor het uitdelen.** Noem hem `laptop-leerling-01`. Vervaldatum: het einde van het schooljaar (31 juli). Geef hem met een eenmalige link uit een wachtwoordkluis (1 keer openen, na een dag verlopen); de leerling zet hem meteen in `.env`. Je hoeft niets te bewaren: kwijt is intrekken en een nieuwe maken (`laptop-leerling-01-2`). *Meer: draaiboek, "Uitdelen".*
 - [ ] **Installeren in blok 1.** De leerling installeert git, uv en een editor, clonet de repo, typt `uv sync`, zet de key in `.env` en test met `uv run les1`. *Meer: lesboek, "Installeren".*
 - [ ] **De Python-basis.** De lessen gaan uit van basiskennis Python ("Wat je al moet kunnen" in het lesboek). Regel die vóór les 1.
 
@@ -19,7 +19,7 @@ Wat jij regelt, en wanneer: van de eerste les tot het einde van het schooljaar. 
 - [ ] **Afspraken over de server.** Een quotum voor de schijf, of alleen controleren met `du`. En wie de mislukte runs controleert. *Meer: draaiboek, "Nog te doen".*
 - [ ] **Een sleutel per leerling.** Elke leerling typt `ssh-keygen -t ed25519` en geeft jou het bestand `id_ed25519.pub`. Alleen het `.pub`-bestand.
 - [ ] **Een gebruiker per groep.** Zet de sleutels in `sleutels-groep1.pub`, één regel per leerling, met de naam erachter. Dan: `scp sleutels-groep1.pub klasserver:` en `ssh klasserver 'sudo nieuwe-groep groep1 sleutels-groep1.pub && rm sleutels-groep1.pub'`. Controleer de vingerafdrukken. *Meer: draaiboek, "Een groep aanmaken".*
-- [ ] **Een serverproject per groep.** Maak bij OpenAI `klasserver-groep1`, met een harde limiet en wat meer ruimte, bijvoorbeeld $10, zodat de pilot niet stilvalt. De key verloopt aan het einde van het schooljaar. Geef hem aan de groep; die zet hem op de server in `.env`. *Meer: draaiboek, "Een OpenAI-key per groep".*
+- [ ] **Een serverproject per groep.** Maak bij OpenAI `klasserver-groep1`, met een harde limiet en wat meer ruimte, bijvoorbeeld $10, zodat de pilot niet stilvalt. Noem de key `server-groep1`; hij verloopt aan het einde van het schooljaar. Geef hem met een eenmalige link aan de groep; die zet hem op de server in `.env`. *Meer: draaiboek, "Een OpenAI-key per groep".*
 - [ ] **Het adres van de server.** Geef de leerlingen het IP-adres. Het staat niet in de repo, wel in de Hetzner Console.
 
 ## 3. Vóór de eindopdracht

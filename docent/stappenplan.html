@@ -225,7 +225,8 @@ h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; margin-top: .3rem; }
     <section class="paneel" aria-labelledby="weten-kop">
       <h2 id="weten-kop">Goed om te weten</h2>
       <ul class="weten">
-        <li><b>Een key</b> geef je persoonlijk. Nooit via chat, mail of git.</li>
+        <li><b>Een key</b> geef je met een eenmalige link. Nooit in een document, mail, chat of git. Je hoeft hem niet te bewaren: kwijt is een nieuwe maken.</li>
+        <li><b>Namen</b> van keys: <code>laptop-leerling-01</code> en <code>server-groep1</code>. Zo zie je waar een key staat en van wie hij is.</li>
         <li><b>Elke key</b> verloopt aan het einde van het schooljaar, op 31 juli.</li>
         <li><b>De harde limiet</b> is een plafond. Is hij op, dan krijgt elk verzoek fout <code>429</code>. Er kan iets overheen gaan.</li>
         <li><b>Het model</b> van de lessen is <code>gpt-6.1-terra</code>.</li>
@@ -256,9 +257,9 @@ h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; margin-top: .3rem; }
   <section class="fase" id="fase1" data-fase="1">
     <div class="fase-kop"><span class="bol">1</span><div><h2>Vóór blok 1</h2><p>Per leerling: een project, een limiet, een key en een werkende installatie.</p></div><span class="teller"></span></div>
     <ol class="stappen">
-      <li class="stap"><input type="checkbox" id="s1"><label for="s1"><span class="tag openai">OpenAI</span> <span class="titel">Een project per leerling.</span> <span class="tekst">Maak <span data-lijst="leerlingen"><code>leerling-01</code> en <code>leerling-02</code></span>: een nummer, geen naam. Houd buiten de repo bij wie welk nummer heeft.</span><span class="meer">Meer: draaiboek, "Een OpenAI-key per leerling"</span></label></li>
+      <li class="stap"><input type="checkbox" id="s1"><label for="s1"><span class="tag openai">OpenAI</span> <span class="titel">Een project per leerling.</span> <span class="tekst">Maak <span data-lijst="leerlingen"><code>leerling-01</code> en <code>leerling-02</code></span>: een nummer, geen naam. Houd in je eigen klassenadministratie bij wie welk nummer heeft, niet in de repo. Dit kan al vroeg: zonder key kost een project niets.</span><span class="meer">Meer: draaiboek, "Een OpenAI-key per leerling"</span></label></li>
       <li class="stap"><input type="checkbox" id="s2"><label for="s2"><span class="tag openai">OpenAI</span> <span class="titel">Een harde limiet.</span> <span class="tekst">Per project: Limits → Set spend limit, <span data-toon="limiet-leerling">$5</span> per maand, en <b>Enforce a hard limit</b> aan. Kijk op dezelfde pagina of <code>gpt-6.1-terra</code> mag.</span></label></li>
-      <li class="stap"><input type="checkbox" id="s3"><label for="s3"><span class="tag openai">OpenAI</span> <span class="titel">Eén key per project.</span> <span class="tekst">Vervaldatum: 31 juli, het einde van het schooljaar. Geef de key persoonlijk aan de leerling, niet via chat of mail.</span></label></li>
+      <li class="stap"><input type="checkbox" id="s3"><label for="s3"><span class="tag openai">OpenAI</span> <span class="titel">Eén key per project, vlak voor het uitdelen.</span> <span class="tekst">Noem hem <span data-lijst="keys"><code>laptop-leerling-01</code> en <code>laptop-leerling-02</code></span>. Vervaldatum: 31 juli, het einde van het schooljaar. Geef hem met een eenmalige link uit een wachtwoordkluis: 1 keer openen, na een dag verlopen. De leerling zet hem meteen in <code>.env</code>. Je hoeft niets te bewaren: kwijt is intrekken en een nieuwe maken (<code>laptop-leerling-01-2</code>).</span><span class="meer">Meer: draaiboek, "Uitdelen"</span></label></li>
       <li class="stap"><input type="checkbox" id="s4"><label for="s4"><span class="tag laptop">Laptop</span> <span class="titel">Installeren in blok 1.</span> <span class="tekst">De leerling installeert git, uv en een editor, clonet de repo, typt <code>uv sync</code>, zet de key in <code>.env</code> en test met <code>uv run les1</code>.</span><span class="meer">Meer: lesboek, <a href="../lesboek.html#start">"Installeren"</a></span></label></li>
       <li class="stap"><input type="checkbox" id="s5"><label for="s5"><span class="tag school">School</span> <span class="titel">De Python-basis.</span> <span class="tekst">De lessen gaan uit van basiskennis Python. Regel die vóór les 1.</span><span class="meer">Meer: lesboek, <a href="../lesboek.html#start">"Wat je al moet kunnen"</a></span></label></li>
     </ol>
@@ -272,7 +273,7 @@ h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; margin-top: .3rem; }
       <li class="stap"><input type="checkbox" id="s7"><label for="s7"><span class="tag laptop">Laptop</span> <span class="titel">Een sleutel per leerling.</span> <span class="tekst">Elke leerling typt <code>ssh-keygen -t ed25519</code> en geeft jou het bestand <code>id_ed25519.pub</code>. Alleen het <code>.pub</code>-bestand: het andere is geheim.</span></label></li>
       <li class="stap"><input type="checkbox" id="s8"><label for="s8"><span class="tag server">Server</span> <span class="titel">Een gebruiker per groep.</span> <span class="tekst">Zet de sleutels van een groep in één bestand, één regel per leerling, met de naam erachter. Zet het op de server en maak de groep. Controleer de vingerafdrukken. Doe dit voor <span data-lijst="groepen-tekst"><code>groep1</code></span>.</span><code class="commando">scp sleutels-groep1.pub klasserver:
 ssh klasserver 'sudo nieuwe-groep groep1 sleutels-groep1.pub &amp;&amp; rm sleutels-groep1.pub'</code><span class="meer">Meer: draaiboek, "Een groep aanmaken"</span></label></li>
-      <li class="stap"><input type="checkbox" id="s9"><label for="s9"><span class="tag openai">OpenAI</span> <span class="titel">Een serverproject per groep.</span> <span class="tekst">Maak <span data-lijst="serverprojecten"><code>klasserver-groep1</code></span>, met een harde limiet van <span data-toon="limiet-groep">$10</span> per maand: wat meer ruimte, zodat de pilot niet stilvalt. De key verloopt op 31 juli. Geef hem aan de groep; die zet hem op de server in <code>.env</code>.</span><span class="meer">Meer: draaiboek, "Een OpenAI-key per groep"</span></label></li>
+      <li class="stap"><input type="checkbox" id="s9"><label for="s9"><span class="tag openai">OpenAI</span> <span class="titel">Een serverproject per groep.</span> <span class="tekst">Maak <span data-lijst="serverprojecten"><code>klasserver-groep1</code></span>, met een harde limiet van <span data-toon="limiet-groep">$10</span> per maand: wat meer ruimte, zodat de pilot niet stilvalt. Noem de key <span data-lijst="serverkeys"><code>server-groep1</code></span>; hij verloopt op 31 juli. Geef hem met een eenmalige link aan de groep; die zet hem op de server in <code>.env</code>.</span><span class="meer">Meer: draaiboek, "Een OpenAI-key per groep"</span></label></li>
       <li class="stap"><input type="checkbox" id="s10"><label for="s10"><span class="tag school">School</span> <span class="titel">Het adres van de server.</span> <span class="tekst">Geef de leerlingen het IP-adres. Het staat niet in de repo, wel in de Hetzner Console.</span><span class="meer">Meer: lesboek, <a href="../lesboek.html#server">"Eerst: je eigen plek op de server"</a></span></label></li>
     </ol>
   </section>
@@ -385,6 +386,8 @@ ssh klasserver 'sudo nieuwe-groep groep1 sleutels-groep1.pub &amp;&amp; rm sleut
     toonLijst("groepen", lijst(groepen));
     toonLijst("groepen-tekst", (g === 1 ? "" : "elke groep: ") + lijst(groepen));
     toonLijst("serverprojecten", lijst(groepen.map(function (x) { return "klasserver-" + x; })));
+    toonLijst("keys", lijst(leerlingen.map(function (x) { return "laptop-" + x; })));
+    toonLijst("serverkeys", lijst(groepen.map(function (x) { return "server-" + x; })));
     toon("limiet-leerling", "$" + ll);
     toon("limiet-groep", "$" + lg);
     toon("kosten", "$" + (n * ll + g * lg) + " per maand");

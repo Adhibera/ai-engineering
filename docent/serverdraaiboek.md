@@ -213,9 +213,22 @@ Daarmee zijn de thuismap, de timers, het werk en de grenzen weg. De OpenAI-key t
 
 In les 1 t/m 18 werkt elke leerling alleen, op de eigen laptop. Elke leerling krijgt daarvoor een eigen key, in een eigen project:
 
-1. Maak per leerling een project met een nummer, geen naam: `leerling-07`. Houd buiten deze repo bij wie welk nummer heeft.
+1. Maak per leerling een project met een nummer, geen naam: `leerling-07`. Houd in je eigen klassenadministratie bij wie welk nummer heeft, niet in deze repo: het zijn persoonsgegevens. Het project mag je al vroeg maken: zonder key kost het niets en kan het niet lekken.
 2. Zet een harde limiet (bijvoorbeeld $5 per maand, zoals bij `groep0`), en kijk of het model van de lessen mag. Dat gaat zoals in stap 2 en 3 van "Een OpenAI-key per groep".
-3. Maak één key in dat project. Kies als vervaldatum het einde van het schooljaar, bijvoorbeeld 31 juli. Kies niet "nooit", maar ook geen korte termijn: een verlopen key geeft een 401, en dan zoekt een leerling midden in de les naar een fout die er niet is. Geef de key aan de leerling. De leerling zet hem in `.env` in de projectmap; dat staat bij de installatie in het lesboek. Zet een key nooit in een chat of in git.
+3. Maak één key in dat project, en noem hem `laptop-leerling-07`. Maak hem pas vlak voordat je hem uitdeelt: een key die je nog niet gebruikt, kan alleen lekken, en OpenAI laat hem maar één keer zien. Kies als vervaldatum het einde van het schooljaar, bijvoorbeeld 31 juli. Kies niet "nooit", maar ook geen korte termijn: een verlopen key geeft een 401, en dan zoekt een leerling midden in de les naar een fout die er niet is. Geef de key aan de leerling (zie hieronder). De leerling zet hem in `.env` in de projectmap; dat staat bij de installatie in het lesboek.
+
+**Uitdelen.** Een key heeft ongeveer 160 tekens: overtypen gaat niet. Gebruik een eenmalige link uit een wachtwoordkluis, bijvoorbeeld Bitwarden Send of de kluis van school: hoogstens 1 keer te openen, en na een dag verlopen. De leerling zet de key meteen in `.env`. Daarna staat hij alleen nog daar, en hoef jij niets te bewaren.
+- Kwijt, of was de link al geopend? Trek de oude key in, en maak een nieuwe: `laptop-leerling-07-2`.
+- Zet een key nooit in een document, een mail, een chat, Drive of git. Moet je hem toch vooraf klaarzetten, dan alleen in een wachtwoordkluis. Haal hem eruit zodra de leerling hem heeft.
+
+**Namen:** `<waar>-<wie>`, net als `laptop-docent` in het project `leerling-00`. Zo zie je aan de naam waar een key staat en van wie hij is, en welke je moet intrekken.
+
+| Wat | Naam |
+|---|---|
+| Het project van een leerling | `leerling-07` |
+| De key daarin | `laptop-leerling-07` |
+| Het project van een groep | `klasserver-groep3` |
+| De key daarin | `server-groep3` |
 
 **Waarom een project per leerling:** de limiet hoort bij het project, niet bij de key. Zitten alle leerlingen in één project, dan kan één leerling de limiet van de hele klas opmaken, bijvoorbeeld met een agent-loop die niet stopt. Dan werkt het midden in de les bij niemand meer.
 
@@ -232,8 +245,8 @@ Wat een groep zelf doet, staat in het lesboek, in de voorbereiding vóór les 19
 1. Maak op [platform.openai.com](https://platform.openai.com) per groep een project, bijvoorbeeld `klasserver-groep3`. Kies het project daarna linksboven.
 2. Ga naar Project settings → **Limits**. Kies bij Spend **Set spend limit**, vul een bedrag in (bij `groep0`: $5 per maand), zet **Enforce a hard limit** aan en sla op. Daarna staat er "Limit enforced". Bij de limiet krijgt elk verzoek een fout 429 (`project_spend_limit_exceeded`). Volgens OpenAI grijpt de limiet niet meteen in, dus het project kan er iets overheen gaan. Een spend alert alleen houdt niets tegen. Bron: [OpenAI Docs, Spend limits](https://developers.openai.com/api/docs/guides/spend-limits).
 3. Kijk op dezelfde pagina bij "Allow or block models" of het model van de lessen (`gpt-6.1-terra`) mag. In een nieuw project staat "Alle modellen toestaan" aan.
-4. Maak de key op [platform.openai.com/api-keys](https://platform.openai.com/api-keys), met het project linksboven gekozen: **Create new secret key**. Je ziet de key maar één keer. Kies als vervaldatum het einde van het schooljaar, net als bij de leerlingen: de key moet werken tot de einddatum van de eindopdracht.
-5. Geef de key aan de groep. De groep zet hem zelf in `~/ai-engineering/.env`, met `chmod 600`. Zet een key nooit in een chat of in git.
+4. Maak de key op [platform.openai.com/api-keys](https://platform.openai.com/api-keys), met het project linksboven gekozen: **Create new secret key**, met de naam `server-groep3`. Je ziet de key maar één keer. Kies als vervaldatum het einde van het schooljaar, net als bij de leerlingen: de key moet werken tot de einddatum van de eindopdracht.
+5. Geef de key aan de groep, met een eenmalige link, net als bij de leerlingen (zie "Uitdelen" bij "Een OpenAI-key per leerling"). De groep zet hem zelf in `~/ai-engineering/.env`, met `chmod 600`. Zet een key nooit in een chat of in git.
 
 **Gegevens bij OpenAI** (bekeken op 19 oktober, onder Data controls):
 - "Share inputs and outputs with OpenAI" staat op **Disabled**. Laat dat zo, ook al biedt OpenAI er gratis tokens voor. Aan betekent: wat je stuurt, mag OpenAI gebruiken om modellen te trainen.
