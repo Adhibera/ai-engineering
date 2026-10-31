@@ -65,7 +65,7 @@ De bestanden hebben twee cijfers (`les01_ai_call.py`), zodat ze op volgorde staa
 
 De opdracht staat in het lesboek, in de sectie "Eindopdracht". Leerlingen vullen `eindopdracht/dossier.md` in; een ingevuld voorbeeld staat in `eindopdracht/voorbeeld-dossier-webshop.md`.
 
-Voor de docent: `docent/eindopdracht-handleiding.md` (een goede opdracht kiezen, privacy, de pilot, een afspraaksjabloon en beoordelen) en `docent/serverdraaiboek.md` (de klassenserver).
+Voor de docent: `docent/eindopdracht-handleiding.md` (een goede opdracht kiezen, privacy, de pilot, een afspraaksjabloon en beoordelen) en `docent/serverdraaiboek.md` (de klassenserver). Alle stappen voor de docent op een rij, met vinkjes: `docent/stappenplan.html`.
 
 ## Het lesboek aanpassen
 

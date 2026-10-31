@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stappenplan docent</title>
+<meta name="description" content="Wat de docent regelt bij de lessenreeks AI engineering, en wanneer: keys, de server, de eindopdracht en opruimen. Met vinkjes en een rekenhulp.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:wght@400;600&family=Atkinson+Hyperlegible+Next:wght@400;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
+<style>
+/* Dezelfde kleuren en letters als het lesboek. De vier soorten stappen
+   gebruiken de kleuren van het lesboek: OpenAI groen, server grijs,
+   laptop geel, school roze. */
+:root {
+  --paper: #f3f6f7;
+  --panel: #ffffff;
+  --ink: #15222c;
+  --muted: #566672;
+  --line: #d2dce1;
+  --accent: #2348c4;
+  --accent-soft: #e2e8fb;
+  --klaar: #2f8a55;
+
+  --openai-bg: #dbf1e2; --openai-line: #2f8a55; --openai-ink: #1d6a3f;
+  --server-bg: #e3e8ee; --server-line: #4f6273; --server-ink: #384a59;
+  --laptop-bg: #fcefc8; --laptop-line: #b07b0e; --laptop-ink: #774f05;
+  --school-bg: #fbe0e1; --school-line: #c24752; --school-ink: #a0343f;
+
+  --code-bg: #e3e8ee; --code-ink: #384a59;
+  --pre-bg: #14212b; --pre-fg: #e4ecf1;
+
+  --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --body: "Atkinson Hyperlegible Next", "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --mono: "Atkinson Hyperlegible Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #10171c; --panel: #17212a; --ink: #e3eaee; --muted: #98a7b2;
+    --line: #2b3943; --accent: #8ca8ff; --accent-soft: #1d2848; --klaar: #5dc48b;
+    --openai-bg: #163a27; --openai-line: #5dc48b; --openai-ink: #84dba8;
+    --server-bg: #232f39; --server-line: #9db0c0; --server-ink: #c6d2dc;
+    --laptop-bg: #3a2e10; --laptop-line: #e2b04a; --laptop-ink: #f1c96e;
+    --school-bg: #3e1e23; --school-line: #ee7c86; --school-ink: #f59ca4;
+    --code-bg: #232f39; --code-ink: #c6d2dc; --pre-bg: #0a1116;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #10171c; --panel: #17212a; --ink: #e3eaee; --muted: #98a7b2;
+  --line: #2b3943; --accent: #8ca8ff; --accent-soft: #1d2848; --klaar: #5dc48b;
+  --openai-bg: #163a27; --openai-line: #5dc48b; --openai-ink: #84dba8;
+  --server-bg: #232f39; --server-line: #9db0c0; --server-ink: #c6d2dc;
+  --laptop-bg: #3a2e10; --laptop-line: #e2b04a; --laptop-ink: #f1c96e;
+  --school-bg: #3e1e23; --school-line: #ee7c86; --school-ink: #f59ca4;
+  --code-bg: #232f39; --code-ink: #c6d2dc; --pre-bg: #0a1116;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 16px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 17px;
+  line-height: 1.55;
+  -webkit-text-size-adjust: 100%;
+}
+a { color: var(--accent); text-underline-offset: 2px; }
+a:focus-visible, input:focus-visible, button:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px;
+}
+h1, h2, h3 { font-family: var(--display); line-height: 1.15; text-wrap: balance; margin: 0; }
+p { margin: 0; }
+code { font-family: var(--mono); font-size: .86em; background: var(--code-bg); color: var(--code-ink); padding: .08em .35em; border-radius: 4px; overflow-wrap: anywhere; }
+.commando {
+  display: block; margin-top: .5rem; padding: .6rem .8rem; border-radius: 8px;
+  background: var(--pre-bg); color: var(--pre-fg); font-family: var(--mono); font-size: .82rem;
+  white-space: pre-wrap; overflow-wrap: anywhere;
+}
+
+.pagina { max-width: 1000px; margin: 0 auto; padding: 40px 16px 64px; }
+
+/* Kop */
+.eyebrow { font-size: .8rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; margin-top: .3rem; }
+.lead { font-size: 1.12rem; color: var(--muted); max-width: 46rem; margin-top: .8rem; }
+.lead strong { color: var(--ink); }
+
+/* Twee panelen: de rekenhulp en goed om te weten */
+.panelen { display: grid; grid-template-columns: 1.25fr 1fr; gap: 16px; margin-top: 28px; }
+.paneel { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 20px; }
+.paneel h2 { font-size: 1.2rem; margin-bottom: .8rem; }
+.velden { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 14px; }
+.veld label { display: block; font-size: .85rem; color: var(--muted); margin-bottom: 3px; }
+.veld input {
+  width: 100%; font: inherit; font-size: 1.05rem; padding: .4rem .6rem;
+  border: 1px solid var(--line); border-radius: 8px; background: var(--paper); color: var(--ink);
+}
+.uitkomst { margin-top: 16px; display: grid; gap: 8px; }
+.uitkomst .rij { display: grid; grid-template-columns: 9.5rem 1fr; gap: 10px; align-items: baseline; font-size: .95rem; }
+.uitkomst .rij > span:first-child { color: var(--muted); }
+.kosten { margin-top: 14px; padding: 12px 14px; border-radius: 10px; background: var(--accent-soft); }
+.kosten b { font-family: var(--display); font-size: 1.6rem; display: block; line-height: 1.1; }
+.kosten span { font-size: .85rem; color: var(--muted); }
+.weten { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; font-size: .95rem; }
+.weten code, [data-lijst] code { white-space: nowrap; }
+.weten li { padding-left: 1.4rem; position: relative; }
+.weten li::before { content: ""; position: absolute; left: .2rem; top: .55em; width: .5rem; height: .5rem; border-radius: 50%; background: var(--accent); }
+
+/* De tijdlijn met de vijf momenten */
+.tijdlijn { list-style: none; padding: 0; margin: 36px 0 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0; position: relative; }
+.tijdlijn::before { content: ""; position: absolute; left: 10%; right: 10%; top: 22px; height: 3px; background: var(--line); }
+.tijdlijn li { position: relative; text-align: center; padding: 0 6px; }
+.tijdlijn a { display: block; text-decoration: none; color: inherit; border-radius: 10px; padding: 0 4px 8px; }
+.tijdlijn a:hover .bol { transform: scale(1.06); }
+.bol {
+  position: relative; width: 46px; height: 46px; margin: 0 auto; border-radius: 50%;
+  display: grid; place-items: center; font-family: var(--display); font-weight: 800; font-size: 1.25rem;
+  background: var(--panel); border: 3px solid var(--accent); color: var(--accent); transition: transform .15s;
+}
+.tijdlijn .klaar .bol { background: var(--klaar); border-color: var(--klaar); color: var(--panel); }
+.tijdlijn .moment { display: block; font-family: var(--display); font-weight: 600; font-size: 1rem; margin-top: 8px; line-height: 1.2; }
+.tijdlijn .wat { display: block; font-size: .82rem; color: var(--muted); }
+.tijdlijn .teller { display: inline-block; margin-top: 4px; font-size: .78rem; font-weight: 700; color: var(--muted); }
+
+/* Legenda */
+.legenda .paar { display: inline-flex; gap: 6px; align-items: center; }
+.legenda { display: flex; flex-wrap: wrap; gap: 8px 14px; margin: 34px 0 0; font-size: .88rem; color: var(--muted); align-items: center; }
+.tag {
+  display: inline-block; font-size: .72rem; font-weight: 700; letter-spacing: .03em; text-transform: uppercase;
+  padding: .12rem .5rem; border-radius: 999px; border: 1px solid; white-space: nowrap; vertical-align: .12em;
+}
+.tag.openai { background: var(--openai-bg); border-color: var(--openai-line); color: var(--openai-ink); }
+.tag.server { background: var(--server-bg); border-color: var(--server-line); color: var(--server-ink); }
+.tag.laptop { background: var(--laptop-bg); border-color: var(--laptop-line); color: var(--laptop-ink); }
+.tag.school { background: var(--school-bg); border-color: var(--school-line); color: var(--school-ink); }
+
+/* De fases */
+.fase { margin-top: 22px; background: var(--panel); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+.fase-kop { display: flex; gap: 14px; align-items: center; padding: 18px 20px; border-bottom: 1px solid var(--line); }
+.fase-kop .bol { width: 40px; height: 40px; font-size: 1.1rem; flex: none; margin: 0; }
+.fase.klaar .fase-kop .bol { background: var(--klaar); border-color: var(--klaar); color: var(--panel); }
+.fase-kop h2 { font-size: 1.35rem; }
+.fase-kop p { color: var(--muted); font-size: .92rem; }
+.fase-kop .teller { margin-left: auto; font-size: .85rem; font-weight: 700; color: var(--muted); white-space: nowrap; }
+.stappen { list-style: none; margin: 0; padding: 0; }
+.stap { display: grid; grid-template-columns: auto 1fr; gap: 12px; padding: 14px 20px; border-top: 1px solid var(--line); }
+.stap:first-child { border-top: 0; }
+.stap input { width: 22px; height: 22px; margin: 3px 0 0; accent-color: var(--klaar); cursor: pointer; }
+.stap label { cursor: pointer; }
+.stap .titel { font-weight: 700; }
+.stap .tekst { display: block; margin-top: 2px; }
+.stap .meer { display: block; margin-top: 6px; font-size: .85rem; color: var(--muted); }
+.stap:has(input:checked) .titel, .stap:has(input:checked) .tekst { color: var(--muted); }
+.stap:has(input:checked) .titel { text-decoration: line-through; text-decoration-color: var(--klaar); text-decoration-thickness: 2px; }
+
+/* Noodstop en voet */
+.nood { margin-top: 22px; display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: start; padding: 18px 20px; border-radius: 16px; border: 2px solid var(--school-line); background: var(--school-bg); }
+.nood .teken { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: var(--school-line); color: var(--panel); font-family: var(--display); font-weight: 800; font-size: 1.3rem; }
+.nood h2 { font-size: 1.2rem; color: var(--school-ink); }
+.voet { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 10px 20px; justify-content: space-between; align-items: center; font-size: .88rem; color: var(--muted); }
+.knop {
+  font: inherit; font-size: .88rem; padding: .45rem .9rem; border-radius: 8px; cursor: pointer;
+  border: 1px solid var(--line); background: var(--panel); color: var(--ink);
+}
+.knop.zeker { border-color: var(--school-line); color: var(--school-ink); }
+
+@media (max-width: 760px) {
+  .panelen { grid-template-columns: 1fr; }
+  .tijdlijn { grid-template-columns: 1fr; gap: 6px; }
+  .tijdlijn::before { left: 22px; right: auto; top: 10px; bottom: 10px; width: 3px; height: auto; }
+  .tijdlijn li { text-align: left; padding: 0; }
+  .tijdlijn a { display: grid; grid-template-columns: 46px 1fr auto; gap: 12px; align-items: center; padding: 2px 0; }
+  .tijdlijn .moment { margin-top: 0; }
+  .tijdlijn .teller { margin-top: 0; }
+  .fase-kop { display: grid; grid-template-columns: 40px 1fr; gap: 4px 12px; align-items: start; padding: 16px; }
+  .fase-kop .teller { grid-column: 2; margin-left: 0; }
+  .uitkomst .rij { grid-template-columns: 1fr; gap: 0; }
+}
+@media (max-width: 420px) {
+  .velden { grid-template-columns: 1fr; }
+  .stap { padding: 14px 16px; }
+}
+@media print {
+  body { background: #fff; font-size: 11pt; }
+  .pagina { padding: 0; max-width: none; }
+  .panelen, .tijdlijn, .voet .knop { display: none; }
+  .fase, .nood { break-inside: avoid; box-shadow: none; }
+  .stap { break-inside: avoid; }
+  a { color: inherit; text-decoration: none; }
+}
+</style>
+</head>
+<body>
+<main class="pagina">
+
+  <header>
+    <p class="eyebrow">AI Engineering · voor de docent</p>
+    <h1>Stappenplan</h1>
+    <p class="lead">Wat jij regelt, en wanneer: van de eerste les tot het einde van het schooljaar. <strong>Vink af wat klaar is.</strong> Je vinkjes blijven bewaard in deze browser. De details staan in het <a href="serverdraaiboek.md">serverdraaiboek</a>, de <a href="eindopdracht-handleiding.md">handleiding van de eindopdracht</a> en het <a href="../lesboek.html">lesboek</a>.</p>
+  </header>
+
+  <div class="panelen">
+    <section class="paneel" aria-labelledby="klas-kop">
+      <h2 id="klas-kop">Jouw klas</h2>
+      <div class="velden">
+        <div class="veld"><label for="n-leerlingen">Aantal leerlingen</label><input id="n-leerlingen" type="number" min="1" max="99" value="2" inputmode="numeric"></div>
+        <div class="veld"><label for="per-groep">Leerlingen per groep</label><input id="per-groep" type="number" min="1" max="10" value="3" inputmode="numeric"></div>
+        <div class="veld"><label for="limiet-leerling">Limiet per leerling ($/maand)</label><input id="limiet-leerling" type="number" min="1" max="100" value="5" inputmode="numeric"></div>
+        <div class="veld"><label for="limiet-groep">Limiet per groep ($/maand)</label><input id="limiet-groep" type="number" min="1" max="200" value="10" inputmode="numeric"></div>
+      </div>
+      <div class="uitkomst" aria-live="polite">
+        <div class="rij"><span>Groepen</span><span data-toon="indeling">1 groep van 2</span></div>
+        <div class="rij"><span>Leerlingprojecten</span><span data-lijst="leerlingen"><code>leerling-01</code> en <code>leerling-02</code></span></div>
+        <div class="rij"><span>Gebruikers op de server</span><span data-lijst="groepen"><code>groep1</code></span></div>
+        <div class="rij"><span>Serverprojecten</span><span data-lijst="serverprojecten"><code>klasserver-groep1</code></span></div>
+      </div>
+      <div class="kosten"><b data-toon="kosten">$20 per maand</b><span data-toon="som">2 × $5 + 1 × $10. Hoogstens: dit is een plafond, geen verwachting.</span></div>
+    </section>
+
+    <section class="paneel" aria-labelledby="weten-kop">
+      <h2 id="weten-kop">Goed om te weten</h2>
+      <ul class="weten">
+        <li><b>Een key</b> geef je persoonlijk. Nooit via chat, mail of git.</li>
+        <li><b>Elke key</b> verloopt aan het einde van het schooljaar, op 31 juli.</li>
+        <li><b>De harde limiet</b> is een plafond. Is hij op, dan krijgt elk verzoek fout <code>429</code>. Er kan iets overheen gaan.</li>
+        <li><b>Het model</b> van de lessen is <code>gpt-6.1-terra</code>.</li>
+        <li><b><code>groep0</code></b> is je testgroep. De leerlingen beginnen bij <code>groep1</code>.</li>
+        <li><b>Het IP-adres</b> van de server staat niet in de repo, wel in de Hetzner Console.</li>
+      </ul>
+    </section>
+  </div>
+
+  <nav aria-label="De vijf momenten">
+    <ol class="tijdlijn">
+      <li data-fase="1"><a href="#fase1"><span class="bol">1</span><span><span class="moment">Vóór blok 1</span><span class="wat">per leerling</span></span><span class="teller"></span></a></li>
+      <li data-fase="2"><a href="#fase2"><span class="bol">2</span><span><span class="moment">Vóór les 19</span><span class="wat">de server</span></span><span class="teller"></span></a></li>
+      <li data-fase="3"><a href="#fase3"><span class="bol">3</span><span><span class="moment">Vóór de eindopdracht</span><span class="wat">klant en repo</span></span><span class="teller"></span></a></li>
+      <li data-fase="4"><a href="#fase4"><span class="bol">4</span><span><span class="moment">Tijdens de eindopdracht</span><span class="wat">controleren</span></span><span class="teller"></span></a></li>
+      <li data-fase="5"><a href="#fase5"><span class="bol">5</span><span><span class="moment">Na de einddatum</span><span class="wat">opruimen</span></span><span class="teller"></span></a></li>
+    </ol>
+  </nav>
+
+  <p class="legenda">Waar je het doet:
+    <span class="paar"><span class="tag openai">OpenAI</span> het dashboard</span>
+    <span class="paar"><span class="tag server">Server</span> de klassenserver</span>
+    <span class="paar"><span class="tag laptop">Laptop</span> bij de leerling</span>
+    <span class="paar"><span class="tag school">School</span> met de school, het bedrijf of de groep</span>
+  </p>
+
+  <!-- 1 -->
+  <section class="fase" id="fase1" data-fase="1">
+    <div class="fase-kop"><span class="bol">1</span><div><h2>Vóór blok 1</h2><p>Per leerling: een project, een limiet, een key en een werkende installatie.</p></div><span class="teller"></span></div>
+    <ol class="stappen">
+      <li class="stap"><input type="checkbox" id="s1"><label for="s1"><span class="tag openai">OpenAI</span> <span class="titel">Een project per leerling.</span> <span class="tekst">Maak <span data-lijst="leerlingen"><code>leerling-01</code> en <code>leerling-02</code></span>: een nummer, geen naam. Houd buiten de repo bij wie welk nummer heeft.</span><span class="meer">Meer: draaiboek, "Een OpenAI-key per leerling"</span></label></li>
+      <li class="stap"><input type="checkbox" id="s2"><label for="s2"><span class="tag openai">OpenAI</span> <span class="titel">Een harde limiet.</span> <span class="tekst">Per project: Limits → Set spend limit, <span data-toon="limiet-leerling">$5</span> per maand, en <b>Enforce a hard limit</b> aan. Kijk op dezelfde pagina of <code>gpt-6.1-terra</code> mag.</span></label></li>
+      <li class="stap"><input type="checkbox" id="s3"><label for="s3"><span class="tag openai">OpenAI</span> <span class="titel">Eén key per project.</span> <span class="tekst">Vervaldatum: 31 juli, het einde van het schooljaar. Geef de key persoonlijk aan de leerling, niet via chat of mail.</span></label></li>
+      <li class="stap"><input type="checkbox" id="s4"><label for="s4"><span class="tag laptop">Laptop</span> <span class="titel">Installeren in blok 1.</span> <span class="tekst">De leerling installeert git, uv en een editor, clonet de repo, typt <code>uv sync</code>, zet de key in <code>.env</code> en test met <code>uv run les1</code>.</span><span class="meer">Meer: lesboek, <a href="../lesboek.html#start">"Installeren"</a></span></label></li>
+      <li class="stap"><input type="checkbox" id="s5"><label for="s5"><span class="tag school">School</span> <span class="titel">De Python-basis.</span> <span class="tekst">De lessen gaan uit van basiskennis Python. Regel die vóór les 1.</span><span class="meer">Meer: lesboek, <a href="../lesboek.html#start">"Wat je al moet kunnen"</a></span></label></li>
+    </ol>
+  </section>
+
+  <!-- 2 -->
+  <section class="fase" id="fase2" data-fase="2">
+    <div class="fase-kop"><span class="bol">2</span><div><h2>Vóór les 19</h2><p>De server: een gebruiker en een serverproject per groep.</p></div><span class="teller"></span></div>
+    <ol class="stappen">
+      <li class="stap"><input type="checkbox" id="s6"><label for="s6"><span class="tag server">Server</span> <span class="titel">Afspraken over de server.</span> <span class="tekst">Een quotum voor de schijf, of alleen controleren met <code>du</code>. En wie de mislukte runs controleert.</span><span class="meer">Meer: draaiboek, "Nog te doen"</span></label></li>
+      <li class="stap"><input type="checkbox" id="s7"><label for="s7"><span class="tag laptop">Laptop</span> <span class="titel">Een sleutel per leerling.</span> <span class="tekst">Elke leerling typt <code>ssh-keygen -t ed25519</code> en geeft jou het bestand <code>id_ed25519.pub</code>. Alleen het <code>.pub</code>-bestand: het andere is geheim.</span></label></li>
+      <li class="stap"><input type="checkbox" id="s8"><label for="s8"><span class="tag server">Server</span> <span class="titel">Een gebruiker per groep.</span> <span class="tekst">Zet de sleutels van een groep in één bestand, één regel per leerling, met de naam erachter. Zet het op de server en maak de groep. Controleer de vingerafdrukken. Doe dit voor <span data-lijst="groepen-tekst"><code>groep1</code></span>.</span><code class="commando">scp sleutels-groep1.pub klasserver:
+ssh klasserver 'sudo nieuwe-groep groep1 sleutels-groep1.pub &amp;&amp; rm sleutels-groep1.pub'</code><span class="meer">Meer: draaiboek, "Een groep aanmaken"</span></label></li>
+      <li class="stap"><input type="checkbox" id="s9"><label for="s9"><span class="tag openai">OpenAI</span> <span class="titel">Een serverproject per groep.</span> <span class="tekst">Maak <span data-lijst="serverprojecten"><code>klasserver-groep1</code></span>, met een harde limiet van <span data-toon="limiet-groep">$10</span> per maand: wat meer ruimte, zodat de pilot niet stilvalt. De key verloopt op 31 juli. Geef hem aan de groep; die zet hem op de server in <code>.env</code>.</span><span class="meer">Meer: draaiboek, "Een OpenAI-key per groep"</span></label></li>
+      <li class="stap"><input type="checkbox" id="s10"><label for="s10"><span class="tag school">School</span> <span class="titel">Het adres van de server.</span> <span class="tekst">Geef de leerlingen het IP-adres. Het staat niet in de repo, wel in de Hetzner Console.</span><span class="meer">Meer: lesboek, <a href="../lesboek.html#server">"Eerst: je eigen plek op de server"</a></span></label></li>
+    </ol>
+  </section>
+
+  <!-- 3 -->
+  <section class="fase" id="fase3" data-fase="3">
+    <div class="fase-kop"><span class="bol">3</span><div><h2>Vóór de eindopdracht</h2><p>Een klant, een getekende afspraak en een eigen repo per groep.</p></div><span class="teller"></span></div>
+    <ol class="stappen">
+      <li class="stap"><input type="checkbox" id="s11"><label for="s11"><span class="tag school">School</span> <span class="titel">Een klant per groep, en een reserveklant.</span> <span class="tekst">Een echte opdracht die past, en die niet op de rode lijst staat. De reserveklant kan de school zelf zijn, bijvoorbeeld de mediatheek.</span><span class="meer">Meer: handleiding, "Een goede opdracht" en "De rode lijst"</span></label></li>
+      <li class="stap"><input type="checkbox" id="s12"><label for="s12"><span class="tag school">School</span> <span class="titel">De afspraak getekend.</span> <span class="tekst">De school tekent de afspraak met het bedrijf.</span><span class="meer">Meer: handleiding, "Een afspraaksjabloon voor school en bedrijf"</span></label></li>
+      <li class="stap"><input type="checkbox" id="s13"><label for="s13"><span class="tag school">School</span> <span class="titel">Twee extra lessen.</span> <span class="tekst">Het intakegesprek oefenen. En de eigen repo, met inloggen bij GitHub vanaf de laptop.</span><span class="meer">Meer: handleiding, "Planning"</span></label></li>
+      <li class="stap"><input type="checkbox" id="s14"><label for="s14"><span class="tag server">Server</span> <span class="titel">Een privé-repo per groep.</span> <span class="tekst">De groep maakt hem en voegt jou toe. Op de server komt een deploy key die alleen mag lezen.</span><span class="meer">Meer: lesboek, <a href="../lesboek.html#eindopdracht">"Jullie eigen repo"</a></span></label></li>
+    </ol>
+  </section>
+
+  <!-- 4 -->
+  <section class="fase" id="fase4" data-fase="4">
+    <div class="fase-kop"><span class="bol">4</span><div><h2>Tijdens de eindopdracht</h2><p>De controlemomenten, de privacy en de pilot.</p></div><span class="teller"></span></div>
+    <ol class="stappen">
+      <li class="stap"><input type="checkbox" id="s15"><label for="s15"><span class="tag school">School</span> <span class="titel">Eind fase 1.</span> <span class="tekst">De afspraak is getekend. Het proces en de nulmeting staan in het dossier.</span><span class="meer">Meer: handleiding, "Controlemomenten"</span></label></li>
+      <li class="stap"><input type="checkbox" id="s16"><label for="s16"><span class="tag school">School</span> <span class="titel">Eind fase 2.</span> <span class="tekst">Het ontwerp en de testgevallen. Bewaar 5 testgevallen voor de eindtest.</span></label></li>
+      <li class="stap"><input type="checkbox" id="s17"><label for="s17"><span class="tag school">School</span> <span class="titel">Vóór echte gegevens: akkoord.</span> <span class="tekst">De privacyfunctionaris en het bedrijf beslissen, ook over de verwerkers: Hetzner en OpenAI.</span><span class="meer">Meer: handleiding, "Privacy"</span></label></li>
+      <li class="stap"><input type="checkbox" id="s18"><label for="s18"><span class="tag server">Server</span> <span class="titel">Vóór klantdata op de server: je eigen sleutel.</span> <span class="tekst">Zet een wachtwoordzin op je ssh-sleutel, en gebruik een ssh-agent.</span><span class="meer">Meer: draaiboek, "Nog te doen"</span></label></li>
+      <li class="stap"><input type="checkbox" id="s19"><label for="s19"><span class="tag school">School</span> <span class="titel">De pilot.</span> <span class="tekst">Spreek af hoe de bestanden komen en gaan, en wie controleert. Geef de groep elke week de kosten van het serverproject: leerlingen kunnen het dashboard niet zien.</span><span class="meer">Meer: handleiding, "De pilot"</span></label></li>
+      <li class="stap"><input type="checkbox" id="s20"><label for="s20"><span class="tag school">School</span> <span class="titel">Beoordelen.</span> <span class="tekst">Met de rubric uit het lesboek. De eindtest draait met je 5 bewaarde gevallen.</span><span class="meer">Meer: handleiding, "Beoordelen"</span></label></li>
+    </ol>
+  </section>
+
+  <!-- 5 -->
+  <section class="fase" id="fase5" data-fase="5">
+    <div class="fase-kop"><span class="bol">5</span><div><h2>Na de einddatum</h2><p>Per groep opruimen, en aan het einde van het schooljaar de rest.</p></div><span class="teller"></span></div>
+    <ol class="stappen">
+      <li class="stap"><input type="checkbox" id="s21"><label for="s21"><span class="tag server">Server</span> <span class="titel">Per groep opruimen.</span> <span class="tekst">De timer uit en <code>~/werk</code> gewist. Met echte gegevens: de groep wist de kopieën op laptops. De groepskey ingetrokken en de deploy key uit de repo. Of de hele groep verwijderd.</span><span class="meer">Meer: handleiding, "Na de einddatum"; draaiboek, "Een groep verwijderen"</span></label></li>
+      <li class="stap"><input type="checkbox" id="s22"><label for="s22"><span class="tag openai">OpenAI</span> <span class="titel">OpenAI opruimen.</span> <span class="tekst">Trek de keys van de leerlingen in en archiveer alle projecten. De keys verlopen op 31 juli ook vanzelf.</span><span class="meer">Meer: draaiboek, "Einde van het schooljaar"</span></label></li>
+      <li class="stap"><input type="checkbox" id="s23"><label for="s23"><span class="tag server">Server</span> <span class="titel">De server.</span> <span class="tekst">Houd je hem niet voor volgend jaar, verwijder hem dan in de Hetzner Console. Pas dan stopt de rekening.</span><span class="meer">Meer: draaiboek, "Einde van het schooljaar"</span></label></li>
+    </ol>
+  </section>
+
+  <aside class="nood" aria-labelledby="nood-kop">
+    <span class="teken" aria-hidden="true">!</span>
+    <div>
+      <h2 id="nood-kop">Gaat er iets mis?</h2>
+      <p>Kan een concept schade doen, is er een datalek, of lopen de kosten op? Zet de groep stil met de <b>noodstop</b> uit het <a href="serverdraaiboek.md">draaiboek</a>. Bij de limiet stopt OpenAI vanzelf: elk verzoek krijgt dan fout <code>429</code> met <code>project_spend_limit_exceeded</code>.</p>
+    </div>
+  </aside>
+
+  <footer class="voet">
+    <span>Dezelfde stappen staan als tekst in <a href="stappenplan.md">stappenplan.md</a>.</span>
+    <button class="knop" type="button" id="wis">Vinkjes wissen</button>
+  </footer>
+</main>
+
+<script>
+(function () {
+  var SLEUTEL = "stappenplan:";
+  function lees(k, standaard) { try { var v = localStorage.getItem(SLEUTEL + k); return v === null ? standaard : v; } catch (e) { return standaard; } }
+  function schrijf(k, v) { try { localStorage.setItem(SLEUTEL + k, v); } catch (e) {} }
+
+  // Vinkjes: bewaren, en per fase tellen
+  var vakjes = Array.prototype.slice.call(document.querySelectorAll(".stap input"));
+  function tel() {
+    for (var f = 1; f <= 5; f++) {
+      var inFase = vakjes.filter(function (v) { return v.closest(".fase").dataset.fase == f; });
+      var klaar = inFase.filter(function (v) { return v.checked; }).length;
+      var tekst = klaar + " van " + inFase.length;
+      var alles = klaar === inFase.length;
+      document.querySelectorAll('[data-fase="' + f + '"]').forEach(function (el) {
+        el.classList.toggle("klaar", alles);
+        var t = el.querySelector(".teller");
+        if (t) t.textContent = tekst;
+      });
+    }
+  }
+  vakjes.forEach(function (v) {
+    v.checked = lees(v.id, "0") === "1";
+    v.addEventListener("change", function () { schrijf(v.id, v.checked ? "1" : "0"); tel(); });
+  });
+  tel();
+
+  // Vinkjes wissen: twee keer klikken, geen pop-up
+  var wis = document.getElementById("wis"), zeker = false;
+  wis.addEventListener("click", function () {
+    if (!zeker) { zeker = true; wis.textContent = "Zeker? Klik nog een keer"; wis.classList.add("zeker"); return; }
+    vakjes.forEach(function (v) { v.checked = false; schrijf(v.id, "0"); });
+    zeker = false; wis.textContent = "Vinkjes wissen"; wis.classList.remove("zeker"); tel();
+  });
+
+  // Rekenhulp: namen, groepen en het plafond van de kosten
+  var velden = ["n-leerlingen", "per-groep", "limiet-leerling", "limiet-groep"];
+  function getal(id, min) { var n = parseInt(document.getElementById(id).value, 10); return isNaN(n) || n < min ? min : n; }
+  // De namen maken we zelf uit getallen, dus innerHTML is hier veilig
+  function lijst(namen) {
+    var c = namen.map(function (x) { return "<code>" + x + "</code>"; });
+    if (c.length > 4) return c[0] + ", " + c[1] + " … " + c[c.length - 1];
+    return c.length === 1 ? c[0] : c.slice(0, -1).join(", ") + " en " + c[c.length - 1];
+  }
+  function reeks(n, maak) { var r = []; for (var i = 1; i <= n; i++) r.push(maak(i)); return r; }
+  function toon(naam, tekst) { document.querySelectorAll('[data-toon="' + naam + '"]').forEach(function (el) { el.textContent = tekst; }); }
+  function toonLijst(naam, html) { document.querySelectorAll('[data-lijst="' + naam + '"]').forEach(function (el) { el.innerHTML = html; }); }
+  function reken() {
+    var n = getal("n-leerlingen", 1), per = getal("per-groep", 1), ll = getal("limiet-leerling", 1), lg = getal("limiet-groep", 1);
+    var g = Math.ceil(n / per), basis = Math.floor(n / g), extra = n % g;
+    var indeling = extra === 0
+      ? g + (g === 1 ? " groep" : " groepen") + " van " + basis
+      : extra + (extra === 1 ? " groep" : " groepen") + " van " + (basis + 1) + " en " + (g - extra) + " van " + basis;
+    var leerlingen = reeks(n, function (i) { return "leerling-" + String(i).padStart(2, "0"); });
+    var groepen = reeks(g, function (i) { return "groep" + i; });
+    toon("indeling", indeling);
+    toonLijst("leerlingen", lijst(leerlingen));
+    toonLijst("groepen", lijst(groepen));
+    toonLijst("groepen-tekst", (g === 1 ? "" : "elke groep: ") + lijst(groepen));
+    toonLijst("serverprojecten", lijst(groepen.map(function (x) { return "klasserver-" + x; })));
+    toon("limiet-leerling", "$" + ll);
+    toon("limiet-groep", "$" + lg);
+    toon("kosten", "$" + (n * ll + g * lg) + " per maand");
+    toon("som", n + " × $" + ll + " + " + g + " × $" + lg + ". Hoogstens: dit is een plafond, geen verwachting.");
+  }
+  velden.forEach(function (id) {
+    var el = document.getElementById(id);
+    el.value = lees(id, el.value);
+    el.addEventListener("input", function () { schrijf(id, el.value); reken(); });
+  });
+  reken();
+})();
+</script>
+</body>
+</html>
