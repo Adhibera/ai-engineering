@@ -16,7 +16,7 @@ load_dotenv()
 client = OpenAI()
 
 # Het taalmodel dat we in alle lessen gebruiken
-MODEL = "gpt-6-astra"
+MODEL = "gpt-6.1-terra"
 
 # De instructie die het LLM bij elke vraag meekrijgt
 INSTRUCTIES = "Je bent een behulpzame docent. Antwoord kort en in het Nederlands, zonder Markdown."

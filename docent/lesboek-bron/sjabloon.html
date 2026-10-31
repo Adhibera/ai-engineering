@@ -842,7 +842,7 @@ taak = response.output_parsed
     <thead><tr><th>Jij typt</th><th>klaar</th><th>prioriteit</th></tr></thead>
     <tbody>
       <tr><td>Ik moet vrijdag de projectpresentatie afmaken, het heeft hoge prioriteit.</td><td><code>False</code></td><td>hoog</td></tr>
-      <tr><td>Morgen de boodschappen doen.</td><td><code>False</code></td><td>middel</td></tr>
+      <tr><td>Morgen de boodschappen doen.</td><td><code>False</code></td><td>nvt (3 van de 5 keer), middel (2 keer)</td></tr>
       <tr><td>Ooit wil ik nog eens mijn zolder opruimen.</td><td><code>False</code></td><td>laag</td></tr>
       <tr><td>Ik heb de afwas gisteren al gedaan.</td><td><code>True</code></td><td>nvt</td></tr>
     </tbody>
@@ -864,6 +864,7 @@ taak = Taak(omschrijving="Presentatie gegeven", klaar=True, prioriteit="hoog")
 if taak.klaar and taak.prioriteit != "nvt":
     print("Let op: deze taak is klaar, maar heeft toch een prioriteit.")
 </pre>
+        <p>Het kan ook andersom. Bij "Morgen de boodschappen doen." koos het LLM bij ons soms <code>nvt</code>, terwijl de taak nog niet klaar is. Welke <code>if</code> vangt dat op?</p>
         <p>En zelfs als vorm en regel kloppen, kan het LLM de zin verkeerd begrepen hebben. Vergelijk het formulier daarom ook met de zin zelf.</p>
       </div></details></div></li>
     <li><input type="checkbox" id="t5b"><div class="tekst"><label for="t5b"><span class="soort s-voorspel">Voorspel</span>Een strikvraag: "De belangrijke presentatie heb ik vanochtend gegeven." Welke prioriteit kiest het LLM?</label><details class="onthul"><summary>Bekijk wat er bij ons gebeurde</summary><div>
@@ -1289,14 +1290,14 @@ elif beoordeling.soort == "compliment":
       <tr><td>Wat is jullie retourbeleid?</td><td>vraag</td><td>kennisbank: 30 dagen, met de bon</td></tr>
       <tr><td>Mijn bestelling kwam super snel aan, echt top!</td><td>compliment</td><td>Bedankt voor je compliment!</td></tr>
       <tr><td>…koptelefoon… linkeroortje doet het niet. Groet, Sanne</td><td>klacht</td><td>concept-mail aan "Beste Sanne", met <code>j</code> goedgekeurd</td></tr>
-      <tr><td>Waarom is mijn pakket nog steeds niet bezorgd?</td><td>klacht</td><td>concept-mail, met <code>[naam]</code> en <code>[Bedrijfsnaam]</code> erin</td></tr>
+      <tr><td>Waarom is mijn pakket nog steeds niet bezorgd?</td><td>vraag</td><td>kennisbank: "Waarom je pakket nog niet is bezorgd, staat niet in onze kennisbank."</td></tr>
     </tbody>
   </table></div>
   <h4>Opdrachten</h4>
   <ul class="taken">
     <li><input type="checkbox" id="t11a"><div class="tekst"><label for="t11a"><span class="soort s-experiment">Experiment</span>Stuur dezelfde berichten naar les 6 en naar les 11. De soorten zijn hetzelfde. Wat is het verschil?</label></div></li>
     <li><input type="checkbox" id="t11b"><div class="tekst"><label for="t11b"><span class="soort s-zoek">Zoek uit</span>Welke onderdelen hergebruikt <code>les11_routing.py</code>? Volg daarna een klacht: welke code kiest de route, en welke functie voert die uit?</label></div></li>
-    <li><input type="checkbox" id="t11c"><div class="tekst"><label for="t11c"><span class="soort s-zoek">Zoek uit</span>Is "Waarom is mijn pakket nog steeds niet bezorgd?" een vraag of een klacht? Het LLM koos klacht. Lees de <code>Reden</code>. Ben je het ermee eens?</label></div></li>
+    <li><input type="checkbox" id="t11c"><div class="tekst"><label for="t11c"><span class="soort s-zoek">Zoek uit</span>Is "Waarom is mijn pakket nog steeds niet bezorgd?" een vraag of een klacht? Het LLM koos vraag, en de klant kreeg alleen te horen dat het niet in de kennisbank staat. Lees de <code>Reden</code>. Ben je het ermee eens?</label></div></li>
     <li><input type="checkbox" id="t11d"><div class="tekst"><label for="t11d"><span class="soort s-zoek">Zoek uit</span>In les 10 noemde het antwoord Sanne niet. Hier begint de mail met "Beste Sanne". Hoe kan dat?</label><details class="onthul"><summary>Bekijk het antwoord</summary><div>
         <p>De mail-route krijgt het hele bericht, met de naam erin. Stap 3 van les 10 kreeg alleen het product en het probleem.</p>
       </div></details></div></li>
@@ -1331,7 +1332,7 @@ elif beoordeling.soort == "compliment":
   </figure>
   <figure class="schema">
     <div class="papier">{{schema:les12_tijd}}</div>
-    <figcaption>Na elkaar tel je de wachttijden op. Tegelijk wacht je alleen op de langzaamste check. Bij ons duurde na elkaar 4,5 tot 5,4 seconden, en tegelijk 2,5 tot 3,2 seconden. De balken zijn een voorbeeld.</figcaption>
+    <figcaption>Na elkaar tel je de wachttijden op. Tegelijk wacht je alleen op de langzaamste check. Bij ons duurde na elkaar 3,9 tot 5,2 seconden, en tegelijk 2,1 tot 2,2 seconden. De balken zijn een voorbeeld.</figcaption>
   </figure>
   <h4>De kern van de code</h4>
 <pre class="py">
@@ -1875,7 +1876,7 @@ Ja, je kunt de jas binnen 30 dagen na aankoop terugsturen met de bon. Je krijgt 
   <h4>Opdrachten</h4>
   <ul class="taken">
     <li><input type="checkbox" id="t17a"><div class="tekst"><label for="t17a"><span class="soort s-voorspel">Voorspel</span>Er liggen vier mails in de inbox. Hoeveel LLM-calls doet het programma? En hoe lang duurt het ongeveer? Kijk naar <code>beantwoord_vraag()</code> in les 9.</label><details class="onthul"><summary>Bekijk wat er bij ons gebeurde</summary><div>
-        <p>Vier calls: één per mail. Bij ons duurde het 9 tot 13 seconden, want de mails gaan na elkaar. Tegelijk kan ook, met les 12.</p>
+        <p>Vier calls: één per mail. Bij ons duurde het ongeveer 10 seconden, want de mails gaan na elkaar. Tegelijk kan ook, met les 12.</p>
       </div></details></div></li>
     <li><input type="checkbox" id="t17b"><div class="tekst"><label for="t17b"><span class="soort s-zoek">Zoek uit</span>Speel de medewerker. Lees de vier concepten, en kijk ook in <code>les09_kennisbank.json</code>, want alleen met de mail kun je niet controleren of het antwoord klopt. Welke concepten zou jij zo versturen? Welke pas je aan, en welke schrijf je zelf?</label><details class="onthul"><summary>Bekijk wat er bij ons gebeurde</summary><div>
         <p><strong>Mail 1, de jas:</strong> klopt met de kennisbank. Die kan zo weg.</p>
@@ -2422,7 +2423,7 @@ Oct 19 17:06:09 klasserver eindopdracht[9062]: Verwerkt: mail-01.txt
     <li>De code van alle lessen: <a href="https://github.com/Adhibera/ai-engineering">github.com/Adhibera/ai-engineering</a>.</li>
   </ul>
   <div class="voet">
-    <p>De uitvoer in dit lesboek komt uit echte testruns met het model <code>gpt-6-astra</code>, in oktober 2026. Een LLM antwoordt niet elke keer hetzelfde, dus jouw uitkomst kan anders zijn.</p>
+    <p>De uitvoer in dit lesboek komt uit echte testruns in oktober 2026, eerst met het model <code>gpt-6-astra</code> en later met <code>gpt-6.1-terra</code>, het model dat de lessen nu gebruiken. Een LLM antwoordt niet elke keer hetzelfde, dus jouw uitkomst kan anders zijn.</p>
   </div>
 </section>
 
