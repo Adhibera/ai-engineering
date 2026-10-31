@@ -215,7 +215,7 @@ In les 1 t/m 18 werkt elke leerling alleen, op de eigen laptop. Elke leerling kr
 
 1. Maak per leerling een project met een nummer, geen naam: `leerling-07`. Houd buiten deze repo bij wie welk nummer heeft.
 2. Zet een harde limiet (bijvoorbeeld $5 per maand, zoals bij `groep0`), en kijk of het model van de lessen mag. Dat gaat zoals in stap 2 en 3 van "Een OpenAI-key per groep".
-3. Maak één key in dat project, en geef die aan de leerling. De leerling zet hem in `.env` in de projectmap; dat staat bij de installatie in het lesboek. Zet een key nooit in een chat of in git.
+3. Maak één key in dat project. Kies als vervaldatum het einde van het schooljaar, bijvoorbeeld 31 juli. Kies niet "nooit", maar ook geen korte termijn: een verlopen key geeft een 401, en dan zoekt een leerling midden in de les naar een fout die er niet is. Geef de key aan de leerling. De leerling zet hem in `.env` in de projectmap; dat staat bij de installatie in het lesboek. Zet een key nooit in een chat of in git.
 
 **Waarom een project per leerling:** de limiet hoort bij het project, niet bij de key. Zitten alle leerlingen in één project, dan kan één leerling de limiet van de hele klas opmaken, bijvoorbeeld met een agent-loop die niet stopt. Dan werkt het midden in de les bij niemand meer.
 
@@ -232,7 +232,7 @@ Wat een groep zelf doet, staat in het lesboek, in de voorbereiding vóór les 19
 1. Maak op [platform.openai.com](https://platform.openai.com) per groep een project, bijvoorbeeld `klasserver-groep3`. Kies het project daarna linksboven.
 2. Ga naar Project settings → **Limits**. Kies bij Spend **Set spend limit**, vul een bedrag in (bij `groep0`: $5 per maand), zet **Enforce a hard limit** aan en sla op. Daarna staat er "Limit enforced". Bij de limiet krijgt elk verzoek een fout 429 (`project_spend_limit_exceeded`). Volgens OpenAI grijpt de limiet niet meteen in, dus het project kan er iets overheen gaan. Een spend alert alleen houdt niets tegen. Bron: [OpenAI Docs, Spend limits](https://developers.openai.com/api/docs/guides/spend-limits).
 3. Kijk op dezelfde pagina bij "Allow or block models" of het model van de lessen (`gpt-6-astra`) mag. In een nieuw project staat "Alle modellen toestaan" aan.
-4. Maak de key op [platform.openai.com/api-keys](https://platform.openai.com/api-keys), met het project linksboven gekozen: **Create new secret key**. Je ziet de key maar één keer.
+4. Maak de key op [platform.openai.com/api-keys](https://platform.openai.com/api-keys), met het project linksboven gekozen: **Create new secret key**. Je ziet de key maar één keer. Kies als vervaldatum het einde van het schooljaar, net als bij de leerlingen: de key moet werken tot de einddatum van de eindopdracht.
 5. Geef de key aan de groep. De groep zet hem zelf in `~/ai-engineering/.env`, met `chmod 600`. Zet een key nooit in een chat of in git.
 
 **Gegevens bij OpenAI** (bekeken op 19 oktober, onder Data controls):
