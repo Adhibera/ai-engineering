@@ -1055,25 +1055,26 @@ while True:
   <h4>Probeer het</h4>
 <pre class="term">
 $ uv run les8
-Klacht van de klant: ⟦Mijn pakket is al twee weken te laat.⟧
+Klacht van de klant: ⟦Ik wil mijn geld terug, de mok was kapot.⟧
 
 Concept:
-Beste [naam],
-Wat vervelend dat uw pakket al twee weken te laat is. Onze excuses voor het ongemak.
-...
+Beste klant,
+
+Wat vervelend dat de mok kapot is aangekomen. Onze excuses voor het ongemak. We betalen het aankoopbedrag graag terug. Kunt u ons uw bestelnummer sturen?
+
 Met vriendelijke groet,
-[Naam]
-[Bedrijfsnaam]
+Klantenservice
 
 Versturen? (j/n): ⟦n⟧
-Wat moet er anders? (typ stop om te stoppen) ⟦Bied 10% korting aan op de volgende bestelling en onderteken met Team Webshop.⟧
+Wat moet er anders? (typ stop om te stoppen) ⟦Beloof geen geld terug. Vraag om een foto van de kapotte mok.⟧
 
 Concept:
-...
-Als tegemoetkoming bieden we u 10% korting op uw volgende bestelling. Bedankt voor uw geduld.
+Beste klant,
+
+Wat vervelend dat de mok kapot is aangekomen. Onze excuses voor het ongemak. Kunt u ons een foto van de kapotte mok en uw bestelnummer sturen? Dan kijken we graag met u mee naar een passende oplossing.
 
 Met vriendelijke groet,
-Team Webshop
+Klantenservice
 
 Versturen? (j/n): ⟦j⟧
 Goedgekeurd. (Simulatie: er is geen echte mail verstuurd.)
@@ -1083,7 +1084,7 @@ Goedgekeurd. (Simulatie: er is geen echte mail verstuurd.)
     <li><input type="checkbox" id="t8a"><div class="tekst"><label for="t8a"><span class="soort s-zoek">Zoek uit</span>Kijk naar het eerste concept hierboven. Wat had de klant gekregen als het LLM die mail zelf had verstuurd?</label></div></li>
     <li><input type="checkbox" id="t8b"><div class="tekst"><label for="t8b"><span class="soort s-experiment">Experiment</span>Geef drie rondes feedback, bijvoorbeeld "korter", "formeler" en "noem een bestelnummer". Onthoudt het LLM ook de feedback van de eerste ronde?</label></div></li>
     <li><input type="checkbox" id="t8c"><div class="tekst"><label for="t8c"><span class="soort s-experiment">Experiment</span>Druk meteen op <code>j</code>, zonder het concept te lezen. Wat krijgt de klant dan?</label><details class="onthul"><summary>Bekijk wat er bij ons gebeurde</summary><div>
-        <p>De goedgekeurde mail eindigde met <code>[Naam]</code> en <code>[Bedrijfsnaam]</code>. Een mens helpt alleen als die het concept ook echt leest.</p>
+        <p>De goedgekeurde mail beloofde de klant zijn geld terug, maar niemand bij de webshop had dat besloten. Een mens helpt alleen als die het concept ook echt leest.</p>
       </div></details></div></li>
     <li><input type="checkbox" id="t8d"><div class="tekst"><label for="t8d"><span class="soort s-experiment">Experiment</span>Typ <code>n</code> en daarna <code>stop</code>. Wat gebeurt er? Waarom moet een mens ook kunnen zeggen: deze mail gaat helemaal niet weg?</label></div></li>
   </ul>
@@ -1613,7 +1614,7 @@ INFO Stap 1: klaar. Antwoord: De hoofdstad van Frankrijk is Parijs.
   <p class="doel"><strong>Na deze les</strong> kun je uitleggen dat ook een controleur fouten maakt, en hoe je dat test.</p>
   <div class="probleem">
     <h4>Het probleem</h4>
-    <p>In les 8 en les 11 stonden er soms <code>[naam]</code> en <code>[Bedrijfsnaam]</code> in de concept-mail. De mens moest dat er elke keer zelf uithalen. Kan een LLM dat eerst controleren?</p>
+    <p>In les 8 beloofde de mail de klant soms zijn geld terug, terwijl niemand dat had besloten. Soms stond er ook <code>[Naam]</code> onder. De mens moest dat er elke keer zelf uithalen. Kan een LLM dat eerst controleren?</p>
   </div>
   <p class="idee">Een tweede LLM, <strong>de controleur</strong>, keurt het concept met vaste regels. Keurt hij af, dan gaat zijn feedback terug naar <strong>de schrijver</strong>. Na hoogstens drie rondes <strong>beslist de mens</strong>, ook als de controleur nog afkeurt.</p>
   <p class="let-op"><strong>Is dit een agent?</strong> Nee. Jouw code legt de route vast: schrijven, keuren, hoogstens drie keer, en dan de mens. Het is een workflow met een beoordelingslus, net als de patronen in deel 2. Twee LLM's maken nog geen agent. Hij staat hier omdat een agent vaak zo'n controleur krijgt.</p>
@@ -1646,17 +1647,23 @@ if not controle.goedgekeurd:
   <h4>Probeer het</h4>
 <pre class="term">
 $ uv run les15
-Klacht van de klant: ⟦Mijn pakket is kwijtgeraakt. Wat gaan jullie hieraan doen?⟧
+Klacht van de klant: ⟦Ik wil mijn geld terug, de mok was kapot.⟧
 
 Concept 1:
-...Als het niet wordt teruggevonden, zorgen we voor een passende oplossing, zoals een vervangende zending of terugbetaling.
+Beste klant,
 
-Controleur: False - Verwijder de toezegging van een mogelijke terugbetaling. De mail is verder kort en vriendelijk en bevat geen invulvelden.
+Wat vervelend dat de mok kapot is aangekomen. Onze excuses daarvoor. We helpen u graag met de terugbetaling. Wilt u ons uw bestelnummer en een foto van de kapotte mok sturen?
+...
+
+Controleur: False - Verwijder de toezegging over terugbetaling.
 
 Concept 2:
-...Als het niet wordt teruggevonden, zorgen we voor een passende oplossing, zoals een vervangende zending.
+Beste klant,
 
-Controleur: True - De mail is kort en vriendelijk, bevat geen invulvelden en belooft geen geld terug, korting of cadeau.
+Wat vervelend dat de mok kapot is aangekomen. Onze excuses daarvoor. Wilt u ons uw bestelnummer en een foto van de kapotte mok sturen? Dan kijken we graag wat we voor u kunnen doen.
+...
+
+Controleur: True - De mail is kort en vriendelijk en bevat geen invulvelden of ongewenste beloften.
 
 Versturen? (j/n): ⟦j⟧
 Goedgekeurd. (Simulatie: er is geen echte mail verstuurd.)
@@ -1667,11 +1674,10 @@ Goedgekeurd. (Simulatie: er is geen echte mail verstuurd.)
         <p>Een mens stopt vanzelf. Twee LLM's kunnen het eindeloos met elkaar oneens blijven. Daarom een maximum, net als in les 7 en les 13.</p>
       </div></details></div></li>
     <li><input type="checkbox" id="t15b"><div class="tekst"><label for="t15b"><span class="soort s-experiment">Experiment</span>Zet <code>MAX_RONDES = 1</code>. Nu kan de mens een afgekeurd concept te zien krijgen. Het programma zegt dat er dan bij. Wat doe je als mens?</label></div></li>
-    <li><input type="checkbox" id="t15c"><div class="tekst"><label for="t15c"><span class="soort s-experiment">Experiment</span>Draai "Ik wacht al drie weken op mijn bestelling, dit is belachelijk!" een paar keer. Soms staan er invulvelden in. Lees wat de controleur dan zegt. Kan de schrijver die feedback uitvoeren?</label></div></li>
-    <li><input type="checkbox" id="t15e"><div class="tekst"><label for="t15e"><span class="soort s-zoek">Zoek uit</span>In een test op 18 oktober 2026 zette de schrijver na de feedback geen invulvelden meer in de mail. Hij verzon namen: <em>"Beste mevrouw De Vries"</em> en <em>"Sanne Jansen, Klantenservice Pakketplein"</em>. De controleur keurde de mail goed. Waarom? Kon de controleur weten dat die namen verzonnen waren?</label><details class="onthul"><summary>Bekijk het antwoord</summary><div>
-        <p>De controleur ziet alleen de mail, niet de klacht. Hij weet dus niet hoe de klant heet. En zijn regels verbieden invulvelden, geen verzonnen namen. De schrijver loste het probleem op een manier op die de regels niet verbieden, maar die wel fout is.</p>
+    <li><input type="checkbox" id="t15c"><div class="tekst"><label for="t15c"><span class="soort s-experiment">Experiment</span>Draai "Mijn mok was kapot. Stuur me een nieuwe!". De schrijver belooft een nieuwe mok. Keurt de controleur dat af? Lees zijn regels.</label><details class="onthul"><summary>Bekijk wat er bij ons gebeurde</summary><div>
+        <p>Hij keurde het drie van de drie keer goed. De regels noemen geld terug, korting en een cadeau. Een nieuwe mok staat er niet bij, ook al had niemand die besloten.</p>
       </div></details></div></li>
-    <li><input type="checkbox" id="t15d"><div class="tekst"><label for="t15d"><span class="soort s-bouw">Bouw</span>Geef de controleur ook de klacht mee, en een regel als "geen namen die niet in de klacht staan". Draai dezelfde klacht vijf keer, voor en na je verandering. Tel twee dingen: hoe vaak keurde hij een foute mail af, en hoe vaak keurde hij een goede mail ten onrechte af? Geef daarna ook de schrijver duidelijke regels, en kijk of de controleur dan nog nodig is.</label></div></li>
+    <li><input type="checkbox" id="t15d"><div class="tekst"><label for="t15d"><span class="soort s-bouw">Bouw</span>Voeg een regel toe, zodat de controleur ook een nieuwe mok afkeurt. Draai "Mijn mok was kapot. Stuur me een nieuwe!" vijf keer, en "Ik wacht al drie weken op mijn bestelling, dit is belachelijk!" ook vijf keer. Tel twee dingen: hoe vaak keurde hij een foute mail af, en hoe vaak keurde hij een goede mail ten onrechte af? Geef daarna ook de schrijver duidelijke regels, en kijk of de controleur dan nog nodig is.</label></div></li>
     <li><input type="checkbox" id="t15f"><div class="tekst"><label for="t15f"><span class="soort s-extra">Extra</span>Schrijf de rondes in <code>agent.log</code>, zoals in les 14.</label></div></li>
   </ul>
   <div class="denk">
@@ -1782,7 +1788,7 @@ AI: Je koptelefoon ligt in het sorteercentrum in Utrecht en wordt morgen bezorgd
       <tr><td>Kan ik met Apple Pay betalen?</td><td class="nr">9</td><td>zegt dat het niet in de informatie staat, niet dat het niet kan</td></tr>
       <tr><td>Dezelfde vraag, met "Apple Pay kun je niet gebruiken" in de kennisbank</td><td class="nr">9</td><td>volgt de bron: nee</td></tr>
       <tr><td><code>Taak(omschrijving="Presentatie gegeven", klaar=True, prioriteit="hoog")</code></td><td class="nr">5</td><td>jij ziet: de vorm klopt, de betekenis niet</td></tr>
-      <tr><td>Mijn pakket is kwijtgeraakt. Wat gaan jullie hieraan doen?</td><td class="nr">15</td><td>geen geld terug beloofd, geen invulvelden, geen verzonnen namen</td></tr>
+      <tr><td>Ik wil mijn geld terug, de mok was kapot.</td><td class="nr">15</td><td>geen geld terug beloofd, geen invulvelden</td></tr>
     </tbody>
   </table></div>
   <p class="prose">Noteer per geval: wat er moest gebeuren, wat er gebeurde, hoeveel LLM-calls en tools, hoe lang het duurde, en of het goed ging. Schrijf ook op welke versie van de code of instructie je testte. Dan kun je na een verandering eerlijk vergelijken.</p>
