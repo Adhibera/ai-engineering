@@ -532,13 +532,15 @@ while True:
     <li>Gebruik in je vragen verzonnen namen en gegevens, nooit echte gegevens van jezelf of van anderen.</li>
     <li>Na een <code>git pull</code> doe je eerst <code>uv sync</code>. Les 16 heeft bijvoorbeeld een extra package nodig.</li>
   </ul>
-  <details class="onthul"><summary>Werkt het niet? De drie meest voorkomende fouten</summary><div>
+  <details class="onthul"><summary>Werkt het niet? De meest voorkomende fouten</summary><div>
     <div class="tabel"><table>
       <thead><tr><th>Je ziet</th><th>Wat er mis is</th></tr></thead>
       <tbody>
         <tr><td><code>uv: command not found</code>, of "uv wordt niet herkend"</td><td><code>uv</code> is niet geïnstalleerd. Vraag je docent, of kijk op <a href="https://docs.astral.sh/uv/">docs.astral.sh/uv</a>.</td></tr>
-        <tr><td><code>Missing credentials</code> of <code>Error code: 401</code></td><td>Er is geen <code>.env</code>, hij staat niet in de projectmap, of de key klopt niet.</td></tr>
+        <tr><td><code>Missing credentials</code> of <code>Error code: 401</code></td><td>Er is geen <code>.env</code>, hij staat niet in de projectmap, of de key klopt niet. Is je key verlopen of ingetrokken? Vraag je docent om een nieuwe.</td></tr>
         <tr><td><code>Error code: 404</code> met <code>model_not_found</code></td><td>Jouw key mag het model uit <code>les01_ai_call.py</code> niet gebruiken. Vraag je docent welk model je moet gebruiken.</td></tr>
+        <tr><td><code>Error code: 429</code> met <code>project_spend_limit_exceeded</code></td><td>De limiet van je key is op. Opnieuw proberen helpt niet. Vraag je docent.</td></tr>
+        <tr><td><code>Error code: 429</code> met "Rate limit reached"</td><td>Je stuurt te veel vragen kort na elkaar. Wacht even en probeer het opnieuw.</td></tr>
       </tbody>
     </table></div>
   </div></details>
@@ -864,7 +866,7 @@ taak = Taak(omschrijving="Presentatie gegeven", klaar=True, prioriteit="hoog")
 if taak.klaar and taak.prioriteit != "nvt":
     print("Let op: deze taak is klaar, maar heeft toch een prioriteit.")
 </pre>
-        <p>Het kan ook andersom. Bij "Morgen de boodschappen doen." koos het LLM bij ons soms <code>nvt</code>, terwijl de taak nog niet klaar is. Welke <code>if</code> vangt dat op?</p>
+        <p>Bij "Morgen de boodschappen doen." koos het LLM bij ons soms <code>nvt</code>, terwijl de taak nog niet klaar is. Dat verbiedt de instructie niet: die zegt alleen wat er moet als de taak klaar is. Vul de instructie aan, bijvoorbeeld met "Is de taak nog niet klaar, kies dan laag, middel of hoog."</p>
         <p>En zelfs als vorm en regel kloppen, kan het LLM de zin verkeerd begrepen hebben. Vergelijk het formulier daarom ook met de zin zelf.</p>
       </div></details></div></li>
     <li><input type="checkbox" id="t5b"><div class="tekst"><label for="t5b"><span class="soort s-voorspel">Voorspel</span>Een strikvraag: "De belangrijke presentatie heb ik vanochtend gegeven." Welke prioriteit kiest het LLM?</label><details class="onthul"><summary>Bekijk wat er bij ons gebeurde</summary><div>
@@ -1386,7 +1388,7 @@ async def beide_checks(bericht: str) -> list[Check]:
       <li><p>Een workflow doet altijd evenveel LLM-calls. Klopt dat?</p><details class="onthul"><summary>Bekijk het antwoord</summary><div>
         <p>Nee. In les 10 stopt de gate soms na één call. In les 11 doet een compliment er één, een vraag twee, en een klacht steeds meer zolang de mens feedback geeft. Wat vastligt, zijn de mogelijke routes, niet het aantal calls.</p>
       </div></details></li>
-      <li><p>In les 11 koos het LLM "klacht" voor "Waarom is mijn pakket nog steeds niet bezorgd?". Wie kiest de route: het LLM of jouw code?</p><details class="onthul"><summary>Bekijk het antwoord</summary><div>
+      <li><p>In les 11 koos het LLM "vraag" voor "Waarom is mijn pakket nog steeds niet bezorgd?". Wie kiest de route: het LLM of jouw code?</p><details class="onthul"><summary>Bekijk het antwoord</summary><div>
         <p>Jouw code kiest de route, met de <code>if</code>. Maar die <code>if</code> leest het label van het LLM. Kiest het LLM het verkeerde label, dan neemt jouw code netjes de verkeerde route. Een workflow is voorspelbaar, niet foutloos.</p>
       </div></details></li>
       <li><p>Welke stap in les 11 heeft helemaal geen LLM nodig?</p><details class="onthul"><summary>Bekijk het antwoord</summary><div>
@@ -1674,18 +1676,36 @@ Goedgekeurd. (Simulatie: er is geen echte mail verstuurd.)
         <p>Een mens stopt vanzelf. Twee LLM's kunnen het eindeloos met elkaar oneens blijven. Daarom een maximum, net als in les 7 en les 13.</p>
       </div></details></div></li>
     <li><input type="checkbox" id="t15b"><div class="tekst"><label for="t15b"><span class="soort s-experiment">Experiment</span>Zet <code>MAX_RONDES = 1</code>. Nu kan de mens een afgekeurd concept te zien krijgen. Het programma zegt dat er dan bij. Wat doe je als mens?</label></div></li>
-    <li><input type="checkbox" id="t15c"><div class="tekst"><label for="t15c"><span class="soort s-experiment">Experiment</span>Draai "Mijn mok was kapot. Stuur me een nieuwe!". De schrijver belooft een nieuwe mok. Keurt de controleur dat af? Lees zijn regels.</label><details class="onthul"><summary>Bekijk wat er bij ons gebeurde</summary><div>
-        <p>Hij keurde het drie van de drie keer goed. De regels noemen geld terug, korting en een cadeau. Een nieuwe mok staat er niet bij, ook al had niemand die besloten.</p>
+    <li><input type="checkbox" id="t15c"><div class="tekst"><label for="t15c"><span class="soort s-experiment">Experiment</span>Een nieuwe mok. Start Python met <code>uv run python</code> en geef de controleur een vaste mail:</label><pre class="py">
+from ai_engineering.les15_controleur import controleer
+controleer("Beste klant, wat vervelend dat uw mok kapot is aangekomen. We sturen u graag een nieuwe mok. Met vriendelijke groet, Klantenservice")
+</pre>
+      Keurt de controleur dat af? Lees zijn regels.<details class="onthul"><summary>Bekijk wat er bij ons gebeurde</summary><div>
+        <p>Hij keurde de mail vijf van de vijf keer goed. De regels noemen geld terug, korting en een cadeau. Een nieuwe mok staat er niet bij, ook al had niemand die besloten. Je krijgt wat je controleert.</p>
       </div></details></div></li>
-    <li><input type="checkbox" id="t15d"><div class="tekst"><label for="t15d"><span class="soort s-bouw">Bouw</span>Voeg een regel toe, zodat de controleur ook een nieuwe mok afkeurt. Draai "Mijn mok was kapot. Stuur me een nieuwe!" vijf keer, en "Ik wacht al drie weken op mijn bestelling, dit is belachelijk!" ook vijf keer. Tel twee dingen: hoe vaak keurde hij een foute mail af, en hoe vaak keurde hij een goede mail ten onrechte af? Geef daarna ook de schrijver duidelijke regels, en kijk of de controleur dan nog nodig is.</label></div></li>
+    <li><input type="checkbox" id="t15d"><div class="tekst"><label for="t15d"><span class="soort s-bouw">Bouw</span>Test de controleur met drie vaste mails: twee foute en één goede. Typ in <code>uv run python</code>:</label><pre class="py">
+from ai_engineering.les15_controleur import controleer
+fout_geld = "Beste klant, wat vervelend dat uw mok kapot is aangekomen. We betalen het aankoopbedrag graag terug. Met vriendelijke groet, Klantenservice"
+fout_mok = "Beste klant, wat vervelend dat uw mok kapot is aangekomen. We sturen u graag een nieuwe mok. Met vriendelijke groet, Klantenservice"
+goed = "Beste klant, wat vervelend dat uw mok kapot is aangekomen. Wilt u ons een foto van de mok sturen? Dan kijken we graag met u mee. Met vriendelijke groet, Klantenservice"
+
+for mail in [fout_geld, fout_mok, goed]:
+    keren = 0
+    for i in range(5):
+        if controleer(mail).goedgekeurd:
+            keren += 1
+    print(keren, "van de 5 keer goedgekeurd")
+</pre>
+      Voeg daarna in <code>REGELS</code> een regel toe, zodat de controleur ook een nieuwe mok afkeurt. Start Python opnieuw, want Python leest het bestand alleen bij de import. Tel dan opnieuw, met dezelfde drie mails. Keurt hij nu beide foute mails af, en de goede nog steeds goed? Geef daarna ook de schrijver duidelijke regels, en kijk of de controleur dan nog nodig is.<details class="onthul"><summary>Bekijk wat er bij ons gebeurde</summary><div>
+        <p>Vóór de nieuwe regel: 0, 5 en 5 keer goedgekeurd. De mail met geld terug keurde hij dus steeds af, maar de nieuwe mok steeds goed.</p>
+      </div></details></div></li>
     <li><input type="checkbox" id="t15f"><div class="tekst"><label for="t15f"><span class="soort s-extra">Extra</span>Schrijf de rondes in <code>agent.log</code>, zoals in les 14.</label></div></li>
   </ul>
   <div class="denk">
     <h4>Denkvraag</h4>
-    <p class="vraag">In onze test vroeg de schrijver één keer: <em>"Wat zijn de naam van de klant, de naam van de afzender en de bedrijfsnaam?"</em> De controleur keurde dat goed als mail. Hoe kan dat, en welke regel ontbreekt?</p>
+    <p class="vraag">Waarom zet je de regels niet gewoon in de instructie van de schrijver?</p>
     <details class="onthul"><summary>Bekijk een hint</summary><div>
-      <p>De controleur keurt alleen wat in zijn regels staat. In die vraag stonden geen invulvelden, beloftes of onvriendelijke woorden. Je krijgt wat je controleert. Een regel als "het moet een mail aan de klant zijn" ontbreekt.</p>
-      <p>En waarom zet je de regels niet gewoon in de instructie van de schrijver? Dat is een goed begin, maar een LLM volgt zijn instructie niet altijd. Een aparte check kan helpen. Alleen is de controleur ook een LLM, dus ook hij maakt fouten. Test hem daarom met dezelfde voorbeelden: vindt hij de fouten, en keurt hij geen goede mails af?</p>
+      <p>Dat is een goed begin, maar een LLM volgt zijn instructie niet altijd. Een aparte check kan helpen. Alleen is de controleur ook een LLM, dus ook hij maakt fouten: dat zag je bij de nieuwe mok. Test hem daarom met dezelfde voorbeelden: vindt hij de fouten, en keurt hij geen goede mails af?</p>
     </div></details>
   </div>
   <div class="onthoud"><span class="kopje">Onthoud</span><p>Maker en controleur: de een schrijft, de ander keurt.</p></div>
@@ -2230,7 +2250,7 @@ response = client.responses.create(
   </div>
   <ol class="stappen">
     <li><div><p><strong>Maak de repo.</strong> Eén van jullie maakt op GitHub een nieuwe repository: kies <em>Private</em>, en voeg geen README toe. Voeg de anderen en de docent toe bij Settings → Collaborators.</p></div></li>
-    <li><div><p><strong>Zet de lessen erin.</strong> Typ op je laptop, in de map <code>ai-engineering</code>: <code>git remote set-url origin &lt;adres van jullie repo&gt;</code>. Daarmee wijst <code>origin</code> niet meer naar de lesrepo, maar naar jullie repo. Typ daarna <code>git push -u origin main</code>. GitHub vraagt dan om in te loggen. Je wachtwoord van GitHub werkt hier niet: de docent laat je vooraf zien hoe je inlogt, bijvoorbeeld met GitHub Desktop. De anderen halen de repo op met <code>git clone &lt;adres van jullie repo&gt;</code>.</p></div></li>
+    <li><div><p><strong>Zet de lessen erin.</strong> Typ op je laptop, in de map <code>ai-engineering</code>: <code>git remote set-url origin &lt;adres van jullie repo&gt;</code>. Daarmee wijst <code>origin</code> niet meer naar de lesrepo, maar naar jullie repo. Typ daarna <code>git push -u origin main</code>. GitHub vraagt dan om in te loggen. Je wachtwoord van GitHub werkt hier niet: de docent laat je vooraf zien hoe je inlogt, bijvoorbeeld met GitHub Desktop. De anderen halen de repo op met <code>git clone &lt;adres van jullie repo&gt;</code>. Kopieer daarna je <code>.env</code> uit je oude map <code>ai-engineering</code> naar de nieuwe map, want <code>.env</code> staat niet in git. Typ in de nieuwe map ook <code>uv sync</code>.</p></div></li>
     <li><div><p><strong>Bewaar je werk.</strong> Typ na een verandering <code>git add .</code>, en dan <code>git status</code>. Bij "Changes to be committed" mag geen <code>.env</code> staan, en geen mail of concept. Staat er toch iets, haal het er dan uit met <code>git restore --staged &lt;bestand&gt;</code>. Typ dan <code>git commit -m "wat je veranderde"</code> en <code>git push</code>. De anderen halen het op met <code>git pull</code>.</p></div></li>
     <li><div><p><strong>Een sleutel voor de server.</strong> Log in op de server en typ <code>ssh-keygen -t ed25519</code>. Druk bij elke vraag op Enter. Typ <code>cat ~/.ssh/id_ed25519.pub</code>, en zet die regel in jullie repo bij Settings → Deploy keys → Add deploy key. Laat <em>Allow write access</em> uit: de server mag de code alleen lezen.</p></div></li>
     <li><div><p><strong>Controleer de sleutel.</strong> Typ op de server <code>ssh -T git@github.com</code>. De eerste keer vraagt ssh of je GitHub vertrouwt. Typ alleen <code>yes</code> als de vingerafdruk <code>SHA256:+DiY3wvvV6TuJJhbpZisF/zLDA0zPMSvHdkr4UvCOqU</code> is. Die staat ook op de site van GitHub.</p></div></li>

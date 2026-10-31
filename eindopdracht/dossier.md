@@ -152,7 +152,7 @@ De docent geeft jullie de 5 apart gehouden gevallen. Draai ze één keer, met de
 |---|---|---|
 | Minuten per keer, inclusief nakijken, en met het programma ook het brengen en halen | | |
 | Hoe vaak gaat het mis? | | |
-| Kosten per week (OpenAI-dashboard, Usage van jullie project) | – | |
+| Kosten per week (de docent geeft ze, uit het dashboard van jullie serverproject) | – | |
 
 Wat bewijzen deze cijfers wel, en wat niet?
 

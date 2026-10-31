@@ -29,8 +29,10 @@ Je hebt [git](https://git-scm.com/) en [uv](https://docs.astral.sh/uv/) nodig. C
 | Je ziet | Wat er mis is |
 |---|---|
 | `uv: command not found`, of "uv wordt niet herkend" | `uv` is niet geïnstalleerd. Zie [docs.astral.sh/uv](https://docs.astral.sh/uv/). |
-| `Missing credentials` of `Error code: 401` | Er is geen `.env`, hij staat niet in de projectmap, of de key klopt niet. |
-| `Error code: 404` met `model_not_found` | De key mag het model uit `les01_ai_call.py` (`MODEL`) niet gebruiken. Kies een model waar de key wel bij kan. |
+| `Missing credentials` of `Error code: 401` | Er is geen `.env`, hij staat niet in de projectmap, of de key klopt niet. Is je key verlopen of ingetrokken? Vraag je docent om een nieuwe. |
+| `Error code: 404` met `model_not_found` | De key mag het model uit `les01_ai_call.py` (`MODEL`) niet gebruiken. Vraag je docent welk model je moet gebruiken. |
+| `Error code: 429` met `project_spend_limit_exceeded` | De limiet van je key is op. Opnieuw proberen helpt niet. Vraag je docent. |
+| `Error code: 429` met "Rate limit reached" | Je stuurt te veel vragen kort na elkaar. Wacht even en probeer het opnieuw. |
 
 ## Starten
 

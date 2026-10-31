@@ -75,7 +75,8 @@ Spreek vóór de pilot af, met de groep en de medewerker:
 - wanneer de medewerker de bestanden aanlevert, en hoe;
 - wanneer de groep ze naar de server brengt (`scp` naar `~/werk/inbox`), en de concepten terughaalt;
 - hoe de concepten bij de medewerker komen. Die route keuren de school en het bedrijf goed; een privémail van een leerling hoort daar niet bij;
-- wie kijkt of er bestanden blijven liggen of mislukken, en hoe vaak (zie "Wat je ziet als het misgaat" in het serverdraaiboek).
+- wie kijkt of er bestanden blijven liggen of mislukken, en hoe vaak (zie "Wat je ziet als het misgaat" in het serverdraaiboek);
+- dat jij per pilotweek de kosten van het serverproject doorgeeft (OpenAI-dashboard, Usage, met het project van de groep gekozen). Leerlingen hebben alleen een key en kunnen het dashboard niet zien. Wat ze op hun laptop testen, staat in hun eigen leerlingproject en telt niet mee.
 
 **Stoppen** doe je als een concept schade kan doen (iets beloven, iemand beledigen, gegevens van een andere klant tonen), bij een datalek, als de kostengrens bereikt is, of als het bedrijf wil stoppen.
 - De groep stopt de timer én een run die nog loopt:
