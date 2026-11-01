@@ -2,13 +2,13 @@
 
 ## Lesboek
 
-Open `lesboek.html` in je browser. Daarin staan per les de uitleg, een schema, opdrachten en een denkvraag.
+Open `lesboek/lesboek.html` in je browser. Daarin staan per les de uitleg, een schema, opdrachten en een denkvraag.
 
 ## Wat staat waar
 
 | Map of bestand | Wat erin staat |
 |---|---|
-| `lesboek.html` | het lesboek |
+| `lesboek/` | het lesboek: open `lesboek.html` in je browser |
 | `src/ai_engineering/` | de code: één bestand per les, van `les01_ai_call.py` tot `les18_herstart.py` |
 | `voorbeelden/` | voorbeeldmails voor les 17, 18 en 19 |
 | `server/` | les 19: het programma op de klassenserver laten draaien |
@@ -69,7 +69,7 @@ Voor de docent: `docent/eindopdracht-handleiding.md` (een goede opdracht kiezen,
 
 ## Het lesboek aanpassen
 
-`lesboek.html` wordt gebouwd. Bewerk `docent/lesboek-bron/sjabloon.html` (tekst) of `docent/lesboek-bron/bouw.py` (schema's), en bouw daarna opnieuw:
+`lesboek/lesboek.html` wordt gebouwd. Bewerk `docent/lesboek-bron/sjabloon.html` (tekst) of `docent/lesboek-bron/bouw.py` (schema's), en bouw daarna opnieuw:
 
 ```
 uv run python docent/lesboek-bron/bouw.py

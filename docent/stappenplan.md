@@ -1,6 +1,6 @@
 # Stappenplan voor de docent
 
-Wat jij regelt, en wanneer: van de eerste les tot het einde van het schooljaar. Dezelfde stappen staan, met vinkjes en een rekenhulp, in `stappenplan.html`. De details staan in het [serverdraaiboek](serverdraaiboek.md), de [handleiding van de eindopdracht](eindopdracht-handleiding.md) en het [lesboek](../lesboek.html).
+Wat jij regelt, en wanneer: van de eerste les tot het einde van het schooljaar. Dezelfde stappen staan, met vinkjes en een rekenhulp, in `stappenplan.html`. De details staan in het [serverdraaiboek](serverdraaiboek.md), de [handleiding van de eindopdracht](eindopdracht-handleiding.md) en het [lesboek](../lesboek/lesboek.html).
 
 **Voorbeeld: twee leerlingen.** Dan maak je twee leerlingprojecten (`leerling-01` en `leerling-02`) en één groep van twee (`groep1`). Met de limieten hieronder kost dat bij OpenAI hoogstens 2 × $5 + 1 × $10 = $20 per maand. Dat is een plafond, geen verwachting.
 

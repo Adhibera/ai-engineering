@@ -1,10 +1,10 @@
 """
-Bouwt het lesboek lesboek.html uit sjabloon.html.
+Bouwt het lesboek lesboek/lesboek.html uit sjabloon.html.
 
 Het script tekent de schema's (op de plekken met {{schema:naam}}) en kleurt
 de code- en terminalblokken. Pas de tekst aan in sjabloon.html en een schema
-hieronder, en draai daarna dit script. Bewerk lesboek.html niet met de
-hand, want het script overschrijft dat bestand.
+hieronder, en draai daarna dit script. Bewerk lesboek/lesboek.html niet met
+de hand, want het script overschrijft dat bestand.
 
 Starten:  uv run python docent/lesboek-bron/bouw.py
 """
@@ -15,7 +15,7 @@ from pathlib import Path
 
 HIER = Path(__file__).parent
 SJABLOON = HIER / "sjabloon.html"
-DOEL = HIER.parent.parent / "lesboek.html"
+DOEL = HIER.parent.parent / "lesboek" / "lesboek.html"
 
 RX = {"llm": 12, "code": 4, "tool": 4, "mens": 24, "io": None}
 

@@ -338,10 +338,33 @@ details.onthul > div { display: grid; gap: 8px; font-size: 15.5px; }
 .voet { border-top: 1px solid var(--line); margin-top: 72px; padding-top: 18px; font-size: 14.5px; color: var(--muted); display: grid; gap: 6px; }
 
 @media print {
+  @page { size: A4; margin: 15mm; }
   .inhoud, .kop-term { display: none; }
   .layout { display: block; }
   body { background: #fff; }
-  .les, figure.schema, pre, .denk, .tabel { break-inside: avoid; }
+  /* Op papier lichte codeblokken, dat kost minder inkt. Wat je typt, blijft geel. */
+  :root {
+    --pre-bg: #f3f6f8; --pre-fg: #14212b; --pre-com: #5b6b77;
+    --pre-str: #1d6a3f; --pre-kw: #2348c4; --pre-warn: #a0343f;
+  }
+  pre { border: 1px solid var(--line); }
+  pre kbd, .uitleg-in kbd { background: #fcefc8; color: #14212b; }
+  /* Lange regels lopen door op de volgende regel; geen schuifbalk op papier */
+  pre { white-space: pre-wrap; overflow-wrap: anywhere; overflow: visible; }
+  .papier, .tabel { overflow: visible; }
+  .papier svg { min-width: 0; }
+  /* Gewone blokken in plaats van een grid: daarin houdt de printer zich wel aan
+     "niet splitsen" en "kop bij wat erna komt". De marges vervangen de gap. */
+  .sectie, .deel, .les, .taken { display: block; }
+  :is(.sectie, .deel, .les) > * + * { margin-top: 18px; }
+  .taken li + li { margin-top: 8px; }
+  :is(.sectie, .deel, .les) > :is(h3, h4) { margin-top: 30px; }
+  /* Elk deel en elke les op een nieuwe pagina; een kop blijft bij wat erna komt */
+  .deel, .les { break-before: page; }
+  .deel { margin-top: 0; }
+  .les { padding-top: 0; }
+  h2, h3, h4 { break-after: avoid; }
+  figure.schema, pre, .denk, .onthoud, .tabel, .taken li, .route a, .rol, .kaartje { break-inside: avoid; }
 }
 </style>
 </head>
