@@ -200,7 +200,7 @@ p.prose { display: block; }
 .meta span.start { background: var(--accent-soft); border-color: transparent; color: var(--accent); font-weight: 600; }
 .optioneel { font-family: var(--body); font-size: 13px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 1px 9px; vertical-align: middle; }
 
-.les h4 { font-size: 19px; font-weight: 700; margin-top: 10px; }
+.les h4, .sectie h4 { font-size: 19px; font-weight: 700; margin-top: 10px; }
 .les .prose { gap: 10px; }
 .probleem { display: grid; gap: 8px; max-width: 40em; }
 .probleem h4 { margin-top: 0; }
@@ -538,10 +538,37 @@ producten = [<span class="str">&quot;koptelefoon&quot;</span>, <span class="str"
   </div></details>
 
   <h3>Installeren</h3>
+  <p class="prose">Je hebt git, uv en een editor nodig, bijvoorbeeld <a href="https://code.visualstudio.com/">VS Code</a>. Python hoef je niet zelf te installeren: uv haalt de goede versie op.</p>
+
+  <h4>Eerst git en uv: op een Mac</h4>
+  <p class="prose">Open Terminal: druk op Cmd+spatie en typ "Terminal".</p>
   <ol class="stappen">
-    <li><div><p>Haal de code op met <code>git clone https://github.com/Adhibera/ai-engineering.git</code>. Ga daarna de map in met <code>cd ai-engineering</code>, en open dezelfde map in je editor.</p></div></li>
-    <li><div><p><code>uv sync</code> installeert alle packages.</p></div></li>
-    <li><div><p><code>cp .env.example .env</code> maakt je eigen <code>.env</code>. Op Windows typ je <code>copy .env.example .env</code>. Zet daar de API-key in die je van je docent krijgt: <code>OPENAI_API_KEY=sk-…</code></p></div></li>
+    <li><div><p><strong>git:</strong> typ <code>git --version</code>. Er verschijnt een venster om de "Command Line Developer Tools" te installeren. Klik op <em>Installeer</em>. Dat duurt een paar minuten.</p></div></li>
+    <li><div><p><strong>uv:</strong> typ dit. Sluit Terminal daarna helemaal af met Cmd+Q, en open hem opnieuw.</p>
+<pre class="term"><code><span class="prompt">$</span> <span class="cmd">curl -LsSf https://astral.sh/uv/install.sh | sh</span></code></pre></div></li>
+  </ol>
+
+  <h4>Eerst git en uv: op Windows</h4>
+  <p class="prose">Open PowerShell: klik op Start en typ "PowerShell".</p>
+  <ol class="stappen">
+    <li><div><p><strong>git:</strong> ga naar <a href="https://git-scm.com/install/windows">git-scm.com/install/windows</a> en klik op "Click here to download". Start het bestand en klik steeds op <em>Next</em>.</p></div></li>
+    <li><div><p><strong>uv:</strong> typ dit. Sluit PowerShell daarna, en open hem opnieuw.</p>
+<pre class="term"><code><span class="prompt">$</span> <span class="cmd">powershell -ExecutionPolicy ByPass -c &quot;irm https://astral.sh/uv/install.ps1 | iex&quot;</span></code></pre></div></li>
+  </ol>
+
+  <h4>Daarna: hetzelfde op Mac en Windows</h4>
+  <p class="prose">Controleer eerst dat <code>git --version</code> en <code>uv --version</code> allebei een versienummer laten zien.</p>
+  <ol class="stappen">
+    <li><div><p>Haal de code op, en ga de map in:</p>
+<pre class="term"><code><span class="prompt">$</span> <span class="cmd">cd ~</span>
+<span class="prompt">$</span> <span class="cmd">git clone https://github.com/Adhibera/ai-engineering.git</span>
+<span class="prompt">$</span> <span class="cmd">cd ai-engineering</span></code></pre>
+      <p>Gebruik niet de knop "Download ZIP" op GitHub: dan werkt <code>git pull</code> later niet. Open dezelfde map in je editor (in VS Code: File &gt; Open Folder).</p></div></li>
+    <li><div><p><code>uv sync</code> installeert alle packages. De eerste keer haalt uv ook Python op.</p></div></li>
+    <li><div><p>Maak je eigen <code>.env</code> en open hem.</p>
+      <p><strong>Mac:</strong> <code>cp .env.example .env</code> en daarna <code>nano .env</code>. Opslaan doe je met Ctrl+O en Enter, afsluiten met Ctrl+X. Finder laat <code>.env</code> niet zien, omdat bestanden met een punt ervoor verborgen zijn. Je editor laat hem wel zien.</p>
+      <p><strong>Windows:</strong> <code>copy .env.example .env</code> en daarna <code>notepad .env</code>. Opslaan doe je met Ctrl+S.</p>
+      <p>Vervang <code>jouw-api-key-hier</code> door de key die je van je docent krijgt: <code>OPENAI_API_KEY=sk-…</code>, zonder spaties en zonder aanhalingstekens.</p></div></li>
     <li><div><p><code>uv run les1</code> start les 1. Elke les start je zo, met zijn eigen nummer.</p></div></li>
   </ol>
   <ul class="prose">
@@ -555,7 +582,10 @@ producten = [<span class="str">&quot;koptelefoon&quot;</span>, <span class="str"
     <div class="tabel"><table>
       <thead><tr><th>Je ziet</th><th>Wat er mis is</th></tr></thead>
       <tbody>
-        <tr><td><code>uv: command not found</code>, of "uv wordt niet herkend"</td><td><code>uv</code> is niet geïnstalleerd. Vraag je docent, of kijk op <a href="https://docs.astral.sh/uv/">docs.astral.sh/uv</a>.</td></tr>
+        <tr><td><code>uv: command not found</code>, of "uv wordt niet herkend"</td><td><code>uv</code> is niet geïnstalleerd, of je hebt de terminal na het installeren niet opnieuw geopend. Sluit hem en open hem opnieuw.</td></tr>
+        <tr><td><code>git: command not found</code>, of "git wordt niet herkend"</td><td><code>git</code> is niet geïnstalleerd, of je hebt de terminal na het installeren niet opnieuw geopend.</td></tr>
+        <tr><td><code>destination path 'ai-engineering' already exists</code></td><td>De map <code>ai-engineering</code> bestaat al. Ga erin met <code>cd ai-engineering</code>.</td></tr>
+        <tr><td><code>not a git repository</code> bij <code>git pull</code></td><td>Je staat niet in de map <code>ai-engineering</code>, of je hebt de code als ZIP gedownload. Haal hem dan opnieuw op met <code>git clone</code>.</td></tr>
         <tr><td><code>Missing credentials</code> of <code>Error code: 401</code></td><td>Er is geen <code>.env</code>, hij staat niet in de projectmap, of de key klopt niet. Is je key verlopen of ingetrokken? Vraag je docent om een nieuwe.</td></tr>
         <tr><td><code>Error code: 404</code> met <code>model_not_found</code></td><td>Jouw key mag het model uit <code>les01_ai_call.py</code> niet gebruiken. Vraag je docent welk model je moet gebruiken.</td></tr>
         <tr><td><code>Error code: 429</code> met <code>project_spend_limit_exceeded</code></td><td>De limiet van je key is op. Opnieuw proberen helpt niet. Vraag je docent.</td></tr>

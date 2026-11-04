@@ -17,18 +17,49 @@ Open `lesboek/lesboek.html` in je browser. Daarin staan per les de uitleg, een s
 
 ## Installeren
 
-Je hebt [git](https://git-scm.com/) en [uv](https://docs.astral.sh/uv/) nodig. Controleer dat met `git --version` en `uv --version`.
+Je hebt [git](https://git-scm.com/), [uv](https://docs.astral.sh/uv/) en een editor nodig, bijvoorbeeld [VS Code](https://code.visualstudio.com/). Python hoef je niet zelf te installeren: uv haalt de goede versie op.
 
-1. Haal de code op: `git clone https://github.com/Adhibera/ai-engineering.git`, en ga de map in: `cd ai-engineering`. Open dezelfde map in je editor.
-2. Installeer de packages: `uv sync`
-3. Maak je eigen `.env`: `cp .env.example .env` (op Windows: `copy .env.example .env`) en zet de key erin die je van je docent krijgt. Die key is alleen voor jou: deel hem met niemand.
+### Eerst git en uv: op een Mac
+
+Open Terminal: druk op Cmd+spatie en typ "Terminal".
+
+1. **git:** typ `git --version`. Er verschijnt een venster om de "Command Line Developer Tools" te installeren. Klik op *Installeer*. Dat duurt een paar minuten.
+2. **uv:** typ `curl -LsSf https://astral.sh/uv/install.sh | sh`. Sluit Terminal daarna helemaal af met Cmd+Q, en open hem opnieuw.
+
+### Eerst git en uv: op Windows
+
+Open PowerShell: klik op Start en typ "PowerShell".
+
+1. **git:** ga naar [git-scm.com/install/windows](https://git-scm.com/install/windows) en klik op "Click here to download". Start het bestand en klik steeds op *Next*.
+2. **uv:** typ `powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"`. Sluit PowerShell daarna, en open hem opnieuw.
+
+### Daarna: hetzelfde op Mac en Windows
+
+Controleer eerst dat `git --version` en `uv --version` allebei een versienummer laten zien.
+
+1. Haal de code op, en ga de map in:
+   ```
+   cd ~
+   git clone https://github.com/Adhibera/ai-engineering.git
+   cd ai-engineering
+   ```
+   Gebruik niet de knop "Download ZIP" op GitHub: dan werkt `git pull` later niet. Open dezelfde map in je editor (in VS Code: File > Open Folder).
+2. Installeer de packages: `uv sync`. De eerste keer haalt uv ook Python op.
+3. Maak je eigen `.env` en open hem:
+   - Mac: `cp .env.example .env` en daarna `nano .env`. Opslaan doe je met Ctrl+O en Enter, afsluiten met Ctrl+X. Finder laat `.env` niet zien, omdat bestanden met een punt ervoor verborgen zijn. Je editor laat hem wel zien.
+   - Windows: `copy .env.example .env` en daarna `notepad .env`. Opslaan doe je met Ctrl+S.
+
+   Vervang `jouw-api-key-hier` door de key die je van je docent krijgt: `OPENAI_API_KEY=sk-...`, zonder spaties en zonder aanhalingstekens. Die key is alleen voor jou: deel hem met niemand.
 4. Test het: `uv run les1`
 
 ### Werkt het niet?
 
 | Je ziet | Wat er mis is |
 |---|---|
-| `uv: command not found`, of "uv wordt niet herkend" | `uv` is niet geïnstalleerd. Zie [docs.astral.sh/uv](https://docs.astral.sh/uv/). |
+| `uv: command not found`, of "uv wordt niet herkend" | `uv` is niet geïnstalleerd, of je hebt de terminal na het installeren niet opnieuw geopend. Sluit hem en open hem opnieuw. |
+| `git: command not found`, of "git wordt niet herkend" | `git` is niet geïnstalleerd, of je hebt de terminal na het installeren niet opnieuw geopend. |
+| `destination path 'ai-engineering' already exists` | De map `ai-engineering` bestaat al. Ga erin met `cd ai-engineering`. |
+| `not a git repository` bij `git pull` | Je staat niet in de map `ai-engineering`, of je hebt de code als ZIP gedownload. Haal hem dan opnieuw op met `git clone`. |
 | `Missing credentials` of `Error code: 401` | Er is geen `.env`, hij staat niet in de projectmap, of de key klopt niet. Is je key verlopen of ingetrokken? Vraag je docent om een nieuwe. |
 | `Error code: 404` met `model_not_found` | De key mag het model uit `les01_ai_call.py` (`MODEL`) niet gebruiken. Vraag je docent welk model je moet gebruiken. |
 | `Error code: 429` met `project_spend_limit_exceeded` | De limiet van je key is op. Opnieuw proberen helpt niet. Vraag je docent. |

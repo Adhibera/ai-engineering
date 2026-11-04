@@ -11,7 +11,7 @@ Wat jij regelt, en wanneer: van de eerste les tot het einde van het schooljaar. 
 - [ ] **Een project per leerling.** Maak bij OpenAI `leerling-01`, `leerling-02`, enzovoort: een nummer, geen naam. Houd in je eigen klassenadministratie bij wie welk nummer heeft, niet in de repo. Dit kan al vroeg: zonder key kost een project niets. *Meer: draaiboek, "Een OpenAI-key per leerling".*
 - [ ] **Een harde limiet.** Per project: Limits → Set spend limit, bijvoorbeeld $5 per maand, en **Enforce a hard limit** aan. Kijk op dezelfde pagina of `gpt-6.1-terra` mag.
 - [ ] **Eén key per project, vlak voor het uitdelen.** Noem hem `laptop-leerling-01`. Vervaldatum: het einde van het schooljaar (31 juli). Geef hem met een eenmalige link uit een wachtwoordkluis (1 keer openen, na een dag verlopen); de leerling zet hem meteen in `.env`. Je hoeft niets te bewaren: kwijt is intrekken en een nieuwe maken (`laptop-leerling-01-2`). *Meer: draaiboek, "Uitdelen".*
-- [ ] **Installeren in blok 1.** De leerling installeert git, uv en een editor, clonet de repo, typt `uv sync`, zet de key in `.env` en test met `uv run les1`. *Meer: lesboek, "Installeren".*
+- [ ] **Installeren in blok 1.** De leerling installeert git, uv en een editor (stappen voor Mac en Windows in het lesboek), clonet de repo (niet als ZIP downloaden: dan werkt `git pull` niet), typt `uv sync`, zet de key in `.env` en test met `uv run les1`. *Meer: lesboek, "Installeren".*
 - [ ] **De Python-basis.** De lessen gaan uit van basiskennis Python ("Wat je al moet kunnen" in het lesboek). Regel die vóór les 1.
 
 ## 2. Vóór les 19: de server
